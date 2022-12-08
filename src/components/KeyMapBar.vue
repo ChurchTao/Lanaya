@@ -1,22 +1,32 @@
 <template>
-  <div class="key-map-bar">
-    <div class="key-item">Cmd+Nmb</div>
-  </div>
+  <footer class="key-map-bar" data-tauri-drag-region>
+    <HotKeyItem
+      :key="item.tips"
+      v-for="item in keyMap"
+      :keymap="item.keymap"
+      :tips="item.tips"
+    ></HotKeyItem>
+  </footer>
 </template>
-<script setup></script>
+<script setup>
+import HotKeyItem from "./HotKeyItem.vue";
+const keyMap = [
+  { keymap: ["Enter"], tips: "搜索" },
+  { keymap: ["↑", "↓"], tips: "移动选择" },
+  { keymap: ["Esc"], tips: "关闭" },
+];
+</script>
 <style scoped>
 .key-map-bar {
-  height: 40px;
-  width: 100%;
-  user-select: none;
-  display: flex;
+  height: 44px;
   align-items: center;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  padding-left: 16px;
-  padding-right: 16px;
-  border-top: 1px solid rgba(0, 0, 0, 0.2);
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 0 0 8px 8px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  padding: 0 12px;
+  position: relative;
+  user-select: none;
+  background: #ffffff;
 }
 </style>

@@ -1,0 +1,42 @@
+<template>
+  <div class="key-item-box">
+    <div class="key-item" v-for="item in keymap" :key="item">{{ item }}</div>
+    <div class="key-tips">{{ tips }}</div>
+  </div>
+</template>
+<script setup>
+defineProps({
+  tips: String,
+  keymap: Array[String],
+});
+</script>
+<style scoped>
+.key-item-box {
+  display: flex;
+  align-items: center;
+  margin-right: 0.8em;
+  height: 24px;
+}
+.key-item {
+  align-items: center;
+  background: rgba(125, 125, 125, 0.1);
+  border-radius: 2px;
+  box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff, 0 1px 2px 1px rgba(30, 35, 90, 0.4);
+  display: flex;
+  height: 18px;
+  justify-content: center;
+  margin-right: 0.4em;
+  padding: 1px 2px;
+  color: #909399;
+  border: 0;
+  font-size: 0.75em;
+  min-width: 20px;
+  box-sizing: border-box;
+}
+.key-tips {
+  color: #909399;
+  font-size: 0.75em;
+  height: 22px;
+  box-sizing: border-box;
+}
+</style>

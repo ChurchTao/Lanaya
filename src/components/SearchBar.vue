@@ -1,8 +1,8 @@
 <template>
-  <div class="search-bar">
+  <header class="search-bar" data-tauri-drag-region>
     <img src="../assets/sousuo.svg" class="search-icon" />
     <input type="text" class="search-input" placeholder="Search" />
-  </div>
+  </header>
 </template>
 <script setup></script>
 <style scoped>
@@ -10,7 +10,6 @@
   display: flex;
   align-items: center;
   height: 60px;
-  width: 100%;
   padding-left: 16px;
   padding-right: 16px;
 }
