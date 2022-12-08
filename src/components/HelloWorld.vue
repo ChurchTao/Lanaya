@@ -1,34 +1,21 @@
-<script setup>
-import { ref } from "vue";
-import { invoke } from "@tauri-apps/api";
-
-defineProps({
-  msg: String,
-});
-
-const count = ref(0);
-const greet = () => {
-  // 调用命令
-  // 在应用窗口中右键，打开开发者工具
-  // 你会看到控制台上输出了 "Hello, World!"！
-  invoke("greet", { name: "World" })
-    // `invoke` 返回的是一个 Promise
-    .then((response) => console.log(response));
-};
-</script>
-
 <template>
+  <div>
+    <a href="https://vitejs.dev" target="_blank">
+      <img src="/vite.svg" class="logo" alt="Vite logo" />
+    </a>
+    <a href="https://vuejs.org/" target="_blank">
+      <img src="../assets/vue.svg" class="logo vue" alt="Vue logo" />
+    </a>
+  </div>
   <h1>{{ msg }}</h1>
-
   <div class="card">
     <button type="button" @click="count++">count is {{ count }}</button>
+    <button type="button" @click="greet">Greet</button>
     <p>
       Edit
       <code>components/HelloWorld.vue</code> to test HMR
     </p>
-    <button type="button" @click="greet()">greet</button>
   </div>
-
   <p>
     Check out
     <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank">create-vue</a>, the
@@ -41,8 +28,33 @@ const greet = () => {
   </p>
   <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
 </template>
+<script setup>
+import { ref } from "vue";
+import { invoke } from "@tauri-apps/api";
 
+defineProps({
+  msg: String,
+});
+
+const count = ref(0);
+const greet = () => {
+  invoke("greet", { name: "World" })
+    // `invoke` returns a Promise
+    .then((response) => console.log(response));
+};
+</script>
 <style scoped>
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.vue:hover {
+  filter: drop-shadow(0 0 2em #42b883aa);
+}
 .read-the-docs {
   color: #888;
 }
