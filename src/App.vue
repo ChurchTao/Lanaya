@@ -1,17 +1,11 @@
 <template>
-  <!-- <TitleBar /> -->
-  <!-- <HelloWorld msg="Vite + Vue" /> -->
-  <div id="main-window">
-    <h1>hello world!</h1>
-  </div>
+  <SearchBar />
+  <KeyMapBar />
 </template>
 
 <script setup>
-// import HelloWorld from "./components/HelloWorld.vue";
-// import TitleBar from "./components/TitleBar.vue";
+import SearchBar from "./components/SearchBar.vue";
+import KeyMapBar from "./components/KeyMapBar.vue";
 </script>
 
-<style scoped>
-#main-window {
-}
-</style>
+<style scoped></style>
