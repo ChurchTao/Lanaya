@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "meepo",
+    "productName": "Lanaya",
     "version": "0.1.0"
   },
   "tauri": {
@@ -33,7 +33,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.church.meepo",
+      "identifier": "com.church.lanaya",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -62,7 +62,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": false,
-        "title": "meepo",
+        "title": "Lanaya",
         "width": 800,
         "transparent": true,
         "decorations": false
