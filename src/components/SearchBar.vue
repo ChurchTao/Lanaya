@@ -10,13 +10,13 @@
   display: flex;
   align-items: center;
   height: 60px;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding: 0 var(--docsearch-spacing);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 .search-icon {
-  height: 32px;
-  width: 32px;
-  margin-right: 10px;
+  height: 28px;
+  width: 28px;
+  margin-right: 5px;
 }
 .search-input {
   height: 60px;
@@ -24,6 +24,6 @@
   width: 100%;
   border: none;
   outline: none;
-  font-size: 16px;
+  font-size: 22px;
 }
 </style>

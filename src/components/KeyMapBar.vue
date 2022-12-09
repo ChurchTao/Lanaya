@@ -28,5 +28,6 @@ const keyMap = [
   position: relative;
   user-select: none;
   background: #ffffff;
+  box-shadow: 0 -1px 0 0 #e0e3e8, 0 -3px 6px 0 rgba(69, 98, 155, 0.12);
 }
 </style>

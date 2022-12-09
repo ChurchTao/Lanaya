@@ -1,33 +1,37 @@
 <template>
-  <div class="DocSearch-Dropdown">
-    <!-- <div class="DocSearch-StartScreen"><p class="DocSearch-Help">No recent searches</p></div> -->
-    <div class="DocSearch-Dropdown-Container">
+  <div class="DocSearch-Dropdown" data-tauri-drag-region>
+    <div class="DocSearch-StartScreen" v-if="!noResult && data.length == 0">
+      <p class="DocSearch-Help">No recent record</p>
+    </div>
+    <div class="DocSearch-NoResults" v-if="noResult">
+      <div class="DocSearch-Screen-Icon">
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 20 20"
+          fill="none"
+          fill-rule="evenodd"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M15.5 4.8c2 3 1.7 7-1 9.7h0l4.3 4.3-4.3-4.3a7.8 7.8 0 01-9.8 1m-2.2-2.2A7.8 7.8 0 0113.2 2.4M2 18L18 2"
+          ></path>
+        </svg>
+      </div>
+      <p class="DocSearch-Title">No results</p>
+    </div>
+    <div class="DocSearch-Dropdown-Container" v-if="!noResult">
       <section class="DocSearch-Hits">
         <ul role="listbox" aria-labelledby="docsearch-label" id="docsearch-list">
-          <li class="DocSearch-Hit" id="docsearch-item-0" role="option" aria-selected="false">
-            <a href="/en-US/component/infinite-scroll#infinite-scroll"
-              ><div class="DocSearch-Hit-Container">
-                <div class="DocSearch-Hit-content-wrapper">
-                  <span class="DocSearch-Hit-title"><mark>In</mark>finite Scroll #</span>
-                </div>
-                <div class="DocSearch-Hit-action">
-                  <svg class="DocSearch-Hit-Select-Icon" width="20" height="20" viewBox="0 0 20 20">
-                    <g
-                      stroke="currentColor"
-                      fill="none"
-                      fill-rule="evenodd"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M18 3v4c0 2-2 4-4 4H2"></path>
-                      <path d="M8 17l-6-6 6-6"></path>
-                    </g>
-                  </svg>
-                  <!-- <HotKeyItem :keymap="['Cmd+1']"></HotKeyItem> -->
-                </div>
-              </div></a
-            >
-          </li>
+          <ClipBoardItem
+            v-for="(item, index) in data"
+            :key="index"
+            :data="item"
+            :select="select == index"
+            @mouseenter="selectThis(index)"
+          />
         </ul>
       </section>
       <section class="DocSearch-HitsFooter"></section>
@@ -36,6 +40,18 @@
 </template>
 <script setup>
 import HotKeyItem from "./HotKeyItem.vue";
+import ClipBoardItem from "./ClipBoardItem.vue";
+import { ref } from "vue";
+
+defineProps({
+  noResult: Boolean,
+  data: Array[Object],
+});
+
+const select = ref(-1);
+const selectThis = (index) => {
+  select.value = index;
+};
 </script>
 <style scoped>
 .DocSearch-Container,
@@ -53,6 +69,7 @@ import HotKeyItem from "./HotKeyItem.vue";
   padding: 0 var(--docsearch-spacing);
   scrollbar-color: var(--docsearch-muted-color) var(--docsearch-modal-background);
   scrollbar-width: thin;
+  margin-top: 10px;
 }
 
 .DocSearch-ErrorScreen,
@@ -95,6 +112,10 @@ import HotKeyItem from "./HotKeyItem.vue";
 .DocSearch-Hit-icon {
   color: var(--docsearch-muted-color);
   stroke-width: var(--docsearch-icon-stroke-width);
+}
+.DocSearch-Screen-Icon {
+  color: var(--docsearch-muted-color);
+  padding-bottom: 12px;
 }
 .DocSearch-Hit-content-wrapper {
   display: flex;
@@ -144,5 +165,11 @@ import HotKeyItem from "./HotKeyItem.vue";
 .DocSearch-Hit[aria-selected="true"] .DocSearch-Hit-Tree,
 .DocSearch-Hit[aria-selected="true"] mark {
   color: var(--docsearch-hit-active-color) !important;
+}
+
+.DocSearch-Help,
+.DocSearch-Title {
+  color: var(--docsearch-muted-color);
+  font-size: 1.2em;
 }
 </style>

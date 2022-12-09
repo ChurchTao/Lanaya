@@ -16,6 +16,11 @@ defineProps({
   align-items: center;
   margin-right: 0.8em;
   height: 24px;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  cursor: pointer;
 }
 .key-item {
   align-items: center;
@@ -32,11 +37,21 @@ defineProps({
   font-size: 0.75em;
   min-width: 20px;
   box-sizing: border-box;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  cursor: pointer;
 }
 .key-tips {
   color: #909399;
   font-size: 0.75em;
   height: 22px;
   box-sizing: border-box;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  cursor: pointer;
 }
 </style>
