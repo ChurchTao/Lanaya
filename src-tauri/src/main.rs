@@ -8,8 +8,8 @@ fn greet(name: &str) -> String {
     format!("Hello, {}!", name)
 }
 use tauri::SystemTray;
-use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem};
-use tauri_plugin_sql::TauriSql;
+use tauri::{CustomMenuItem, Manager, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
+use tauri_plugin_sql::{Migration, MigrationKind, TauriSql};
 
 fn main() {
     // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.
@@ -23,8 +23,34 @@ fn main() {
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])
-        .plugin(TauriSql::default())
+        .plugin(TauriSql::default().add_migrations(
+            "sqlite:record.db",
+            vec![Migration {
+                version: 1,
+                description: "create record",
+                sql: include_str!("../migrations/record.sql"),
+                kind: MigrationKind::Up,
+            }],
+        ))
         .system_tray(system_tray)
+        .on_system_tray_event(|app, event| match event {
+            SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
+                "show" => {
+                    let window = app.get_window("main").unwrap();
+                    window.show().unwrap();
+                    window.set_focus().unwrap();
+                }
+                "hide" => {
+                    let window = app.get_window("main").unwrap();
+                    window.hide().unwrap();
+                }
+                "quit" => {
+                    app.exit(0);
+                }
+                _ => {}
+            },
+            _ => {}
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
