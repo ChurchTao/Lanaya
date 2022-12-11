@@ -9,6 +9,8 @@ fn greet(name: &str) -> String {
 }
 use tauri::SystemTray;
 use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem};
+use tauri_plugin_sql::TauriSql;
+
 fn main() {
     // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
@@ -21,6 +23,7 @@ fn main() {
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])
+        .plugin(TauriSql::default())
         .system_tray(system_tray)
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

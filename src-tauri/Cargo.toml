@@ -18,6 +18,12 @@ tauri-build = { version = "1.2.1", features = [] }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.2.1", features = ["api-all", "macos-private-api", "system-tray"] }
+rust-crypto = {version="0.2.36"}
+
+[dependencies.tauri-plugin-sql]
+git = "https://github.com/tauri-apps/tauri-plugin-sql"
+# tag = "v0.1.0" Not available yet
+features = ["sqlite"] # or "postgres", or "mysql"
 
 [features]
 # by default Tauri runs in production mode

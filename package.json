@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.2.0",
+    "md5": "^2.3.0",
+    "pinia": "^2.0.28",
+    "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql#dev",
     "vue": "^3.2.41"
   },
   "devDependencies": {
