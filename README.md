@@ -1,13 +1,73 @@
-# Lanaya
+<h1 align="center">
+  <img src="./md/icon.png" width="128" />
+  <br>
+  Lanaya
+  <br>
+</h1>
 
-<img src='./md/icon.png' style='width:200px;height:200px'/>
+<h3 align="center">
+A clipboard management with easy to use.
+</h3>
 
-- Lanaya comes from Templar Assassin in Dota2, which is a clipboard management software with convenient and simple interaction.
+<h4 align="center">
+Lanaya comes from Templar Assassin in Dota2, which is a clipboard management software with convenient and simple interaction.
+</h4>
 
-## Technical solutions
+## Features
 
-### Vite ⚡
+- Search by keywords.
+- All shortcut to manage.
 
-### Vue3
+## Todos
 
-### Tauri
+- [ ] make some args to settings.
+- [ ] light and black theme.
+- [ ] collect css by `taildwind`
+- [ ] collect code
+
+## Download
+
+Download from [release](https://github.com/ChurchTao/Lanaya/releases).
+
+## Development
+
+You should install Rust and Nodejs, see [here](https://tauri.studio/docs/getting-started/prerequisites) for more details. Then install Nodejs packages.
+
+```shell
+npm install
+```
+
+Then run
+
+```shell
+cargo tauri dev
+```
+
+Or you can build it
+
+```shell
+cargo tauri build
+```
+
+## Screenshots
+
+<div align="center">
+  <img src="./md/demo1.png" alt="demo1" width="100%" />
+  <img src="./md/demo2.png" alt="demo2" width="100%" />
+  <img src="./md/demo3.png" alt="demo3" width="100%" />
+</div>
+
+## Contributions
+
+Issue and PR welcome!
+
+## Acknowledgement
+
+Lanaya was based on or inspired by these projects and so on:
+
+- [tauri-apps/tauri](https://github.com/tauri-apps/tauri): Build smaller, faster, and more secure desktop applications with a web frontend.
+- [vitejs/vite](https://github.com/vitejs/vite): Next generation frontend tooling. It's fast!
+
+## License
+
+Apache-2.0 license. See [License here](./LICENSE) for details.

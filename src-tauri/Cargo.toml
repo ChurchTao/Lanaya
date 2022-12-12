@@ -1,15 +1,13 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
-default-run = "app"
+name = "lanaya"
+version = "0.0.1"
+description = "a simple clipboard manager"
+authors = ["churchTao"]
+license = "Apache-2.0 license"
+repository = "https://github.com/ChurchTao/Lanaya"
+default-run = "lanaya"
 edition = "2021"
 rust-version = "1.59"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
 tauri-build = { version = "1.2.1", features = [] }

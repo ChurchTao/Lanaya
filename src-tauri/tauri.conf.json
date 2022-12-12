@@ -21,7 +21,7 @@
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
-      "copyright": "github.churchTao",
+      "copyright": "© 2022 churchTao All Rights Reserved",
       "deb": {
         "depends": []
       },
@@ -34,7 +34,7 @@
         "icons/icon.ico"
       ],
       "identifier": "com.church.lanaya",
-      "longDescription": "",
+      "longDescription": "a simple clipboard manager",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -43,7 +43,7 @@
         "signingIdentity": null
       },
       "resources": [],
-      "shortDescription": "",
+      "shortDescription": "a simple clipboard manager",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,
