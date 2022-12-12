@@ -1,10 +1,25 @@
 <template>
   <header class="search-bar" data-tauri-drag-region>
     <img src="../assets/sousuo.svg" class="search-icon" />
-    <input type="text" class="search-input" placeholder="Search" />
+    <input
+      @input="onSearchInputChange"
+      @keyup.enter="onEnter"
+      type="text"
+      class="search-input"
+      placeholder="Search"
+    />
   </header>
 </template>
-<script setup></script>
+<script setup>
+const emit = defineEmits(["change", "enter"]);
+const onSearchInputChange = (e) => {
+  console.log(e.target.value);
+  emit("change", e.target.value);
+};
+const onEnter = () => {
+  emit("enter");
+};
+</script>
 <style scoped>
 .search-bar {
   display: flex;

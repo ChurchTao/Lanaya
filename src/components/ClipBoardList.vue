@@ -30,6 +30,7 @@
             :key="index"
             :data="item"
             :select="select == index"
+            @click="clickThis(index)"
             @mouseenter="selectThis(index)"
           />
         </ul>
@@ -43,6 +44,7 @@ import HotKeyItem from "./HotKeyItem.vue";
 import ClipBoardItem from "./ClipBoardItem.vue";
 import { ref } from "vue";
 
+const emit = defineEmits(["clickItem", "changeIndex"]);
 defineProps({
   noResult: Boolean,
   data: Array[Object],
@@ -51,6 +53,11 @@ defineProps({
 const select = ref(-1);
 const selectThis = (index) => {
   select.value = index;
+  emit("changeIndex", index);
+};
+const clickThis = (index) => {
+  select.value = index;
+  emit("clickItem", index);
 };
 </script>
 <style scoped>

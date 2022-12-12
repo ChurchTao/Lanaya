@@ -4,7 +4,7 @@
       ><div class="DocSearch-Hit-Container">
         <div class="DocSearch-Hit-content-wrapper">
           <span class="DocSearch-Hit-title">
-            <template :key="item.content" v-for="item in data.contentParse">
+            <template :key="item.id" v-for="item in data.contentParse">
               <mark v-if="item.match">{{ item.content }}</mark>
               <template v-else>
                 {{ item.content }}

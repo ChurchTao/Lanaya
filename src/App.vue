@@ -1,87 +1,144 @@
 <template>
-  <SearchBar />
-  <ClipBoardList :no-result="noResultFlag" :data="clipBoardDataList" />
+  <SearchBar @change="onSearchChange" @enter="onKeyEnter" />
+  <ClipBoardList
+    :no-result="noResultFlag"
+    :data="clipBoardDataList"
+    @clickItem="clickDataItem"
+    @changeIndex="changeIndex"
+  />
   <KeyMapBar />
 </template>
+<script>
+import { listen, once } from "@tauri-apps/api/event";
+import { isRegistered, register } from "@tauri-apps/api/globalShortcut";
+const mainShortCut = "CommandOrControl+Shift+C";
+console.log("App is loaded");
+// const unlisten = await once("loaded", (event) => {
+//   console.log(`App is loaded, loggedIn: ${event.payload.loggedIn}, token: ${event.payload.token}`);
+// });
+// unlisten();
+const isRegisteredFlag = await isRegistered(mainShortCut);
+if (isRegisteredFlag) {
+  await message(`快捷键 ${mainShortCut} 被占用`, { title: "警告", type: "error" });
+} else {
+  await register(mainShortCut, async () => {
+    console.log("Shortcut triggered");
+    let visible = await appWindow.isVisible();
+    if (visible) {
+      await appWindow.hide();
+    } else {
+      await appWindow.show();
+      await appWindow.setFocus();
+    }
+  });
+}
+</script>
 
 <script setup>
 import SearchBar from "./components/SearchBar.vue";
 import ClipBoardList from "./components/ClipBoardList.vue";
 import KeyMapBar from "./components/KeyMapBar.vue";
 import { appWindow, LogicalSize } from "@tauri-apps/api/window";
-import { ref } from "vue";
+import { ref, onMounted, onBeforeMount, onUpdated } from "vue";
+import { selectPage, insertRecord, removeById } from "./service/recordService";
+import { readText, writeText } from "@tauri-apps/api/clipboard";
 
 const noResultFlag = ref(false);
-const clipBoardDataList = [
-  {
-    contentParse: [
-      { content: "hel", match: true },
-      { content: "lo world", match: false },
-    ],
-    contentSource: "hello world",
-  },
-  {
-    contentParse: [
-      { content: "hel", match: true },
-      { content: "lo world2", match: false },
-    ],
-    contentSource: "hello world2",
-  },
-  {
-    contentParse: [
-      { content: "hel", match: true },
-      { content: "lo world3", match: false },
-    ],
-    contentSource: "hello world3",
-  },
-  {
-    contentParse: [
-      { content: "hel", match: true },
-      { content: "lo world", match: false },
-    ],
-    contentSource: "hello world",
-  },
-  {
-    contentParse: [
-      { content: "hel", match: true },
-      { content: "lo world2", match: false },
-    ],
-    contentSource: "hello world2",
-  },
-  {
-    contentParse: [
-      { content: "hel", match: true },
-      { content: "lo world3", match: false },
-    ],
-    contentSource: "hello world3",
-  },
-  {
-    contentParse: [
-      { content: "hel", match: true },
-      { content: "lo world", match: false },
-    ],
-    contentSource: "hello world",
-  },
-  {
-    contentParse: [
-      { content: "hel", match: true },
-      { content: "lo world2", match: false },
-    ],
-    contentSource: "hello world2",
-  },
-  {
-    contentParse: [
-      { content: "hel", match: true },
-      { content: "lo world3", match: false },
-    ],
-    contentSource: "hello world3",
-  },
-];
-setTimeout(() => {
+const selectIndex = ref(-1);
+const lastClipBoardData = ref("");
+/**
+ * @type {Array<{id: number, contentParse: Array<{content: string, match: boolean}>, contentSource: string}>}
+ */
+const clipBoardDataList = ref([]);
+onBeforeMount(async () => {
+  await initClipBoardDataList();
+});
+
+onMounted(async () => {
+  setInterval(async () => {
+    let text = await readText();
+    if (text === null) {
+      return;
+    }
+    if (text.trim() === "") {
+      return;
+    }
+    if (text !== lastClipBoardData.value) {
+      lastClipBoardData.value = text;
+      await insertRecord(text);
+      await initClipBoardDataList();
+    }
+  }, 500);
+});
+
+onUpdated((e) => {
   let height = document.body.offsetHeight;
   let width = document.body.offsetWidth;
   appWindow.setSize(new LogicalSize(width, height));
-}, 500);
+});
+
+const initClipBoardDataList = async () => {
+  let res = await selectPage("");
+  clipBoardDataList.value = res.map((item) => formatData(item, ""));
+};
+
+const onSearchChange = async (value) => {
+  if (value === "") {
+    // reset flag
+    noResultFlag.value = false;
+  }
+  // [{id: 1, content: "hello world"}]
+  let res = await selectPage(value, 20);
+  // format to clipBoardDataList
+  clipBoardDataList.value = res.map((item) => formatData(item, value));
+  if (res.length === 0) {
+    noResultFlag.value = true;
+  } else {
+    noResultFlag.value = false;
+  }
+};
+
+const changeIndex = (index) => {
+  selectIndex.value = index;
+};
+
+const clickDataItem = async (index) => {
+  console.log("clickDataItem", index);
+  let item = clipBoardDataList.value[index];
+  await writeText(item.contentSource);
+  appWindow.hide();
+};
+
+const onKeyEnter = async () => {
+  console.log("onKeyEnter");
+  if (selectIndex.value === -1) {
+    return;
+  }
+  let item = clipBoardDataList.value[selectIndex.value];
+  await writeText(item.contentSource);
+  appWindow.hide();
+};
+
+const formatData = (item, value) => {
+  let contentSource = item.content;
+  let contentParse = [];
+  let matchIndex = contentSource.indexOf(value);
+  if (matchIndex === -1) {
+    contentParse.push({ content: contentSource, match: false });
+  } else {
+    let matchContent = contentSource.slice(matchIndex, matchIndex + value.length);
+    let beforeContent = contentSource.slice(0, matchIndex);
+    let afterContent = contentSource.slice(matchIndex + value.length);
+    contentParse.push({ content: beforeContent, match: false });
+    contentParse.push({ content: matchContent, match: true });
+    contentParse.push({ content: afterContent, match: false });
+  }
+  return {
+    id: item.id,
+    contentParse,
+    contentSource,
+  };
+};
 </script>
 
 <style scoped></style>
