@@ -1,74 +1,71 @@
 <template>
-  <SearchBar @change="onSearchChange" @enter="onKeyEnter" />
+  <SearchBar @change="onSearchChange" />
   <ClipBoardList
+    :select-index="selectIndex"
     :no-result="noResultFlag"
     :data="clipBoardDataList"
     @clickItem="clickDataItem"
     @changeIndex="changeIndex"
   />
-  <KeyMapBar />
+  <KeyMapBar :key-map="keyMap" />
 </template>
-<script>
-import { listen, once } from "@tauri-apps/api/event";
-import { isRegistered, register } from "@tauri-apps/api/globalShortcut";
-const mainShortCut = "CommandOrControl+Shift+C";
-console.log("App is loaded");
-// const unlisten = await once("loaded", (event) => {
-//   console.log(`App is loaded, loggedIn: ${event.payload.loggedIn}, token: ${event.payload.token}`);
-// });
-// unlisten();
-const isRegisteredFlag = await isRegistered(mainShortCut);
-if (isRegisteredFlag) {
-  await message(`快捷键 ${mainShortCut} 被占用`, { title: "警告", type: "error" });
-} else {
-  await register(mainShortCut, async () => {
-    console.log("Shortcut triggered");
-    let visible = await appWindow.isVisible();
-    if (visible) {
-      await appWindow.hide();
-    } else {
-      await appWindow.show();
-      await appWindow.setFocus();
-    }
-  });
-}
-</script>
-
 <script setup>
 import SearchBar from "./components/SearchBar.vue";
 import ClipBoardList from "./components/ClipBoardList.vue";
 import KeyMapBar from "./components/KeyMapBar.vue";
 import { appWindow, LogicalSize } from "@tauri-apps/api/window";
-import { ref, onMounted, onBeforeMount, onUpdated } from "vue";
+import { ref, onMounted, onBeforeMount, onUpdated, onUnmounted } from "vue";
 import { selectPage, insertRecord, removeById } from "./service/recordService";
 import { readText, writeText } from "@tauri-apps/api/clipboard";
-
+import { listen, once } from "@tauri-apps/api/event";
+import { message } from "@tauri-apps/api/dialog";
+import { isRegistered, register, unregister } from "@tauri-apps/api/globalShortcut";
+const mainShortCut = "CommandOrControl+Shift+C";
 const noResultFlag = ref(false);
 const selectIndex = ref(-1);
 const lastClipBoardData = ref("");
+const keyMap = [
+  { keymap: ["Enter"], tips: "复制" },
+  { keymap: ["Cmd+Nmb"], tips: "快捷复制" },
+  { keymap: ["↑", "↓"], tips: "移动选择" },
+  { keymap: ["Esc"], tips: "关闭" },
+  { keymap: ["Cmd+Shift+C"], tips: "唤起" },
+];
 /**
  * @type {Array<{id: number, contentParse: Array<{content: string, match: boolean}>, contentSource: string}>}
  */
 const clipBoardDataList = ref([]);
 onBeforeMount(async () => {
+  await initShortCut();
   await initClipBoardDataList();
 });
+let clipBoardListener;
 
 onMounted(async () => {
-  setInterval(async () => {
-    let text = await readText();
-    if (text === null) {
-      return;
-    }
-    if (text.trim() === "") {
-      return;
-    }
-    if (text !== lastClipBoardData.value) {
-      lastClipBoardData.value = text;
-      await insertRecord(text);
-      await initClipBoardDataList();
-    }
-  }, 500);
+  initAppShortCut();
+  if (!clipBoardListener) {
+    clipBoardListener = setInterval(async () => {
+      let text = await readText();
+      if (text === null) {
+        return;
+      }
+      if (text.trim() === "") {
+        return;
+      }
+      if (text !== lastClipBoardData.value) {
+        lastClipBoardData.value = text;
+        await insertRecord(text);
+        await initClipBoardDataList();
+      }
+    }, 500);
+  }
+});
+
+onUnmounted(async () => {
+  if (clipBoardListener) {
+    clearInterval(clipBoardListener);
+  }
+  await unRegisterShortCut();
 });
 
 onUpdated((e) => {
@@ -79,6 +76,7 @@ onUpdated((e) => {
 
 const initClipBoardDataList = async () => {
   let res = await selectPage("");
+  lastClipBoardData.value = res[0].content;
   clipBoardDataList.value = res.map((item) => formatData(item, ""));
 };
 
@@ -137,6 +135,75 @@ const formatData = (item, value) => {
     id: item.id,
     contentParse,
     contentSource,
+  };
+};
+
+const initShortCut = async () => {
+  const isRegisteredFlag = await isRegistered(mainShortCut);
+  if (isRegisteredFlag) {
+    await message(`快捷键 ${mainShortCut} 被占用`, { title: "警告", type: "error" });
+  } else {
+    await register(mainShortCut, async () => {
+      console.log("Shortcut triggered");
+      let visible = await appWindow.isVisible();
+      if (visible) {
+        await appWindow.hide();
+      } else {
+        await appWindow.show();
+        await appWindow.setFocus();
+      }
+    });
+  }
+};
+
+const unRegisterShortCut = async () => {
+  const isRegisteredFlag = await isRegistered(mainShortCut);
+  if (isRegisteredFlag) {
+    console.log("unRegisterShortCut");
+    await unregister(mainShortCut);
+  }
+};
+
+const moveIndex = (offset) => {
+  let selectIndexTmp = selectIndex.value + offset;
+  if (selectIndexTmp <= 0) {
+    selectIndex.value = 0;
+  } else if (selectIndexTmp >= clipBoardDataList.value.length - 1) {
+    selectIndex.value = clipBoardDataList.value.length - 1;
+  } else {
+    selectIndex.value = selectIndexTmp;
+  }
+};
+
+const initAppShortCut = async () => {
+  document.onkeydown = async (e) => {
+    let key = e.key;
+    let isShift = e.shiftKey;
+    let isMeta = e.metaKey;
+    let isCtrl = e.ctrlKey;
+    let isAlt = e.altKey;
+    let isCmd = isMeta || isCtrl;
+    let numberKey = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    if (key == "Escape") {
+      //esc
+      await appWindow.hide();
+    }
+    if (key == "Up" || key == "ArrowUp") {
+      //up
+      moveIndex(-1);
+    }
+    if (key == "Down" || key == "ArrowDown") {
+      //down
+      moveIndex(1);
+    }
+    if (key == "Enter") {
+      //enter
+      await onKeyEnter();
+    }
+    if (isCmd && numberKey.includes(key)) {
+      //cmd + 1
+      await clickDataItem(parseInt(key) - 1);
+    }
   };
 };
 </script>

@@ -10,11 +10,9 @@
 </template>
 <script setup>
 import HotKeyItem from "./HotKeyItem.vue";
-const keyMap = [
-  { keymap: ["Enter"], tips: "搜索" },
-  { keymap: ["↑", "↓"], tips: "移动选择" },
-  { keymap: ["Esc"], tips: "关闭" },
-];
+defineProps({
+  keyMap: Array[Object],
+});
 </script>
 <style scoped>
 .key-map-bar {

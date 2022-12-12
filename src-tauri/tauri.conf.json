@@ -21,7 +21,7 @@
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
-      "copyright": "",
+      "copyright": "github.churchTao",
       "deb": {
         "depends": []
       },
