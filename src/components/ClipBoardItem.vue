@@ -60,11 +60,14 @@ defineProps({
 }
 .DocSearch-Hit-Container {
   align-items: center;
+  justify-content: space-between;
   color: var(--docsearch-hit-color);
   display: flex;
   flex-direction: row;
-  height: var(--docsearch-hit-height);
+  min-height: var(--docsearch-hit-height);
+  max-height: var(--docsearch-hit-max-height);
   padding: 0 var(--docsearch-spacing) 0 0;
+  overflow: hidden;
 }
 .DocSearch-Hit-action,
 .DocSearch-Hit-icon {
@@ -73,20 +76,21 @@ defineProps({
 }
 .DocSearch-Hit-content-wrapper {
   display: flex;
-  flex: 1 1 auto;
   flex-direction: column;
   font-weight: 500;
   justify-content: center;
-  line-height: 1.2em;
+  line-height: 1.4em;
   margin: 0 8px;
   overflow-x: hidden;
   position: relative;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 80%;
+  /* white-space: nowrap; */
+  width: 90%;
+  max-height: var(--docsearch-hit-max-height);
 }
 .DocSearch-Hit-title {
   font-size: 0.9em;
+  overflow: hidden;
 }
 .DocSearch-Hits mark {
   background: none;

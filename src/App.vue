@@ -29,7 +29,8 @@ const keyMap = [
   { keymap: ["Cmd+Nmb"], tips: "快捷复制" },
   { keymap: ["↑", "↓"], tips: "移动选择" },
   { keymap: ["Esc"], tips: "关闭" },
-  { keymap: ["Cmd+Shift+C"], tips: "唤起" },
+  { keymap: ["Backspace"], tips: "删除" },
+  { keymap: ["Cmd+Shift+C"], tips: "全局唤起" },
 ];
 /**
  * @type {Array<{id: number, contentParse: Array<{content: string, match: boolean}>, contentSource: string}>}
@@ -76,8 +77,10 @@ onUpdated((e) => {
 
 const initClipBoardDataList = async () => {
   let res = await selectPage("");
-  lastClipBoardData.value = res[0].content;
-  clipBoardDataList.value = res.map((item) => formatData(item, ""));
+  if (res) {
+    lastClipBoardData.value = res[0].content;
+    clipBoardDataList.value = res.map((item) => formatData(item, ""));
+  }
 };
 
 const onSearchChange = async (value) => {
@@ -117,6 +120,16 @@ const onKeyEnter = async () => {
   appWindow.hide();
 };
 
+const onKeyBackspace = async () => {
+  console.log("onKeyBackspace");
+  if (selectIndex.value === -1) {
+    return;
+  }
+  let item = clipBoardDataList.value[selectIndex.value];
+  await removeById(item.id);
+  await initClipBoardDataList();
+};
+
 const formatData = (item, value) => {
   let contentSource = item.content;
   let contentParse = [];
@@ -154,6 +167,12 @@ const initShortCut = async () => {
       }
     });
   }
+  // const unlistenDestroyed = await listen("tauri://destroyed", (event) => {
+  //   console.log(`destroyed window`, event);
+  // });
+  // const unlistenCreated = await listen("tauri://window-created", (event) => {
+  //   console.log(`created window`, event);
+  // });
 };
 
 const unRegisterShortCut = async () => {
@@ -203,6 +222,10 @@ const initAppShortCut = async () => {
     if (isCmd && numberKey.includes(key)) {
       //cmd + 1
       await clickDataItem(parseInt(key) - 1);
+    }
+    if (key == "Backspace") {
+      //cmd + backspace
+      await onKeyBackspace();
     }
   };
 };

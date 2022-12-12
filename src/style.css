@@ -255,6 +255,7 @@
   --docsearch-modal-height: 600px;
   --docsearch-searchbox-height: 56px;
   --docsearch-hit-height: 56px;
+  --docsearch-hit-max-height: 112px;
   --docsearch-hit-color: #444950;
   --docsearch-hit-active-color: #fff;
   --docsearch-hit-background: #fff;

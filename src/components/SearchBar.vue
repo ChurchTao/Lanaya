@@ -13,7 +13,6 @@
 <script setup>
 const emit = defineEmits(["change", "enter"]);
 const onSearchInputChange = (e) => {
-  console.log(e.target.value);
   emit("change", e.target.value);
 };
 const onEnter = () => {

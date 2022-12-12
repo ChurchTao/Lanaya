@@ -1,7 +1,7 @@
 {
   "name": "lanaya",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,6 @@
   "dependencies": {
     "@tauri-apps/api": "^1.2.0",
     "md5": "^2.3.0",
-    "pinia": "^2.0.28",
     "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql#dev",
     "vue": "^3.2.41"
   },
