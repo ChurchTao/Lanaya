@@ -9,9 +9,14 @@
 A clipboard management with easy to use.
 </h3>
 
-<h4 align="center">
+<h3 align="center">
+<a src="https://github.com/ChurchTao/Lanaya">English</a> |
+<a scr="https://github.com/ChurchTao/Lanaya/blob/master/README_CN.md" target="_blank">中文</a>
+</h3>
+
+## Introduction
+
 Lanaya comes from Templar Assassin in Dota2, which is a clipboard management software with convenient and simple interaction.
-</h4>
 
 ## Features
 
@@ -22,8 +27,9 @@ Lanaya comes from Templar Assassin in Dota2, which is a clipboard management sof
 
 - [ ] make some args to settings.
 - [ ] light and black theme.
-- [ ] collect css by `taildwind`
-- [ ] collect code
+- [ ] collect css by `taildwind`.
+- [ ] collect code.
+- [ ] add image type history.
 
 ## Download
 
@@ -67,6 +73,7 @@ Lanaya was based on or inspired by these projects and so on:
 
 - [tauri-apps/tauri](https://github.com/tauri-apps/tauri): Build smaller, faster, and more secure desktop applications with a web frontend.
 - [vitejs/vite](https://github.com/vitejs/vite): Next generation frontend tooling. It's fast!
+- [vue3](https://github.com/vuejs/core): An approachable, performant and versatile framework for building web user interfaces.
 
 ## License
 

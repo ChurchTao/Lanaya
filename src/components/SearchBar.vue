@@ -7,6 +7,7 @@
       type="text"
       class="search-input"
       placeholder="Search"
+      autocomplete="off"
     />
   </header>
 </template>

@@ -17,7 +17,6 @@ import { appWindow, LogicalSize } from "@tauri-apps/api/window";
 import { ref, onMounted, onBeforeMount, onUpdated, onUnmounted } from "vue";
 import { selectPage, insertRecord, removeById } from "./service/recordService";
 import { readText, writeText } from "@tauri-apps/api/clipboard";
-import { listen, once } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/api/dialog";
 import { isRegistered, register, unregister } from "@tauri-apps/api/globalShortcut";
 const mainShortCut = "CommandOrControl+Shift+C";
