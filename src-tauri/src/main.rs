@@ -6,6 +6,7 @@
 use tauri::SystemTray;
 use tauri::{App, CustomMenuItem, Manager, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 use tauri_plugin_sql::TauriSql;
+use window_shadows::set_shadow;
 
 fn main() {
     // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.
@@ -52,4 +53,6 @@ fn main() {
 fn set_up(app: &mut App) {
     // Make the docker NOT to have an active app when started
     app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+    let window = app.get_window("main").unwrap();
+    set_shadow(&window, true).expect("Unsupported platform!");
 }

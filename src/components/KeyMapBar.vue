@@ -1,13 +1,20 @@
 <template>
-  <footer class="key-map-bar" data-tauri-drag-region>
+  <div
+    class="key-map-bar h-12 text-center flex items-center flex-shrink-0 py-0 px-4 relative select-none bg-white rounded-b-xl"
+    data-tauri-drag-region
+  >
     <HotKeyItem
       :key="item.tips"
       v-for="item in keyMap"
       :keymap="item.keymap"
       :tips="item.tips"
     ></HotKeyItem>
-    <img src="../assets/gh-desktop.png" class="github-repository" @click="gotoGithub" />
-  </footer>
+    <img
+      src="../assets/gh-desktop.png"
+      class="absolute w-8 h-8 right-4 cursor-pointer"
+      @click="gotoGithub"
+    />
+  </div>
 </template>
 <script setup>
 import HotKeyItem from "./HotKeyItem.vue";
@@ -21,23 +28,6 @@ const gotoGithub = () => {
 </script>
 <style scoped>
 .key-map-bar {
-  height: 44px;
-  align-items: center;
-  border-radius: 0 0 8px 8px;
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  padding: 0 12px;
-  position: relative;
-  user-select: none;
-  background: #ffffff;
   box-shadow: 0 -1px 0 0 #e0e3e8, 0 -3px 6px 0 rgba(69, 98, 155, 0.12);
-}
-.github-repository {
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  right: 16px;
-  cursor: pointer;
 }
 </style>

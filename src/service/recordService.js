@@ -48,4 +48,9 @@ async function removeById(id) {
   return await db.execute("DELETE FROM record WHERE id = $1", [id]);
 }
 
-export { selectPage, insertRecord, updateRecord, removeById };
+async function clearAll() {
+  let db = await getConnect();
+  return await db.execute("DELETE FROM record");
+}
+
+export { selectPage, insertRecord, updateRecord, removeById, clearAll };

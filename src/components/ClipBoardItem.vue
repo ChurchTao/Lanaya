@@ -1,5 +1,5 @@
 <template>
-  <li class="DocSearch-Hit" id="docsearch-item-0" role="option" :aria-selected="select">
+  <li class="DocSearch-Hit" role="option" :aria-selected="select">
     <a href="javascript:void(0)"
       ><div class="DocSearch-Hit-Container">
         <div class="DocSearch-Hit-content-wrapper">

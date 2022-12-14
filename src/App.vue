@@ -1,21 +1,24 @@
 <template>
-  <SearchBar @change="onSearchChange" />
-  <ClipBoardList
-    :select-index="selectIndex"
-    :no-result="noResultFlag"
-    :data="clipBoardDataList"
-    @clickItem="clickDataItem"
-    @changeIndex="changeIndex"
-  />
-  <KeyMapBar :key-map="keyMap" />
+  <Layout>
+    <SearchBar @change="onSearchChange" />
+    <ClipBoardList
+      :select-index="selectIndex"
+      :no-result="noResultFlag"
+      :data="clipBoardDataList"
+      @clickItem="clickDataItem"
+      @changeIndex="changeIndex"
+    />
+    <KeyMapBar :key-map="keyMap" />
+  </Layout>
 </template>
 <script setup>
+import Layout from "./components/Layout.vue";
 import SearchBar from "./components/SearchBar.vue";
 import ClipBoardList from "./components/ClipBoardList.vue";
 import KeyMapBar from "./components/KeyMapBar.vue";
 import { appWindow, LogicalSize } from "@tauri-apps/api/window";
 import { ref, onMounted, onBeforeMount, onUpdated, onUnmounted } from "vue";
-import { selectPage, insertRecord, removeById } from "./service/recordService";
+import { selectPage, insertRecord, removeById, clearAll } from "./service/recordService";
 import { readText, writeText } from "@tauri-apps/api/clipboard";
 import { message } from "@tauri-apps/api/dialog";
 import { isRegistered, register, unregister } from "@tauri-apps/api/globalShortcut";
@@ -28,7 +31,7 @@ const keyMap = [
   { keymap: ["Cmd+Nmb"], tips: "快捷复制" },
   { keymap: ["↑", "↓"], tips: "移动选择" },
   { keymap: ["Esc"], tips: "关闭" },
-  { keymap: ["Backspace"], tips: "删除" },
+  { keymap: ["Cmd+Shift+BackSpace"], tips: "清空历史" },
   { keymap: ["Cmd+Shift+C"], tips: "全局唤起" },
 ];
 /**
@@ -68,16 +71,12 @@ onUnmounted(async () => {
   await unRegisterShortCut();
 });
 
-onUpdated((e) => {
-  let height = document.body.offsetHeight;
-  let width = document.body.offsetWidth;
-  appWindow.setSize(new LogicalSize(width, height));
-});
-
 const initClipBoardDataList = async () => {
   let res = await selectPage("");
   if (res) {
-    lastClipBoardData.value = res[0].content;
+    if (res.length > 0) {
+      lastClipBoardData.value = res[0].content;
+    }
     clipBoardDataList.value = res.map((item) => formatData(item, ""));
   }
 };
@@ -93,8 +92,10 @@ const onSearchChange = async (value) => {
   clipBoardDataList.value = res.map((item) => formatData(item, value));
   if (res.length === 0) {
     noResultFlag.value = true;
+    selectIndex.value = -1;
   } else {
     noResultFlag.value = false;
+    selectIndex.value = 0;
   }
 };
 
@@ -126,6 +127,11 @@ const onKeyBackspace = async () => {
   }
   let item = clipBoardDataList.value[selectIndex.value];
   await removeById(item.id);
+  await initClipBoardDataList();
+};
+
+const onClearAll = async () => {
+  await clearAll();
   await initClipBoardDataList();
 };
 
@@ -205,27 +211,37 @@ const initAppShortCut = async () => {
     if (key == "Escape") {
       //esc
       await appWindow.hide();
+      return;
     }
     if (key == "Up" || key == "ArrowUp") {
       //up
       moveIndex(-1);
+      return;
     }
     if (key == "Down" || key == "ArrowDown") {
       //down
       moveIndex(1);
+      return;
     }
     if (key == "Enter") {
       //enter
       await onKeyEnter();
+      return;
     }
     if (isCmd && numberKey.includes(key)) {
       //cmd + 1
       await clickDataItem(parseInt(key) - 1);
+      return;
     }
-    if (key == "Backspace") {
-      //cmd + backspace
-      await onKeyBackspace();
+    if (isCmd && isShift && key == "Backspace") {
+      await onClearAll();
+      return;
     }
+    // if (isCmd && key == "Backspace") {
+    //   //cmd + backspace
+    //   await onKeyBackspace();
+    //   return;
+    // }
   };
 };
 </script>

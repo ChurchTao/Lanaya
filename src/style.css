@@ -1,25 +1,24 @@
+/* ./src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
+  background-color: transparent;
+  box-sizing: border-box;
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  --docsearch-muted-color: #909399
+  --docsearch-modal-background: #fafafa
+  --docsearch-highlight-color: #409eff
 
-  --categories-c-bg: #f9fafc;
-  --categories-c-page: #e5e9f2;
-  --categories-c-overlay: white;
-  --categories-c-text: #99a9bf;
-  --categories-c-icon: #e5e9f2;
-  --categories-c-line: #e5e9f2;
   --ep-c-bg-row: #f9fafc;
   --ep-c-bg-purple: #d3dce6;
   --ep-c-bg-purple-dark: #99a9bf;
@@ -291,87 +290,41 @@
   --docsearch-modal-shadow: var(--el-box-shadow);
 }
 
+html,
 body {
   margin: 0;
-  min-width: 100%;
+  padding: 0;
+  width: 100%;
   overflow: hidden;
-  background-color: transparent;
-  padding: 24px;
-  box-sizing: border-box;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  scroll-behavior: smooth;
+  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-.card {
-  padding: 2em;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: transparent;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-
-#app {
-  border-radius: 8px;
-  box-sizing: border-box;
-  background-color: #fafafa;
-  overflow: hidden;
-  /*窗口阴影*/
-  box-shadow: 0px 12px 32px 4px rgba(0, 0, 0, 0.04), 0px 8px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  position: relative;
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
 }
 
 input {
   background: none;
   outline: none;
   border: 0;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+  }
 }
