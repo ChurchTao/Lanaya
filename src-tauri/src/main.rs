@@ -10,9 +10,10 @@ use window_shadows::set_shadow;
 
 fn main() {
     // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.
-    let show = CustomMenuItem::new("show".to_string(), "唤起主界面(Cmd+Shift+C)");
-    let hide = CustomMenuItem::new("hide".to_string(), "隐藏窗口(Esc)");
-    let quit = CustomMenuItem::new("quit".to_string(), "退出");
+    let show = CustomMenuItem::new("show".to_string(), "唤起主界面")
+        .accelerator("CommandOrControl+Shift+C");
+    let hide = CustomMenuItem::new("hide".to_string(), "隐藏窗口").accelerator("Esc");
+    let quit = CustomMenuItem::new("quit".to_string(), "退出").accelerator("CommandOrControl+Q");
     let tray_menu = SystemTrayMenu::new()
         .add_item(show)
         .add_item(hide)

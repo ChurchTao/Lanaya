@@ -4,7 +4,13 @@
       <div
         class="data-item-container flex flex-row items-center justify-between max-h-28 pr-4 overflow-hidden"
       >
-        <div class="data-item-icon w-5 h-5">
+        <div
+          v-if="cmdPressDown && idx < 9"
+          class="data-item-icon-copy w-5 h-5 text-center leading-5 rounded"
+        >
+          <span class="text-sm font-medium">{{ idx + 1 }}</span>
+        </div>
+        <div v-else class="data-item-icon w-5 h-5">
           <svg width="20" height="20" viewBox="0 0 20 20">
             <path
               d="M17 6v12c0 .52-.2 1-1 1H4c-.7 0-1-.33-1-1V2c0-.55.42-1 1-1h8l5 5zM14 8h-3.13c-.51 0-.87-.34-.87-.87V4"
@@ -43,7 +49,6 @@
               <path d="M8 17l-6-6 6-6"></path>
             </g>
           </svg>
-          <!-- <HotKeyItem :keymap="['Cmd+1']"></HotKeyItem> -->
         </div>
       </div>
     </div>
@@ -53,8 +58,16 @@
 import HotKeyItem from "./HotKeyItem.vue";
 
 defineProps({
-  select: Boolean,
+  select: {
+    type: Boolean,
+    default: false,
+  },
   data: Object,
+  cmdPressDown: {
+    type: Boolean,
+    default: false,
+  },
+  idx: Number,
 });
 </script>
 <style scoped>
@@ -68,6 +81,10 @@ defineProps({
 .data-item-icon {
   color: var(--docsearch-muted-color);
   stroke-width: var(--docsearch-icon-stroke-width);
+}
+.data-item-icon-copy {
+  color: white;
+  background: var(--docsearch-muted-color);
 }
 .data-item-content-wrapper {
   width: 90%;

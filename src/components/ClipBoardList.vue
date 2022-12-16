@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="data-list box-border min-h-4 max-h-96 overflow-y-auto py-0 px-4 mt-3"
-    data-tauri-drag-region
-  >
+  <div class="data-list box-border min-h-4 overflow-y-auto py-0 pl-4 mt-2" data-tauri-drag-region>
     <SearchNoResult v-if="noResult || data.length == 0" />
     <div class="data-list-container" v-if="!noResult">
       <section class="item-hits">
@@ -10,8 +7,10 @@
           <ClipBoardItem
             v-for="(item, index) in data"
             :key="index"
+            :idx="index"
             :data="item"
             :select="selectIndex == index"
+            :cmd-press-down="cmdPressDown"
             @click="clickThis(index)"
             @mouseenter="selectThis(index)"
           />
@@ -33,6 +32,7 @@ defineProps({
   noResult: Boolean,
   data: Array[Object],
   selectIndex: Number,
+  cmdPressDown: Boolean,
 });
 const selectThis = (index) => {
   emit("changeIndex", index);
@@ -51,6 +51,7 @@ onUpdated(async () => {
 .data-list {
   scrollbar-color: var(--docsearch-muted-color) var(--docsearch-modal-background);
   scrollbar-width: thin;
+  max-height: 30rem;
 }
 
 .data-list ul {

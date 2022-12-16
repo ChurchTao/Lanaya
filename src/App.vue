@@ -5,6 +5,7 @@
       :select-index="selectIndex"
       :no-result="noResultFlag"
       :data="clipBoardDataList"
+      :cmd-press-down="cmdPressDown"
       @clickItem="clickDataItem"
       @changeIndex="changeIndex"
     />
@@ -17,7 +18,7 @@ import SearchBar from "./components/SearchBar.vue";
 import ClipBoardList from "./components/ClipBoardList.vue";
 import KeyMapBar from "./components/KeyMapBar.vue";
 import { appWindow, LogicalSize } from "@tauri-apps/api/window";
-import { ref, onMounted, onBeforeMount, onUpdated, onUnmounted } from "vue";
+import { ref, onMounted, onBeforeMount, onUnmounted } from "vue";
 import { selectPage, insertRecord, removeById, clearAll } from "./service/recordService";
 import { readText, writeText } from "@tauri-apps/api/clipboard";
 import { message } from "@tauri-apps/api/dialog";
@@ -26,13 +27,14 @@ const mainShortCut = "CommandOrControl+Shift+C";
 const noResultFlag = ref(false);
 const selectIndex = ref(-1);
 const lastClipBoardData = ref("");
+const cmdPressDown = ref(false);
 const keyMap = [
-  { keymap: ["Enter"], tips: "复制" },
-  { keymap: ["Cmd+Nmb"], tips: "快捷复制" },
+  { keymap: ["⏎"], tips: "复制" },
+  { keymap: ["⌘+Nmb"], tips: "快捷复制" },
   { keymap: ["↑", "↓"], tips: "移动选择" },
   { keymap: ["Esc"], tips: "关闭" },
-  { keymap: ["Cmd+Shift+BackSpace"], tips: "清空历史" },
-  { keymap: ["Cmd+Shift+C"], tips: "全局唤起" },
+  { keymap: ["⌘⇧⌫"], tips: "清空历史" },
+  { keymap: ["⌘⇧C"], tips: "全局唤起" },
 ];
 /**
  * @type {Array<{id: number, contentParse: Array<{content: string, match: boolean}>, contentSource: string}>}
@@ -208,6 +210,9 @@ const initAppShortCut = async () => {
     let isAlt = e.altKey;
     let isCmd = isMeta || isCtrl;
     let numberKey = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    if (isCmd) {
+      cmdPressDown.value = true;
+    }
     if (key == "Escape") {
       //esc
       await appWindow.hide();
@@ -242,6 +247,14 @@ const initAppShortCut = async () => {
     //   await onKeyBackspace();
     //   return;
     // }
+  };
+
+  document.onkeyup = async (e) => {
+    let key = e.key;
+    let isCmd = key == "Meta" || key == "Control";
+    if (isCmd) {
+      cmdPressDown.value = false;
+    }
   };
 };
 </script>
