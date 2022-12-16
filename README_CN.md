@@ -10,8 +10,8 @@
 </h3>
 
 <h3 align="center">
-<a src="https://github.com/ChurchTao/Lanaya">English</a> |
-<a scr="https://github.com/ChurchTao/Lanaya/blob/master/README_CN.md" target="_blank">中文</a>
+<a href="https://github.com/ChurchTao/Lanaya">English</a> |
+<a href="https://github.com/ChurchTao/Lanaya/blob/master/README_CN.md" target="_blank">中文</a>
 </h3>
 
 ## 简介
