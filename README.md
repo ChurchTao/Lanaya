@@ -6,56 +6,56 @@
 </h1>
 
 <h3 align="center">
-A clipboard management with easy to use.
+一个简洁易用的剪切板管理
 </h3>
 
 <h3 align="center">
-<a href="https://github.com/ChurchTao/Lanaya">English</a> |
-<a href="https://github.com/ChurchTao/Lanaya/blob/master/README_CN.md" target="_blank">中文</a>
+<a src="https://github.com/ChurchTao/Lanaya">English</a> |
+<a scr="https://github.com/ChurchTao/Lanaya/blob/master/README_CN.md" target="_blank">中文</a>
 </h3>
 
-## Introduction
+## 简介
 
-Lanaya comes from Templar Assassin in Dota2, which is a clipboard management software with convenient and simple interaction.
+`Lanaya` 来自于`DOTA2`中的圣堂刺客, 简洁易用，全键盘操作的剪切板管理工具
 
-## Features
+## 功能
 
-- Search by keywords.
-- All shortcut to manage.
+- 通过关键词搜索
+- 全快捷键操作
 
-## Todos
+## 未完成
 
-- [ ] make some args to settings.
-- [ ] light and black theme.
-- [ ] collect css by `taildwind`.
-- [ ] collect code.
-- [ ] add image type history.
+- [ ] 新增设置页面，开放一些参数为设置首选项
+- [ ] 增加主题
+- [x] 引入`taildwind`管理 css
+- [ ] 整理代码结构
+- [ ] 新增复制图片历史的功能
 
-## Download
+## 下载
 
-Download from [release](https://github.com/ChurchTao/Lanaya/releases).
+从 [release](https://github.com/ChurchTao/Lanaya/releases) 中下载.
 
-## Development
+## 开发
 
-You should install Rust and Nodejs, see [here](https://tauri.studio/docs/getting-started/prerequisites) for more details. Then install Nodejs packages.
+你需要安装 `Rust` 和 `Nodejs`，详细步骤查看 [这里](https://tauri.studio/docs/getting-started/prerequisites) ，然后按如下命令进行开发
 
 ```shell
 npm install
 ```
 
-Then run
+然后
 
 ```shell
 cargo tauri dev
 ```
 
-Or you can build it
+如果需要构建
 
 ```shell
 cargo tauri build
 ```
 
-## Screenshots
+## 截图
 
 <div align="center">
   <img src="./md/demo1.png" alt="demo1" width="100%" />
@@ -63,13 +63,13 @@ cargo tauri build
   <img src="./md/demo3.png" alt="demo3" width="100%" />
 </div>
 
-## Contributions
+## 建议
 
-Issue and PR welcome!
+👏🏻 非常欢迎提`Issue`和`PR`！毕竟一个人的力量有限。
 
-## Acknowledgement
+## 技术栈
 
-Lanaya was based on or inspired by these projects and so on:
+`Lanaya` 基于如下技术栈：
 
 - [tauri-apps/tauri](https://github.com/tauri-apps/tauri): Build smaller, faster, and more secure desktop applications with a web frontend.
 - [vitejs/vite](https://github.com/vitejs/vite): Next generation frontend tooling. It's fast!
