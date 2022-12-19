@@ -19,11 +19,15 @@
 <script setup>
 import HotKeyItem from "./HotKeyItem.vue";
 import { open } from "@tauri-apps/api/shell";
+// import { WebviewWindow } from "@tauri-apps/api/window";
 defineProps({
   keyMap: Array[Object],
 });
-const gotoGithub = () => {
+const gotoGithub = async () => {
   open("https://github.com/ChurchTao/Lanaya");
+  // const webview = new WebviewWindow("config", {
+  // url: "/config",
+  // });
 };
 </script>
 <style scoped>

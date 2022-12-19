@@ -5,7 +5,7 @@
 
 use tauri::SystemTray;
 use tauri::{App, CustomMenuItem, Manager, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
-use tauri_plugin_sql::TauriSql;
+use tauri_plugin_sql::{Migration, MigrationKind, TauriSql};
 use window_shadows::set_shadow;
 
 fn main() {
@@ -27,7 +27,7 @@ fn main() {
             Ok(())
         })
         // .invoke_handler(tauri::generate_handler![greet])
-        .plugin(TauriSql::default())
+        .plugin(TauriSql::default().add_migrations("sqlite:lanaya_data.db", get_migrations()))
         .system_tray(system_tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
@@ -56,4 +56,15 @@ fn set_up(app: &mut App) {
     app.set_activation_policy(tauri::ActivationPolicy::Accessory);
     let window = app.get_window("main").unwrap();
     set_shadow(&window, true).expect("Unsupported platform!");
+}
+
+fn get_migrations() -> Vec<Migration> {
+    let mut migrations = Vec::new();
+    migrations.push(Migration {
+        version: 1,
+        description: "create record table",
+        sql: include_str!("../migrations/record.sql"),
+        kind: MigrationKind::Up,
+    });
+    migrations
 }
