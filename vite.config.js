@@ -12,6 +12,12 @@ export default defineConfig({
   // 使用 `TAURI_PLATFORM`、`TAURI_ARCH`、`TAURI_FAMILY`,
   // `TAURI_PLATFORM_VERSION`、`TAURI_PLATFORM_TYPE` 和 `TAURI_DEBUG` 环境变量
   envPrefix: ["VITE_", "TAURI_"],
+  resolve: {
+    alias: {
+      "@": path.resolve("./src"),
+      "@root": path.resolve("."),
+    },
+  },
   build: {
     // Tauri 支持 es2021
     target: ["es2021", "chrome100", "safari13"],

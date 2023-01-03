@@ -21,6 +21,7 @@ import { appWindow, LogicalSize } from "@tauri-apps/api/window";
 import { ref, onMounted, onBeforeMount, onUnmounted } from "vue";
 import { selectPage, insertRecord, removeById, clearAll } from "../service/recordService";
 import { readText, writeText } from "@tauri-apps/api/clipboard";
+import { listen } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/api/dialog";
 import { isRegistered, register, unregister } from "@tauri-apps/api/globalShortcut";
 const mainShortCut = "CommandOrControl+Shift+C";
@@ -42,9 +43,11 @@ const keyMap = [
 const clipBoardDataList = ref([]);
 onBeforeMount(async () => {
   await initShortCut();
+  await initListenr();
   await initClipBoardDataList();
 });
 let clipBoardListener;
+let unlistenBlur;
 
 onMounted(async () => {
   initAppShortCut();
@@ -71,6 +74,7 @@ onUnmounted(async () => {
     clearInterval(clipBoardListener);
   }
   await unRegisterShortCut();
+  unlistenBlur();
 });
 
 const initClipBoardDataList = async () => {
@@ -174,12 +178,18 @@ const initShortCut = async () => {
       }
     });
   }
-  // const unlistenDestroyed = await listen("tauri://destroyed", (event) => {
-  //   console.log(`destroyed window`, event);
-  // });
-  // const unlistenCreated = await listen("tauri://window-created", (event) => {
-  //   console.log(`created window`, event);
-  // });
+};
+
+const initListenr = async () => {
+  if (!unlistenBlur) {
+    unlistenBlur = await listen("tauri://blur", async (event) => {
+      console.log(`tauri://blur`, event);
+      let visible = await appWindow.isVisible();
+      if (visible) {
+        await appWindow.hide();
+      }
+    });
+  }
 };
 
 const unRegisterShortCut = async () => {

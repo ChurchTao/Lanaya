@@ -32,6 +32,7 @@ defineProps({
 </script>
 <style scoped>
 .search-bar {
+  background: #fafafa;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 </style>

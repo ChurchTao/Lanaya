@@ -1,5 +1,5 @@
 <template>
-  <div class="data-list box-border min-h-4 overflow-y-auto py-0 pl-4 mt-2" data-tauri-drag-region>
+  <div class="data-list box-border min-h-4 overflow-y-auto px-4 pt-2" data-tauri-drag-region>
     <SearchNoResult v-if="noResult || data.length == 0" />
     <div class="data-list-container" v-if="!noResult">
       <section class="item-hits">
@@ -52,6 +52,7 @@ onUpdated(async () => {
   scrollbar-color: var(--docsearch-muted-color) var(--docsearch-modal-background);
   scrollbar-width: thin;
   max-height: 30rem;
+  background: #fafafa;
 }
 
 .data-list ul {
