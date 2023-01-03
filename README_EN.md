@@ -31,6 +31,7 @@ Lanaya comes from Templar Assassin in Dota2, which is a clipboard management sof
 - [x] collect code.
 - [ ] add image type history.
 - [ ] multi-language
+- [ ] updater
 
 ## Download
 
