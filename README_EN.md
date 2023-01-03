@@ -28,8 +28,9 @@ Lanaya comes from Templar Assassin in Dota2, which is a clipboard management sof
 - [ ] make some args to settings.
 - [ ] light and black theme.
 - [x] collect css by `taildwind`.
-- [ ] collect code.
+- [x] collect code.
 - [ ] add image type history.
+- [ ] multi-language
 
 ## Download
 
