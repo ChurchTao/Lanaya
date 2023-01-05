@@ -1,5 +1,10 @@
 <template>
-  <div class="data-list box-border min-h-4 overflow-y-auto px-4 pt-2" data-tauri-drag-region>
+  <div
+    class="data-list box-border min-h-4 overflow-y-auto px-3 pt-2"
+    :data-mouseenter="mouseenter"
+    @mouseenter="() => (mouseenter = true)"
+    @mouseleave="() => (mouseenter = false)"
+  >
     <SearchNoResult v-if="noResult || data.length == 0" />
     <div class="data-list-container" v-if="!noResult">
       <section class="item-hits">
@@ -26,8 +31,8 @@ import ClipBoardItem from "./ClipBoardItem.vue";
 import SearchNoResult from "./child/clipboard/SearchNoResult.vue";
 import { ref, onUpdated } from "vue";
 import { appWindow, LogicalSize } from "@tauri-apps/api/window";
-
 const emit = defineEmits(["clickItem", "changeIndex"]);
+const mouseenter = ref(false);
 defineProps({
   noResult: Boolean,
   data: Array[Object],
@@ -49,10 +54,10 @@ onUpdated(async () => {
 </script>
 <style scoped>
 .data-list {
-  scrollbar-color: var(--docsearch-muted-color) var(--docsearch-modal-background);
-  scrollbar-width: thin;
   max-height: 30rem;
   background: #fafafa;
+  -webkit-transition: all 1s;
+  transition: all 1s;
 }
 
 .data-list ul {
@@ -63,5 +68,25 @@ onUpdated(async () => {
 
 .item-hits-footer {
   color: var(--docsearch-muted-color);
+}
+.data-list::-webkit-scrollbar {
+  width: 5px;
+}
+.data-list::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+.data-list::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: #9e9fa1;
+  opacity: 0.9;
+}
+.data-list[data-mouseenter="false"]::-webkit-scrollbar-thumb {
+  opacity: 0;
+}
+.data-list::-webkit-scrollbar-thumb:hover {
+  background: #666263;
+}
+.data-list::-webkit-scrollbar-track {
+  border-radius: 0;
 }
 </style>
