@@ -17,7 +17,6 @@
             :select="selectIndex == index"
             :cmd-press-down="cmdPressDown"
             @click="clickThis(index)"
-            @mouseenter="selectThis(index)"
           />
         </ul>
       </section>
