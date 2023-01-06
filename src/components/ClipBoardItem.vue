@@ -55,8 +55,6 @@
   </li>
 </template>
 <script setup>
-import HotKeyItem from "./HotKeyItem.vue";
-
 defineProps({
   select: {
     type: Boolean,
@@ -111,14 +109,7 @@ mark {
 }
 .data-item[aria-selected="true"] .data-item-action,
 .data-item[aria-selected="true"] .data-item-icon,
-.data-item[aria-selected="true"] .data-item-path,
-.data-item[aria-selected="true"] .data-item-text,
-.data-item[aria-selected="true"] .data-item-title,
-.data-item[aria-selected="true"] .data-item-Tree,
 .data-item[aria-selected="true"] mark {
   color: var(--docsearch-hit-active-color) !important;
-}
-.data-item[aria-selected="true"] .data-item-select-icon {
-  display: block;
 }
 </style>

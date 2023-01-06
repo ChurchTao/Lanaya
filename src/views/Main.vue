@@ -7,6 +7,7 @@
       :data="clipBoardDataList"
       :cmd-press-down="cmdPressDown"
       @clickItem="clickDataItem"
+      @changeIndex="changeIndex"
     />
     <KeyMapBar :key-map="keyMap" />
   </Layout>
@@ -16,13 +17,14 @@ import Layout from "../components/Layout.vue";
 import SearchBar from "../components/SearchBar.vue";
 import ClipBoardList from "../components/ClipBoardList.vue";
 import KeyMapBar from "../components/KeyMapBar.vue";
-import { appWindow, LogicalSize } from "@tauri-apps/api/window";
-import { ref, onMounted, onBeforeMount, onUnmounted } from "vue";
+import { appWindow } from "@tauri-apps/api/window";
+import { ref, onMounted, onBeforeMount, onUnmounted, nextTick } from "vue";
 import { selectPage, insertRecord, removeById, clearAll } from "../service/recordService";
 import { readText, writeText } from "@tauri-apps/api/clipboard";
 import { listen } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/api/dialog";
 import { isRegistered, register, unregister } from "@tauri-apps/api/globalShortcut";
+
 const mainShortCut = "CommandOrControl+Shift+C";
 const noResultFlag = ref(false);
 const selectIndex = ref(-1);
@@ -199,17 +201,23 @@ const unRegisterShortCut = async () => {
   }
 };
 const setDataItemAlwaysShow = (offset) => {
-      const dataSelect = document.querySelector('.data-select')?.getBoundingClientRect()
-      const dataList = document.querySelector('.data-list')?.getBoundingClientRect()
-      if (dataSelect?.top > 0 && dataSelect?.left > 0 && dataSelect?.bottom < dataList?.height && dataSelect?.right < dataList?.width) {
-          document.querySelector('.data-select')?.scrollIntoView({
-              behavior: "smooth", 
-              block: offset < 0 ? "end":"start", 
-              inline: "nearest"
-          });
-      }
+  const dataSelect = document.querySelector(".data-select")?.getBoundingClientRect();
+  const dataList = document.querySelector(".data-list")?.getBoundingClientRect();
+  if (dataSelect && dataList) {
+    const dataSelectTop = dataSelect.top - dataList.top;
+    const dataSelectBottom = dataSelectTop + dataSelect.height;
+    const dataListHeight = dataList.height;
+    if (dataSelectTop < 0 || dataSelectBottom > dataListHeight) {
+      document.querySelector(".data-select")?.scrollIntoView({
+        behavior: "smooth",
+        block: offset < 0 ? "end" : "start",
+        inline: "nearest",
+      });
+    }
   }
+};
 const moveIndex = (offset) => {
+  let prevIndex = selectIndex.value;
   let selectIndexTmp = selectIndex.value + offset;
   if (selectIndexTmp <= 0) {
     selectIndex.value = 0;
@@ -218,7 +226,11 @@ const moveIndex = (offset) => {
   } else {
     selectIndex.value = selectIndexTmp;
   }
-  setDataItemAlwaysShow(offset)
+  if (prevIndex !== selectIndex.value) {
+    nextTick(() => {
+      setDataItemAlwaysShow(offset);
+    });
+  }
 };
 
 const initAppShortCut = async () => {

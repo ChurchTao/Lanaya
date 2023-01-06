@@ -39,7 +39,7 @@
 
 ## 开发
 
-你需要安装 `Rust` 和 `Nodejs`，详细步骤查看 [这里](https://tauri.studio/docs/getting-started/prerequisites) ，然后按如下命令进行开发
+你需要安装 `Rust` 和 `Nodejs`，详细步骤查看 [这里](https://tauri.app/zh-cn/v1/guides/getting-started/prerequisites) ，然后按如下命令进行开发
 
 ```shell
 npm install
@@ -48,7 +48,7 @@ npm install
 然后
 
 ```shell
-cargo install tauri-cli # 提示没有 cargo tauri 命令需先执行安装 
+cargo install tauri-cli # 提示没有 cargo tauri 命令需先执行安装
 
 cargo tauri dev
 ```
