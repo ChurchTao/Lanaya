@@ -17,6 +17,7 @@
             :select="selectIndex == index"
             :cmd-press-down="cmdPressDown"
             @click="clickThis(index)"
+            @mouseenter="selectThis(index)"
           />
         </ul>
       </section>
@@ -25,7 +26,6 @@
   </div>
 </template>
 <script setup>
-import HotKeyItem from "./HotKeyItem.vue";
 import ClipBoardItem from "./ClipBoardItem.vue";
 import SearchNoResult from "./child/clipboard/SearchNoResult.vue";
 import { ref, onUpdated } from "vue";
