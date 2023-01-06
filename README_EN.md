@@ -39,7 +39,7 @@ Download from [release](https://github.com/ChurchTao/Lanaya/releases).
 
 ## Development
 
-You should install Rust and Nodejs, see [here](https://tauri.studio/docs/getting-started/prerequisites) for more details. Then install Nodejs packages.
+You should install Rust and Nodejs, see [here](https://tauri.app/v1/guides/getting-started/prerequisites) for more details. Then install Nodejs packages.
 
 ```shell
 npm install
@@ -48,7 +48,7 @@ npm install
 Then run
 
 ```shell
-cargo install tauri-cli # output with [no such subcommand: `tauri`] please install first 
+cargo install tauri-cli # output with [no such subcommand: `tauri`] please install first
 
 cargo tauri dev
 ```
