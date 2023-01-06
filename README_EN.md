@@ -48,6 +48,8 @@ npm install
 Then run
 
 ```shell
+cargo install tauri-cli # output with [no such subcommand: `tauri`] please install first 
+
 cargo tauri dev
 ```
 

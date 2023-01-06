@@ -48,6 +48,7 @@ npm install
 然后
 
 ```shell
+cargo install tauri-cli # 提示没有 cargo tauri 命令需先执行安装 
 cargo tauri dev
 ```
 
