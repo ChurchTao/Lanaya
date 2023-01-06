@@ -7,7 +7,6 @@
       :data="clipBoardDataList"
       :cmd-press-down="cmdPressDown"
       @clickItem="clickDataItem"
-      @changeIndex="changeIndex"
     />
     <KeyMapBar :key-map="keyMap" />
   </Layout>
@@ -199,7 +198,17 @@ const unRegisterShortCut = async () => {
     await unregister(mainShortCut);
   }
 };
-
+const setDataItemAlwaysShow = (offset) => {
+      const dataSelect = document.querySelector('.data-select')?.getBoundingClientRect()
+      const dataList = document.querySelector('.data-list')?.getBoundingClientRect()
+      if (dataSelect?.top > 0 && dataSelect?.left > 0 && dataSelect?.bottom < dataList?.height && dataSelect?.right < dataList?.width) {
+          document.querySelector('.data-select')?.scrollIntoView({
+              behavior: "smooth", 
+              block: offset < 0 ? "end":"start", 
+              inline: "nearest"
+          });
+      }
+  }
 const moveIndex = (offset) => {
   let selectIndexTmp = selectIndex.value + offset;
   if (selectIndexTmp <= 0) {
@@ -209,6 +218,7 @@ const moveIndex = (offset) => {
   } else {
     selectIndex.value = selectIndexTmp;
   }
+  setDataItemAlwaysShow(offset)
 };
 
 const initAppShortCut = async () => {
