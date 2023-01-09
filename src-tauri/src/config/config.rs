@@ -6,7 +6,6 @@ use std::sync::{Arc, Mutex};
 pub struct Config {
     // i18n
     pub language: Option<String>,
-
     /// `light` or `dark` or `system`
     pub theme_mode: Option<String>,
     /// can the app auto startup
