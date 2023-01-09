@@ -10,9 +10,7 @@ pub struct Tray {}
 impl Tray {
     pub fn tray_menu(app_handle: &AppHandle) -> SystemTrayMenu {
         let zh = { Config::verge().latest().language == Some("zh".into()) };
-
         let version = app_handle.package_info().version.to_string();
-
         if zh {
             SystemTrayMenu::new()
                 .add_item(CustomMenuItem::new("open_window", "打开面板"))
