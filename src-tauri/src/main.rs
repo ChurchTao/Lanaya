@@ -7,6 +7,8 @@ use tauri::SystemTray;
 use tauri::{App, CustomMenuItem, Manager, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 use tauri_plugin_sql::{Migration, MigrationKind, TauriSql};
 use window_shadows::set_shadow;
+mod config;
+mod utils;
 
 fn main() {
     // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.

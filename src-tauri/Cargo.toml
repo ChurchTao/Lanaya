@@ -17,6 +17,10 @@ serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.2.2", features = ["api-all", "macos-private-api", "system-tray"] }
 window-shadows = { git = "https://github.com/tauri-apps/window-shadows" }
+auto-launch = "0.4"
+once_cell = "1.17.0"
+anyhow = "1.0"
+parking_lot = "0.12.1"
 
 [dependencies.tauri-plugin-sql]
 git = "https://github.com/tauri-apps/tauri-plugin-sql"
