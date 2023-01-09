@@ -12,7 +12,21 @@
   "tauri": {
     "macOSPrivateApi": true,
     "allowlist": {
-      "all": true
+      "shell": {
+        "open": true
+      },
+      "window": {
+        "all": true
+      },
+      "dialog": {
+        "message": true
+      },
+      "clipboard": {
+        "all": true
+      },
+      "globalShortcut": {
+        "all": true
+      }
     },
     "systemTray": {
       "iconPath": "icons/icon.png",
@@ -52,7 +66,7 @@
       }
     },
     "security": {
-      "csp": null
+      "csp": "script-src 'unsafe-eval' 'self'; default-src blob: data: filesystem: ws: wss: http: https: tauri: 'unsafe-eval' 'unsafe-inline' 'self'; img-src data: 'self';"
     },
     "updater": {
       "active": false
