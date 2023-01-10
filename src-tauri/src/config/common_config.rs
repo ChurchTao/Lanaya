@@ -39,7 +39,7 @@ impl CommonConfig {
 
     /// Save IVerge App Config
     pub fn save_file(&self) -> Result<()> {
-        json_util::save(&dirs::config_path()?, &self, Some("# Common Config"))
+        json_util::save(&dirs::config_path()?, &self)
     }
 
     /// patch config

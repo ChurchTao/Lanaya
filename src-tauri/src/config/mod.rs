@@ -1,7 +1,7 @@
 mod common_config;
 mod config;
-// mod tray;
+mod draft;
 
 pub use self::common_config::*;
 pub use self::config::*;
-// pub use self::tray::*;
+pub use self::draft::*;

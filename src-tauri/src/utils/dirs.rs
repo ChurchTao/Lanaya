@@ -12,7 +12,7 @@ static mut RESOURCE_DIR: Option<PathBuf> = None;
 /// portable flag
 #[allow(unused)]
 static mut PORTABLE_FLAG: bool = false;
-
+#[allow(unused)]
 pub static mut APP_VERSION: &str = "v0.0.1";
 
 /// initialize portable flag
@@ -62,6 +62,7 @@ pub fn app_home_dir() -> Result<PathBuf> {
 }
 
 /// get the resources dir
+#[allow(unused)]
 pub fn app_resources_dir(package_info: &PackageInfo) -> Result<PathBuf> {
     let res_dir = resource_dir(package_info, &Env::default())
         .ok_or(anyhow::anyhow!("failed to get the resource dir"))?
@@ -78,6 +79,7 @@ pub fn app_resources_dir(package_info: &PackageInfo) -> Result<PathBuf> {
     Ok(res_dir)
 }
 /// logs dir
+#[allow(unused)]
 pub fn app_logs_dir() -> Result<PathBuf> {
     Ok(app_home_dir()?.join("logs"))
 }
@@ -86,6 +88,7 @@ pub fn config_path() -> Result<PathBuf> {
     Ok(app_home_dir()?.join(CONFIG_FILE))
 }
 
+#[allow(unused)]
 pub fn app_res_dir() -> Result<PathBuf> {
     unsafe {
         Ok(RESOURCE_DIR
@@ -94,31 +97,7 @@ pub fn app_res_dir() -> Result<PathBuf> {
     }
 }
 
-// #[cfg(windows)]
-// pub fn service_path() -> Result<PathBuf> {
-//     unsafe {
-//         let res_dir = RESOURCE_DIR
-//             .clone()
-//             .ok_or(anyhow::anyhow!("failed to get the resource dir"))?;
-//         Ok(res_dir.join("lanaya.exe"))
-//     }
-// }
-
-// #[cfg(windows)]
-// pub fn service_log_file() -> Result<PathBuf> {
-//     use chrono::Local;
-
-//     let log_dir = app_logs_dir()?.join("service");
-
-//     let local_time = Local::now().format("%Y-%m-%d-%H%M").to_string();
-//     let log_file = format!("{}.log", local_time);
-//     let log_file = log_dir.join(log_file);
-
-//     let _ = std::fs::create_dir_all(&log_dir);
-
-//     Ok(log_file)
-// }
-
+#[allow(unused)]
 pub fn path_to_str(path: &PathBuf) -> Result<&str> {
     let path_str = path
         .as_os_str()

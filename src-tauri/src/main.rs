@@ -3,26 +3,17 @@
     windows_subsystem = "windows"
 )]
 
-use tauri::SystemTray;
-use tauri::{App, CustomMenuItem, Manager, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
+use tauri::{App, Manager, SystemTray};
 use tauri_plugin_sql::{Migration, MigrationKind, TauriSql};
 use window_shadows::set_shadow;
+
+use crate::config::Config;
+use crate::core::tray;
 mod config;
+mod core;
 mod utils;
 
 fn main() {
-    // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.
-    let show = CustomMenuItem::new("show".to_string(), "唤起主界面")
-        .accelerator("CommandOrControl+Shift+C");
-    let hide = CustomMenuItem::new("hide".to_string(), "隐藏窗口").accelerator("Esc");
-    let quit = CustomMenuItem::new("quit".to_string(), "退出").accelerator("CommandOrControl+Q");
-    let tray_menu = SystemTrayMenu::new()
-        .add_item(show)
-        .add_item(hide)
-        .add_native_item(SystemTrayMenuItem::Separator)
-        .add_item(quit);
-    let system_tray = SystemTray::new().with_menu(tray_menu);
-
     tauri::Builder::default()
         .setup(|app| {
             set_up(app);
@@ -30,25 +21,8 @@ fn main() {
         })
         // .invoke_handler(tauri::generate_handler![greet])
         .plugin(TauriSql::default().add_migrations("sqlite:lanaya_data.db", get_migrations()))
-        .system_tray(system_tray)
-        .on_system_tray_event(|app, event| match event {
-            SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
-                "show" => {
-                    let window = app.get_window("main").unwrap();
-                    window.show().unwrap();
-                    window.set_focus().unwrap();
-                }
-                "hide" => {
-                    let window = app.get_window("main").unwrap();
-                    window.hide().unwrap();
-                }
-                "quit" => {
-                    app.exit(0);
-                }
-                _ => {}
-            },
-            _ => {}
-        })
+        .system_tray(SystemTray::new())
+        .on_system_tray_event(core::tray::Tray::on_system_tray_event)
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -58,6 +32,9 @@ fn set_up(app: &mut App) {
     app.set_activation_policy(tauri::ActivationPolicy::Accessory);
     let window = app.get_window("main").unwrap();
     set_shadow(&window, true).expect("Unsupported platform!");
+    core::handle::Handle::global().init(app.app_handle());
+    log_err!(Config::init_config());
+    log_err!(tray::Tray::update_systray(&app.app_handle()));
 }
 
 fn get_migrations() -> Vec<Migration> {
