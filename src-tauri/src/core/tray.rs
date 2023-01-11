@@ -1,11 +1,13 @@
+use super::{
+    handle,
+    window_manager::{self, WindowType},
+};
 use crate::config::{CommonConfig, Config};
 use anyhow::Result;
 use tauri::{
     AppHandle, CustomMenuItem, Manager, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
     SystemTraySubmenu,
 };
-
-use super::handle;
 
 pub struct Tray {}
 
@@ -27,6 +29,7 @@ impl Tray {
                         .add_item(CustomMenuItem::new("language_zh", "简体中文"))
                         .add_item(CustomMenuItem::new("language_en", "English")),
                 ))
+                .add_item(CustomMenuItem::new("more_config", "更多设置"))
                 .add_native_item(SystemTrayMenuItem::Separator)
                 .add_item(CustomMenuItem::new("app_version", format!("版本 {version}")).disabled())
                 .add_item(CustomMenuItem::new("quit", "退出").accelerator("CmdOrControl+Q"))
@@ -44,6 +47,7 @@ impl Tray {
                         .add_item(CustomMenuItem::new("language_zh", "简体中文"))
                         .add_item(CustomMenuItem::new("language_en", "English")),
                 ))
+                .add_item(CustomMenuItem::new("more_config", "More Config"))
                 .add_native_item(SystemTrayMenuItem::Separator)
                 .add_item(
                     CustomMenuItem::new("app_version", format!("Version {version}")).disabled(),
@@ -91,6 +95,7 @@ impl Tray {
                 }
                 "language_zh" => change_language("zh".into()),
                 "language_en" => change_language("en".into()),
+                "more_config" => window_manager::open_window(app_handle, WindowType::Config),
                 "quit" => {
                     app_handle.exit(0);
                     std::process::exit(0);
