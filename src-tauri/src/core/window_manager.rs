@@ -31,20 +31,6 @@ impl WindowInfo {
             always_on_top: false,
         }
     }
-
-    // fn about() -> Self {
-    //     WindowInfo {
-    //         label: "about".into(),
-    //         title: "关于".into(),
-    //         url: "/about".into(),
-    //         width: 800.0,
-    //         height: 600.0,
-    //         resizable: false,
-    //         // minimizable: false,
-    //         fullscreenable: false,
-    //         always_on_top: false,
-    //     }
-    // }
 }
 
 pub fn open_window(app_handle: &AppHandle, window_type: WindowType) {

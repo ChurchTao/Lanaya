@@ -1,3 +1,4 @@
+use crate::core::handle::Handle;
 use crate::utils::{dirs, json_util};
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
@@ -15,12 +16,19 @@ pub struct CommonConfig {
     pub hotkeys: Option<Vec<String>>,
     // pub font_family: Option<String>,
     // pub font_size: Option<String>,
+    pub record_limit: Option<u32>,
 }
 
 impl CommonConfig {
     pub fn new() -> Self {
         match dirs::config_path().and_then(|path| json_util::read::<CommonConfig>(&path)) {
-            Ok(config) => config,
+            Ok(config) => {
+                // 先拿 template
+                // 再拿 config 去覆盖
+                let mut template = Self::template();
+                template.merge(config);
+                template
+            }
             Err(_) => Self::template(),
         }
     }
@@ -33,17 +41,30 @@ impl CommonConfig {
             },
             theme_mode: Some("light".into()),
             enable_auto_launch: Some(false),
+            record_limit: Some(100),
             ..Self::default()
         }
     }
 
-    /// Save IVerge App Config
     pub fn save_file(&self) -> Result<()> {
         json_util::save(&dirs::config_path()?, &self)
     }
 
-    /// patch config
-    /// only save to file
+    pub fn merge(&mut self, other: Self) {
+        if let Some(language) = other.language {
+            self.language = Some(language);
+        }
+        if let Some(theme_mode) = other.theme_mode {
+            self.theme_mode = Some(theme_mode);
+        }
+        if let Some(enable_auto_launch) = other.enable_auto_launch {
+            self.enable_auto_launch = Some(enable_auto_launch);
+        }
+        if let Some(record_limit) = other.record_limit {
+            self.record_limit = Some(record_limit);
+        }
+    }
+
     pub fn patch_config(&mut self, patch: CommonConfig) {
         macro_rules! patch {
             ($key: tt) => {
@@ -56,5 +77,16 @@ impl CommonConfig {
         patch!(theme_mode);
         patch!(enable_auto_launch);
         patch!(hotkeys);
+        patch!(record_limit);
+    }
+
+    pub fn notify(&self) {
+        // todo enable_auto_launch
+
+        // todo hotkeys
+
+        Handle::notice_message("common_config:change", "ok");
+
+        let _ = Handle::update_systray();
     }
 }

@@ -44,8 +44,9 @@ impl Config {
 fn test_config() {
     log_err!(Config::init_config());
     let common = Config::common();
-    println!("common: {:?}", common.data().enable_auto_launch);
+    println!("common: {:?}", common.data());
     common.draft().enable_auto_launch = Some(false);
+    common.draft().record_limit = Some(300);
     common.apply();
     let res = common.latest().save_file();
     match res {

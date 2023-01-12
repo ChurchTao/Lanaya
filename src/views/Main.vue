@@ -24,6 +24,7 @@ import { readText, writeText } from "@tauri-apps/api/clipboard";
 import { listen } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/api/dialog";
 import { isRegistered, register, unregister } from "@tauri-apps/api/globalShortcut";
+import { getCommonConfig } from "../service/cmds";
 
 const mainShortCut = "CommandOrControl+Shift+C";
 const noResultFlag = ref(false);
@@ -51,6 +52,9 @@ let clipBoardListener;
 let unlistenBlur;
 
 onMounted(async () => {
+  getCommonConfig().then((res) => {
+    console.log(res);
+  });
   initAppShortCut();
   if (!clipBoardListener) {
     clipBoardListener = setInterval(async () => {

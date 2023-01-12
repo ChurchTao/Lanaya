@@ -9,6 +9,7 @@ use window_shadows::set_shadow;
 
 use crate::config::Config;
 use crate::core::tray;
+mod cmds;
 mod config;
 mod core;
 mod utils;
@@ -23,6 +24,10 @@ fn main() {
         .plugin(TauriSql::default().add_migrations("sqlite:lanaya_data.db", get_migrations()))
         .system_tray(SystemTray::new())
         .on_system_tray_event(core::tray::Tray::on_system_tray_event)
+        .invoke_handler(tauri::generate_handler![
+            cmds::get_common_config,
+            cmds::set_common_config
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
