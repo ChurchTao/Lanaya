@@ -24,21 +24,18 @@ import { readText, writeText } from "@tauri-apps/api/clipboard";
 import { listen } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/api/dialog";
 import { isRegistered, register, unregister } from "@tauri-apps/api/globalShortcut";
-import { getCommonConfig } from "../service/cmds";
-
+import { useI18n } from "vue-i18n";
+import { registerCommonConfigConsumer } from "../service/globalListener";
 const mainShortCut = "CommandOrControl+Shift+C";
 const noResultFlag = ref(false);
 const selectIndex = ref(-1);
 const lastClipBoardData = ref("");
 const cmdPressDown = ref(false);
-const keyMap = [
-  { keymap: ["⏎"], tips: "复制" },
-  { keymap: ["⌘+Nmb"], tips: "快捷复制" },
-  { keymap: ["↑", "↓"], tips: "移动选择" },
-  { keymap: ["Esc"], tips: "关闭" },
-  { keymap: ["⌘⇧⌫"], tips: "清空历史" },
-  { keymap: ["⌘⇧C"], tips: "全局唤起" },
-];
+const { t } = useI18n({
+  inheritLocale: true,
+  useScope: "global",
+});
+const keyMap = ref([]);
 /**
  * @type {Array<{id: number, contentParse: Array<{content: string, match: boolean}>, contentSource: string}>}
  */
@@ -52,9 +49,6 @@ let clipBoardListener;
 let unlistenBlur;
 
 onMounted(async () => {
-  getCommonConfig().then((res) => {
-    console.log(res);
-  });
   initAppShortCut();
   if (!clipBoardListener) {
     clipBoardListener = setInterval(async () => {
@@ -90,6 +84,17 @@ const initClipBoardDataList = async () => {
     }
     clipBoardDataList.value = res.map((item) => formatData(item, ""));
   }
+};
+
+const initKeyMapShow = () => {
+  keyMap.value = [
+    { keymap: ["⏎"], tips: t("hotkeys.copy") },
+    { keymap: ["⌘+Nmb"], tips: t("hotkeys.quick-copy") },
+    { keymap: ["↑", "↓"], tips: t("hotkeys.move-selected") },
+    { keymap: ["Esc"], tips: t("hotkeys.close-window") },
+    { keymap: ["⌘⇧⌫"], tips: t("hotkeys.clear-history") },
+    { keymap: ["⌘⇧C"], tips: t("hotkeys.global-shortcut") },
+  ];
 };
 
 const onSearchChange = async (value) => {
@@ -238,6 +243,10 @@ const moveIndex = (offset) => {
 };
 
 const initAppShortCut = async () => {
+  initKeyMapShow();
+  registerCommonConfigConsumer((config) => {
+    initKeyMapShow();
+  });
   document.onkeydown = async (e) => {
     let key = e.key;
     let isShift = e.shiftKey;

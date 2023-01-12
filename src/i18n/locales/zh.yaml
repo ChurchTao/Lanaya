@@ -1,2 +1,9 @@
 search:
   placeholder: "关键词搜索"
+hotkeys:
+  copy: "复制"
+  quick-copy: "快捷复制"
+  move-selected: "移动选择"
+  close-window: "关闭窗口"
+  clear-history: "清空历史"
+  global-shortcut: "全局唤起"

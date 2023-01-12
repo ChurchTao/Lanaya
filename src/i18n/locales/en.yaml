@@ -1,2 +1,9 @@
 search:
   placeholder: "Search"
+hotkeys:
+  copy: "Copy"
+  quick-copy: "Quick Copy"
+  move-selected: "Move Selected"
+  close-window: "Close Window"
+  clear-history: "Clear History"
+  global-shortcut: "Global Shortcut"
