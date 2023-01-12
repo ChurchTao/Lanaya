@@ -1,9 +1,17 @@
 import { defineConfig } from "vite";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "url";
 import path from "path";
 import vue from "@vitejs/plugin-vue";
+import vueI18n from "@intlify/vite-plugin-vue-i18n";
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    vueI18n({
+      include: resolve(dirname(fileURLToPath(import.meta.url)), "./src/locales/**"),
+    }),
+  ],
   // 防止 vite 输出复杂的 rust 错误
   clearScreen: false,
   // Tauri 使用固定端口，若此端口不可用将会导致程序错误

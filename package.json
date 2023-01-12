@@ -13,9 +13,11 @@
     "md5": "^2.3.0",
     "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql#dev",
     "vue": "^3.2.41",
+    "vue-i18n": "^9.2.2",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
+    "@intlify/vite-plugin-vue-i18n": "^7.0.0",
     "@vitejs/plugin-vue": "^3.2.0",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",

@@ -85,7 +85,7 @@ impl CommonConfig {
 
         // todo hotkeys
 
-        Handle::notice_message("common_config:change", "ok");
+        Handle::refresh_common_config();
 
         let _ = Handle::update_systray();
     }

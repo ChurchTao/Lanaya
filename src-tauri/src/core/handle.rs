@@ -33,13 +33,13 @@ impl Handle {
 
     pub fn refresh_common_config() {
         if let Some(window) = Self::global().get_window() {
-            log_err!(window.emit("verge://refresh-common-config", "yes"));
+            log_err!(window.emit("lanaya://refresh-common-config", "yes"));
         }
     }
 
     pub fn notice_message<S: Into<String>, M: Into<String>>(status: S, msg: M) {
         if let Some(window) = Self::global().get_window() {
-            log_err!(window.emit("verge://notice-message", (status.into(), msg.into())));
+            log_err!(window.emit("lanaya://notice-message", (status.into(), msg.into())));
         }
     }
 

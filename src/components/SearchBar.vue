@@ -7,7 +7,7 @@
       @focus="onFocus"
       type="text"
       class="search-input h-16 text-2xl w-full"
-      :placeholder="placeholder"
+      :placeholder="$t('search.placeholder')"
       autocomplete="off"
     />
   </div>
@@ -23,12 +23,6 @@ const onEnter = () => {
 const onFocus = (e) => {
   emit("focus", e);
 };
-defineProps({
-  placeholder: {
-    type: String,
-    default: "Search",
-  },
-});
 </script>
 <style scoped>
 .search-bar {
