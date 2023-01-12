@@ -1,15 +1,14 @@
 import { defineConfig } from "vite";
-import { resolve, dirname } from "node:path";
-import { fileURLToPath } from "url";
 import path from "path";
+import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
 import vue from "@vitejs/plugin-vue";
-import vueI18n from "@intlify/vite-plugin-vue-i18n";
 
 export default defineConfig({
   plugins: [
     vue(),
-    vueI18n({
-      include: resolve(dirname(fileURLToPath(import.meta.url)), "./src/locales/**"),
+    VueI18nPlugin({
+      include: path.resolve(__dirname, "./src/i18n/locales/**"),
+      compositionOnly: false,
     }),
   ],
   // 防止 vite 输出复杂的 rust 错误

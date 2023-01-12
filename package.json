@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@intlify/unplugin-vue-i18n": "^0.8.1",
     "@tauri-apps/api": "^1.2.0",
     "md5": "^2.3.0",
     "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql#dev",
@@ -17,7 +18,6 @@
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
-    "@intlify/vite-plugin-vue-i18n": "^7.0.0",
     "@vitejs/plugin-vue": "^3.2.0",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",
