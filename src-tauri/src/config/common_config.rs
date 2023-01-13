@@ -36,8 +36,8 @@ impl CommonConfig {
     pub fn template() -> Self {
         Self {
             language: match cfg!(feature = "default-meta") {
-                false => Some("en".into()),
-                true => Some("zh".into()),
+                false => Some("zh".into()),
+                true => Some("en".into()),
             },
             theme_mode: Some("light".into()),
             enable_auto_launch: Some(false),

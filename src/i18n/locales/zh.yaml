@@ -7,3 +7,7 @@ hotkeys:
   close-window: "关闭窗口"
   clear-history: "清空历史"
   global-shortcut: "全局唤起"
+config:
+  section:
+    common: "通用"
+    about: "关于"

@@ -10,7 +10,6 @@ app.use(i18n);
 app.mount("#app");
 initGlobalListener();
 registerCommonConfigConsumer((config) => {
-  console.log("consumer", config);
   if (config.language) {
     setLanguage(config.language);
   }

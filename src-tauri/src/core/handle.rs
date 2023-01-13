@@ -37,6 +37,7 @@ impl Handle {
         }
     }
 
+    #[allow(unused)]
     pub fn notice_message<S: Into<String>, M: Into<String>>(status: S, msg: M) {
         if let Some(window) = Self::global().get_window() {
             log_err!(window.emit("lanaya://notice-message", (status.into(), msg.into())));
