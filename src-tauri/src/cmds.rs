@@ -1,5 +1,6 @@
 use crate::{
     config::{CommonConfig, Config},
+    core::handle::Handle,
     log_err,
 };
 
@@ -11,10 +12,14 @@ pub fn get_common_config() -> CmdResult<CommonConfig> {
 }
 
 #[tauri::command]
-pub fn set_common_config(common_config: CommonConfig) -> CmdResult {
-    Config::common().draft().patch_config(common_config);
+pub fn set_common_config(config: CommonConfig) -> CmdResult {
+    Config::common().draft().patch_config(config);
     Config::common().apply();
     log_err!(Config::common().data().save_file());
-    Config::common().data().notify();
+
+    // todo enable_auto_launch
+    // todo hotkeys
+    Handle::refresh_common_config();
+    log_err!(Handle::update_systray());
     Ok(())
 }

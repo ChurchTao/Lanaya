@@ -1,4 +1,3 @@
-use crate::core::handle::Handle;
 use crate::utils::{dirs, json_util};
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
@@ -78,15 +77,5 @@ impl CommonConfig {
         patch!(enable_auto_launch);
         patch!(hotkeys);
         patch!(record_limit);
-    }
-
-    pub fn notify(&self) {
-        // todo enable_auto_launch
-
-        // todo hotkeys
-
-        Handle::refresh_common_config();
-
-        let _ = Handle::update_systray();
     }
 }

@@ -19,18 +19,28 @@
         @click="itemClick(item)"
       />
     </div>
-    <div class="right-section"></div>
+    <div class="right-section">
+      <KeepAlive>
+        <component :is="sectionIdAndComponentNameMap[activeSection]"></component>
+      </KeepAlive>
+    </div>
   </div>
 </template>
 
 <script setup>
 import LeftSectionItem from "@/components/child/config/LeftSectionItem.vue";
+import RightSectionCommonConfig from "@/components/child/config/RightSectionCommonConfig.vue";
+import RightSectionAbout from "@/components/child/config/RightSectionAbout.vue";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n({
   inheritLocale: true,
   useScope: "global",
 });
+const sectionIdAndComponentNameMap = {
+  common: RightSectionCommonConfig,
+  about: RightSectionAbout,
+};
 const sectionItemListTop = ["common"];
 const sectionItemListBottom = ["about"];
 const activeSection = ref("common");

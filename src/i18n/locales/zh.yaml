@@ -11,3 +11,10 @@ config:
   section:
     common: "通用"
     about: "关于"
+  common:
+    enable_auto_launch: "开机时启动"
+    language: "语言"
+    record_limit: "历史记录条数"
+    theme_mode: "主题"
+    hotkeys: "快捷键"
+    hotkeys_placeholder: "输入键盘快捷键"
