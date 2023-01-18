@@ -26,7 +26,8 @@ fn main() {
         .on_system_tray_event(core::tray::Tray::on_system_tray_event)
         .invoke_handler(tauri::generate_handler![
             cmds::get_common_config,
-            cmds::set_common_config
+            cmds::set_common_config,
+            cmds::change_language
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,5 +1,6 @@
 use super::{CommonConfig, Draft};
 use crate::{
+    core::handle,
     log_err,
     utils::{dirs, json_util},
 };
@@ -37,6 +38,53 @@ impl Config {
             }
         }));
         Ok(())
+    }
+}
+
+/// 修改通用配置文件的入口
+pub async fn modify_common_config(patch: CommonConfig) -> Result<()> {
+    Config::common().draft().patch_config(patch.clone());
+
+    let auto_launch = patch.enable_auto_launch;
+    let language = patch.language;
+    let theme_mode = patch.theme_mode;
+    let record_limit = patch.record_limit;
+    let hotkeys = patch.hotkeys;
+
+    match {
+        if auto_launch.is_some() {
+            // todo change auto launch
+            // todo send msg to frontend
+        }
+        if hotkeys.is_some() {
+            // send msg to frontend
+            // system tary hotkey modify
+        }
+
+        if language.is_some() {
+            handle::Handle::update_systray()?;
+            handle::Handle::notice_to_window(handle::MsgTypeEnum::ChangeLanguage, language)?;
+        }
+
+        if theme_mode.is_some() {
+            // todo send msg to frontend
+        }
+
+        if record_limit.is_some() {
+            // todo send msg to frontend
+        }
+
+        <Result<()>>::Ok(())
+    } {
+        Ok(()) => {
+            Config::common().apply();
+            Config::common().data().save_file()?;
+            Ok(())
+        }
+        Err(err) => {
+            Config::common().discard();
+            Err(err)
+        }
     }
 }
 

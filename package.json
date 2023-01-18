@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.7",
+    "@heroicons/vue": "^2.0.13",
     "@intlify/unplugin-vue-i18n": "^0.8.1",
     "@tauri-apps/api": "^1.2.0",
     "hotkeys-js": "^3.10.1",

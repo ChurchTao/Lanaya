@@ -1,50 +1,47 @@
 <template>
-  <div class="common-config-container px-4 py-4">
-    <div class="check-config-item flex">
-      <div class="check-config-item-value">
-        <input type="checkbox" v-model="commonConfig.enable_auto_launch" @change="change" />
-      </div>
-      <div class="check-config-item-name">
+  <div class="common-config-container px-4 py-4 relative">
+    <div class="check-config-item h-10 mb-2 flex items-center justify-between">
+      <div class="check-config-item-name text-sm">
         {{ t("config.common.enable_auto_launch") }}
       </div>
+      <div class="check-config-item-value flex items-center">
+        <BaseSwitch v-model="commonConfig.enable_auto_launch" @change="change" />
+      </div>
     </div>
-    <div class="select-config-item flex">
-      <div class="select-config-item-name">
+    <div class="select-config-item h-10 mb-2 flex items-center justify-between">
+      <div class="select-config-item-name text-sm">
         {{ t("config.common.language") }}
       </div>
-      <div class="select-config-item-value">
-        <select v-model="commonConfig.language" @change="change">
-          <option value="zh">简体中文</option>
-          <option value="en">English</option>
-        </select>
+      <div class="select-config-item-value flex items-center">
+        <BaseSelect
+          v-model="languageSelectOption"
+          :options="languageOptions"
+          @change="changeLanguage"
+        />
       </div>
     </div>
-    <div class="select-config-item flex">
-      <div class="select-config-item-name">
+    <div class="select-config-item h-10 mb-2 flex items-center justify-between">
+      <div class="select-config-item-name text-sm">
         {{ t("config.common.theme_mode") }}
       </div>
-      <div class="select-config-item-value">
-        <select v-model="commonConfig.theme_mode" @change="change">
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
+      <div class="select-config-item-value flex items-center">
+        <BaseSelect v-model="themeSelectOption" :options="themeOptions" @change="changeTheme" />
       </div>
     </div>
-    <div class="select-config-item flex">
-      <div class="select-config-item-name">
+    <div class="select-config-item h-10 mb-2 flex items-center justify-between">
+      <div class="select-config-item-name text-sm">
         {{ t("config.common.record_limit") }}
       </div>
-      <div class="select-config-item-value">
-        <select v-model="commonConfig.record_limit" @change="change">
-          <option :value="50">50</option>
-          <option :value="100">100</option>
-          <option :value="200">200</option>
-          <option :value="300">300</option>
-        </select>
+      <div class="select-config-item-value flex items-center">
+        <BaseSelect
+          v-model="recordLimitSelectOption"
+          :options="recordLimitOptions"
+          @change="changeRecordLimit"
+        />
       </div>
     </div>
-    <div class="select-config-item">
-      <div class="select-config-item-name">
+    <div class="select-config-item mt-4">
+      <div class="select-config-item-name font-medium text-base mb-1">
         {{ t("config.common.hotkeys") }}
       </div>
       <div class="select-config-item-list">
@@ -66,7 +63,9 @@ export default {
 };
 </script>
 <script setup>
-import { getCommonConfig, setCommonConfig } from "@/service/cmds";
+import BaseSelect from "./base/BaseSelect.vue";
+import BaseSwitch from "./base/BaseSwitch.vue";
+import { getCommonConfig, setCommonConfig, setLanguage } from "@/service/cmds";
 import { useI18n } from "vue-i18n";
 import { ref, onMounted } from "vue";
 import HotKeyInput from "@/components/child/config/HotKeyInput.vue";
@@ -91,6 +90,44 @@ const shortCuts = ref([
     keys: [],
   },
 ]);
+const languageOptions = ref([
+  {
+    name: "简体中文",
+    value: "zh",
+  },
+  {
+    name: "English",
+    value: "en",
+  },
+]);
+const languageSelectOption = ref({
+  name: "简体中文",
+  value: "zh",
+});
+const themeOptions = ref([
+  {
+    name: "Light",
+    value: "light",
+  },
+  {
+    name: "Dark",
+    value: "dark",
+  },
+]);
+const themeSelectOption = ref({
+  name: "Light",
+  value: "light",
+});
+const recordLimitOptions = ref([
+  { name: "50", value: 50 },
+  { name: "100", value: 100 },
+  { name: "200", value: 200 },
+  { name: "300", value: 300 },
+]);
+const recordLimitSelectOption = ref({
+  name: "300",
+  value: 300,
+});
 
 const getCommonConfigFromService = async () => {
   const res = await getCommonConfig();
@@ -103,6 +140,21 @@ const getCommonConfigFromService = async () => {
       if (find) {
         item.keys = find.split(":")[1].split("+");
       }
+    });
+  }
+  if (res.language) {
+    languageSelectOption.value = languageOptions.value.find((item) => {
+      return item.value === res.language;
+    });
+  }
+  if (res.theme_mode) {
+    themeSelectOption.value = themeOptions.value.find((item) => {
+      return item.value === res.theme_mode;
+    });
+  }
+  if (res.record_limit) {
+    recordLimitSelectOption.value = recordLimitOptions.value.find((item) => {
+      return item.value == res.record_limit;
     });
   }
 };
@@ -121,6 +173,19 @@ onMounted(async () => {
 
 const change = async () => {
   await setCommonConfigToService();
+};
+
+const changeLanguage = async (e) => {
+  commonConfig.value.language = e.value;
+  setLanguage(e.value);
+};
+const changeTheme = async (e) => {
+  commonConfig.value.theme_mode = e.value;
+  change();
+};
+const changeRecordLimit = async (e) => {
+  commonConfig.value.record_limit = e.value;
+  change();
 };
 
 const shortCutChange = async (e) => {

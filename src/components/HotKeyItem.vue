@@ -1,7 +1,7 @@
 <template>
   <div class="key-item-box">
     <div class="key-item" v-for="item in keymap" :key="item">{{ item }}</div>
-    <div class="key-tips">{{ tips }}</div>
+    <div class="key-tips">{{ $t(tips) }}</div>
   </div>
 </template>
 <script setup>

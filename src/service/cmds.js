@@ -7,3 +7,7 @@ export async function getCommonConfig() {
 export async function setCommonConfig(config) {
   return invoke("set_common_config", { config });
 }
+
+export async function setLanguage(language) {
+  return invoke("change_language", { language });
+}

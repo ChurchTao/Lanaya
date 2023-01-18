@@ -15,6 +15,6 @@ config:
     enable_auto_launch: "Auto Launch"
     language: "Language"
     record_limit: "Record Limit"
-    theme_mode: "Theme"
+    theme_mode: "Theme(unrealized)"
     hotkeys: "Hotkeys"
     hotkeys_placeholder: "Input Keyboard Shortcut"

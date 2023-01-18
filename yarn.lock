@@ -7,6 +7,16 @@
   resolved "https://mirrors.cloud.tencent.com/npm/@babel%2fparser/-/parser-7.20.7.tgz"
   integrity sha512-T3Z9oHybU+0vZlY9CiDSJQTD5ZapcW18ZctFMi0MOAl/4BjFF4ul7NVSARLdbGO5vDqy9eQiGTV0LtKfvCYvcg==
 
+"@headlessui/vue@^1.7.7":
+  version "1.7.7"
+  resolved "https://mirrors.cloud.tencent.com/npm/@headlessui%2fvue/-/vue-1.7.7.tgz"
+  integrity sha512-dkdNhJkxyT9rXW5fHx/MkKaM3U13P3duYuwoGTRmDGjE7xAsvcWOSJRJpw1AmCQTvjZF44bh2wSlySLaHW+WuQ==
+
+"@heroicons/vue@^2.0.13":
+  version "2.0.13"
+  resolved "https://mirrors.cloud.tencent.com/npm/@heroicons%2fvue/-/vue-2.0.13.tgz"
+  integrity sha512-vVCVF02+rNKXEmanVNnmktJlxCbOn0qVFP1gfZPn4bcBIwPX3h9AVHGCkwly+IWDEME8w5oooG0KRd2hhSe/HQ==
+
 "@intlify/bundle-utils@^3.4.0":
   version "3.4.0"
   resolved "https://mirrors.cloud.tencent.com/npm/@intlify%2fbundle-utils/-/bundle-utils-3.4.0.tgz"
@@ -900,7 +910,7 @@ vue-router@^4.1.6:
   dependencies:
     "@vue/devtools-api" "^6.4.5"
 
-vue@^3.0.0, vue@^3.2.0, vue@^3.2.25, vue@^3.2.41, vue@3.2.45:
+vue@^3.0.0, vue@^3.2.0, vue@^3.2.25, vue@^3.2.41, "vue@>= 3", vue@3.2.45:
   version "3.2.45"
   resolved "https://mirrors.cloud.tencent.com/npm/vue/-/vue-3.2.45.tgz"
   integrity sha512-9Nx/Mg2b2xWlXykmCwiTUCWHbWIj53bnkizBxKai1g61f2Xit700A1ljowpTIM11e3uipOeiPcSqnmBg6gyiaA==

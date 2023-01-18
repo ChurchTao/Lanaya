@@ -1,7 +1,5 @@
-use super::{
-    handle,
-    window_manager::{self, WindowType},
-};
+use super::window_manager::{self, WindowType};
+use crate::config;
 use crate::config::{CommonConfig, Config};
 use anyhow::Result;
 use tauri::{
@@ -116,25 +114,14 @@ impl Tray {
 // 切换模式语言
 fn change_language(mode: String) {
     tauri::async_runtime::spawn(async move {
-        match patch(CommonConfig {
+        match config::modify_common_config(CommonConfig {
             language: Some(mode),
             ..CommonConfig::default()
         })
         .await
         {
-            Ok(_) => handle::Handle::refresh_common_config(),
+            Ok(_) => println!("change_language: success"),
             Err(err) => println!("change_language: {}", err),
         }
     });
-}
-
-async fn patch(config: CommonConfig) -> Result<()> {
-    Config::common().draft().patch_config(config.clone());
-    let language = config.language;
-    if language.is_some() {
-        handle::Handle::update_systray()?;
-        Config::common().apply();
-        Config::common().data().save_file()?;
-    }
-    Ok(())
 }

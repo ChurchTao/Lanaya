@@ -1,4 +1,5 @@
 use crate::{
+    config,
     config::{CommonConfig, Config},
     core::handle::Handle,
     log_err,
@@ -21,5 +22,15 @@ pub fn set_common_config(config: CommonConfig) -> CmdResult {
     // todo hotkeys
     Handle::refresh_common_config();
     log_err!(Handle::update_systray());
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn change_language(language: String) -> CmdResult {
+    let _ = config::modify_common_config(CommonConfig {
+        language: Some(language),
+        ..CommonConfig::default()
+    })
+    .await;
     Ok(())
 }

@@ -19,6 +19,7 @@ pub fn read<T: DeserializeOwned>(path: &PathBuf) -> Result<T> {
 
 pub fn save<T: Serialize>(path: &PathBuf, data: &T) -> Result<()> {
     let data_str = serde_json::to_string(data)?;
+    println!("data_str: {}", data_str);
     let path_str = path.as_os_str().to_string_lossy().to_string();
     fs::write(path, data_str.as_bytes()).context(format!("failed to save file \"{path_str}\""))
 }

@@ -1,30 +1,40 @@
 <template>
-  <div class="hotkey-input-container flex items-center">
-    <div class="hotkey-func">{{ $t("hotkeys." + func) }}</div>
-    <input
-      :id="id"
-      type="text"
-      class="hotkey-input"
-      :placeholder="$t('config.common.hotkeys_placeholder')"
-      :value="hotkeyShow"
-      @blur="onBlur"
-      @focus="onFocus"
-      @keypress="(e) => e.preventDefault()"
-      autocomplete="off"
-    />
-    <div class="hotkey-input-clear" @click="onClear">
-      <img src="@/assets/delete.svg" class="h-4 w-4" />
+  <div class="hotkey-input-container w-full flex items-center justify-between py-1">
+    <div class="hotkey-func text-sm">{{ $t("hotkeys." + func) }}：</div>
+    <div
+      class="relative input-container flex items-center border rounded-lg border-gray-200 py-1 pl-2 pr-6 text-left sm:text-sm"
+      :class="focus ? 'ring-2 ring-blue-500 ring-opacity-50' : ''"
+    >
+      <input
+        :id="id"
+        type="text"
+        class="hotkey-input"
+        :placeholder="$t('config.common.hotkeys_placeholder')"
+        :value="hotkeyShow"
+        @blur="onBlur"
+        @focus="onFocus"
+        @keypress="(e) => e.preventDefault()"
+        autocomplete="off"
+      />
+      <div
+        class="hotkey-input-clear cursor-pointer absolute inset-y-0 right-0 pl-2 pr-2 flex items-center hover:bg-gray-100"
+        @click="onClear"
+      >
+        <img src="@/assets/delete.svg" class="h-4 w-4" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import hotkeys from "hotkeys-js";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { getShortCutShow, getShortCutName } from "@/service/util";
 const id = Math.random().toString(36);
 const emit = defineEmits(["change"]);
+const focus = ref(false);
 const onBlur = (e) => {
+  focus.value = false;
   hotkeys.unbind("*", "input");
 };
 const props = defineProps({
@@ -47,6 +57,7 @@ const hotkeyShow = computed(() => {
 });
 
 const onFocus = (e) => {
+  focus.value = true;
   hotkeys.filter = function (event) {
     var tagName = (event.target || event.srcElement).tagName;
     hotkeys.setScope(/^(INPUT|TEXTAREA|SELECT)$/.test(tagName) ? "input" : "other");
