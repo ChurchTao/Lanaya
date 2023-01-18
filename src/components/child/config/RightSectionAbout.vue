@@ -12,7 +12,10 @@
     <div
       class="about-check-update border border-gray-200 shadow-sm h-16 mt-6 rounded-lg px-4 w-full flex items-center justify-between"
     >
-      <div class="change-log text-sm text-blue-700 underline cursor-pointer font-normal">
+      <div
+        @click="gotoChangeLog"
+        class="change-log text-sm text-blue-700 underline cursor-pointer font-normal"
+      >
         {{ $t("config.about.change-log") }}
       </div>
       <div class="check-update">
@@ -24,7 +27,12 @@
       </div>
     </div>
     <div class="about-footer mt-6">
-      <p class="text-sm text-blue-600 underline cursor-pointer font-normal text-center">Github</p>
+      <p
+        @click="gotoGithub"
+        class="text-sm text-blue-600 underline cursor-pointer font-normal text-center"
+      >
+        Github
+      </p>
       <p class="thanks mt-2 text-gray-500 text-xs text-center font-light">
         {{ $t("config.about.thanks") }}
       </p>
@@ -35,6 +43,7 @@
 <script setup>
 import { getName, getVersion } from "@tauri-apps/api/app";
 import { onMounted, ref } from "vue";
+import { open } from "@tauri-apps/api/shell";
 const appName = ref("");
 const appVersion = ref("");
 
@@ -42,6 +51,14 @@ onMounted(async () => {
   appName.value = await getName();
   appVersion.value = await getVersion();
 });
+
+const gotoChangeLog = () => {
+  open("https://github.com/ChurchTao/Lanaya/blob/master/CHANGE_LOG.md");
+};
+
+const gotoGithub = () => {
+  open("https://github.com/ChurchTao/Lanaya");
+};
 </script>
 
 <style scoped>
