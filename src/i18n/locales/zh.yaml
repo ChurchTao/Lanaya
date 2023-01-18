@@ -18,3 +18,8 @@ config:
     theme_mode: "主题(敬请期待)"
     hotkeys: "快捷键"
     hotkeys_placeholder: "输入键盘快捷键"
+  about:
+    version: "版本号"
+    change-log: "更新日志"
+    check-update: "检查更新"
+    thanks: "如果你觉得好用,也许可以给我点个star。"

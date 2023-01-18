@@ -35,7 +35,7 @@
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
-      "copyright": "© 2022 churchTao All Rights Reserved",
+      "copyright": "© 2023 churchTao All Rights Reserved",
       "deb": {
         "depends": []
       },

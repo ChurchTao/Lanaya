@@ -18,3 +18,8 @@ config:
     theme_mode: "Theme(unrealized)"
     hotkeys: "Hotkeys"
     hotkeys_placeholder: "Input Keyboard Shortcut"
+  about:
+    version: "Version"
+    change-log: "Change Log"
+    check-update: "Check Update"
+    thanks: "If you find it useful, maybe you can give me a star."
