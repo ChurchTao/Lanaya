@@ -62,6 +62,9 @@ impl CommonConfig {
         if let Some(record_limit) = other.record_limit {
             self.record_limit = Some(record_limit);
         }
+        if let Some(hotkeys) = other.hotkeys {
+            self.hotkeys = Some(hotkeys);
+        }
     }
 
     pub fn patch_config(&mut self, patch: CommonConfig) {

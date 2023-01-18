@@ -175,7 +175,7 @@ const formatData = (item, value) => {
 const initShortCut = async () => {
   const isRegisteredFlag = await isRegistered(mainShortCut);
   if (isRegisteredFlag) {
-    await message(`快捷键 ${mainShortCut} 被占用`, { title: "警告", type: "error" });
+    // await message(`快捷键 ${mainShortCut} 被占用`, { title: "警告", type: "error" });
   } else {
     await register(mainShortCut, async () => {
       console.log("Shortcut triggered");
@@ -196,7 +196,7 @@ const initListenr = async () => {
       console.log(`tauri://blur`, event);
       let visible = await appWindow.isVisible();
       if (visible) {
-        // await appWindow.hide();
+        await appWindow.hide();
       }
     });
   }

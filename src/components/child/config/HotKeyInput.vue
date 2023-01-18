@@ -9,6 +9,7 @@
       :value="hotkeyShow"
       @blur="onBlur"
       @focus="onFocus"
+      @keypress="(e) => e.preventDefault()"
       autocomplete="off"
     />
     <div class="hotkey-input-clear" @click="onClear">
@@ -19,7 +20,7 @@
 
 <script setup>
 import hotkeys from "hotkeys-js";
-import { onMounted, computed } from "vue";
+import { computed } from "vue";
 import { getShortCutShow, getShortCutName } from "@/service/util";
 const id = Math.random().toString(36);
 const emit = defineEmits(["change"]);
@@ -35,11 +36,6 @@ const props = defineProps({
     type: String,
     default: "",
   },
-});
-onMounted(() => {
-  document.getElementById(id).addEventListener("keypress", (e) => {
-    e.preventDefault();
-  });
 });
 
 const hotkeyShow = computed(() => {
