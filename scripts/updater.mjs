@@ -40,7 +40,7 @@ async function updater() {
   // 需要生成的静态 json 文件数据，根据自己的需要进行调整
   const updateData = {
     version: tag.name,
-    // 使用 UPDATE_LOG.md，如果不需要版本更新日志，则将此字段置空
+    // 使用 CHANGE_LOG.md，如果不需要版本更新日志，则将此字段置空
     notes: updatelog(tag.name),
     pub_date: new Date().toISOString(),
     platforms: {

@@ -40,7 +40,7 @@ async function release() {
   fs.writeFileSync("./package.json", JSON.stringify(packageJson, null, 2));
 
   // 提交修改的文件，打 tag 标签（tag 标签是为了触发 github action 工作流）并推送到远程
-  execSync("git add ./package.json ./UPDATE_LOG.md");
+  execSync("git add ./package.json ./CHANGE_LOG.md");
   execSync(`git commit -m "v${nextVersion}"`);
   execSync(`git tag -a v${nextVersion} -m "v${nextVersion}"`);
   execSync(`git push`);
