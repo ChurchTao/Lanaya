@@ -72,7 +72,10 @@
       "csp": "default-src 'self';"
     },
     "updater": {
-      "active": false
+      "active": true,
+      "dialog": true,
+      "endpoints": ["https://releases.myapp.com/{{target}}/{{current_version}}"],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDFFQkYyRTBBMzk3MkM0QTcKUldTbnhISTVDaTYvSHJXbFpZYzNydW8yU0lEN2JjOFFYTHNpZFZnMmxRTWM1SUtjM0ZlcThlaVkK"
     },
     "windows": [
       {
