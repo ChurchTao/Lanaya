@@ -4,7 +4,7 @@
 )]
 
 use tauri::{App, Manager, SystemTray};
-use tauri_plugin_sql::{Migration, MigrationKind, TauriSql};
+use tauri_plugin_sql::{Migration, MigrationKind};
 use window_shadows::set_shadow;
 
 use crate::config::Config;
@@ -20,8 +20,11 @@ fn main() {
             set_up(app);
             Ok(())
         })
-        // .invoke_handler(tauri::generate_handler![greet])
-        .plugin(TauriSql::default().add_migrations("sqlite:lanaya_data.db", get_migrations()))
+        .plugin(
+            tauri_plugin_sql::Builder::default()
+                .add_migrations("sqlite:lanaya_data.db", get_migrations())
+                .build(),
+        )
         .system_tray(SystemTray::new())
         .on_system_tray_event(core::tray::Tray::on_system_tray_event)
         .invoke_handler(tauri::generate_handler![

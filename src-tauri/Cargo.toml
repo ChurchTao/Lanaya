@@ -23,8 +23,8 @@ anyhow = "1.0"
 parking_lot = "0.12.1"
 
 [dependencies.tauri-plugin-sql]
-git = "https://github.com/tauri-apps/tauri-plugin-sql"
-branch = "release"
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "dev"
 features = ["sqlite"] # or "postgres", or "mysql"
 
 [features]
