@@ -7,8 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "updater": "node scripts/updater.mjs",
-    "release": "node scripts/release.mjs"
+    "updater": "tr updater",
+    "release": "tr release --git",
+    "tr": "tr",
+    "tauri": "tauri"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.7",
@@ -24,6 +26,8 @@
   },
   "devDependencies": {
     "@actions/github": "^5.1.1",
+    "@tauri-apps/cli": "^1.2.3",
+    "@tauri-release/cli": "^0.2.3",
     "@vitejs/plugin-vue": "^3.2.0",
     "autoprefixer": "^10.4.13",
     "node-fetch": "^3.3.0",
