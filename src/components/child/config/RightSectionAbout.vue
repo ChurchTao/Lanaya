@@ -53,7 +53,7 @@ onMounted(async () => {
 });
 
 const gotoChangeLog = () => {
-  open("https://github.com/ChurchTao/Lanaya/blob/master/CHANGE_LOG.md");
+  open("https://github.com/ChurchTao/Lanaya/blob/master/UPDATE_LOG.md");
 };
 
 const gotoGithub = () => {
