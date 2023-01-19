@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "Lanaya",
-    "version": "0.0.3"
+    "version": "0.0.4"
   },
   "tauri": {
     "macOSPrivateApi": true,
@@ -64,7 +64,10 @@
         "digestAlgorithm": "sha256",
         "timestampUrl": "",
         "wix": {
-          "language": ["zh-CN", "en-US"]
+          "language": [
+            "zh-CN",
+            "en-US"
+          ]
         }
       }
     },
@@ -74,7 +77,9 @@
     "updater": {
       "active": true,
       "dialog": true,
-      "endpoints": ["https://releases.myapp.com/{{target}}/{{current_version}}"],
+      "endpoints": [
+        "https://releases.myapp.com/{{target}}/{{current_version}}"
+      ],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDFFQkYyRTBBMzk3MkM0QTcKUldTbnhISTVDaTYvSHJXbFpZYzNydW8yU0lEN2JjOFFYTHNpZFZnMmxRTWM1SUtjM0ZlcThlaVkK"
     },
     "windows": [
