@@ -29,7 +29,10 @@ async function resolve() {
   const bundlePath = path.join(cwd, "src-tauri/target/release/bundle");
   const join = (p) => path.join(bundlePath, p);
 
-  const appPathList = [join("macos/Lanaya.app.tar.gz"), join("macos/Lanaya.app.tar.gz.sig")];
+  const appPathList = [
+    join("macos/Lanaya.aarch64.app.tar.gz"),
+    join("macos/Lanaya.aarch64.app.tar.gz.sig"),
+  ];
 
   for (const appPath of appPathList) {
     if (fs.pathExistsSync(appPath)) {
@@ -40,9 +43,8 @@ async function resolve() {
   fs.copyFileSync(join("macos/Lanaya.app.tar.gz"), appPathList[0]);
   fs.copyFileSync(join("macos/Lanaya.app.tar.gz.sig"), appPathList[1]);
 
-  const options = { owner: context.repo.owner, repo: context.repo.repo };
+  const options = { owner: "ChurchTao", repo: "Lanaya" };
   const github = getOctokit(process.env.GITHUB_TOKEN);
-
   const { data: release } = await github.rest.repos.getReleaseByTag({
     ...options,
     tag: `v${version}`,
@@ -74,14 +76,13 @@ async function uploadAssets(releaseId, assets) {
       : `${filename}${ext}`;
 
     console.log(`[INFO]: Uploading ${assetName}...`);
-
     try {
       await github.rest.repos.uploadReleaseAsset({
         headers,
         name: assetName,
         data: fs.readFileSync(assetPath),
-        owner: context.repo.owner,
-        repo: context.repo.repo,
+        owner: "ChurchTao",
+        repo: "Lanaya",
         release_id: releaseId,
       });
     } catch (error) {
