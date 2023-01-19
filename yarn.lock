@@ -304,15 +304,6 @@
     "@tauri-apps/cli-win32-ia32-msvc" "1.2.3"
     "@tauri-apps/cli-win32-x64-msvc" "1.2.3"
 
-"@tauri-release/cli@^0.2.3":
-  version "0.2.3"
-  resolved "https://mirrors.cloud.tencent.com/npm/@tauri-release%2fcli/-/cli-0.2.3.tgz#71ed2a9bbe7900e1796d5c8e995b2299a82d34da"
-  integrity sha512-Xzn/UtOpu68Ic21GmhTMKWqBXo1Al6TfUkuBy7EMuy6p2LPoLGHT3rND1yjqbqco0drU8wsAU8xGahFuvXLY6A==
-  dependencies:
-    "@actions/github" "^5.1.1"
-    lodash "^4.17.21"
-    node-fetch "^3.3.0"
-
 "@vitejs/plugin-vue@^3.2.0":
   version "3.2.0"
   resolved "https://mirrors.cloud.tencent.com/npm/@vitejs%2fplugin-vue/-/plugin-vue-3.2.0.tgz"
@@ -904,7 +895,7 @@ lilconfig@^2.0.5, lilconfig@^2.0.6:
   resolved "https://mirrors.cloud.tencent.com/npm/lilconfig/-/lilconfig-2.0.6.tgz"
   integrity sha512-9JROoBW7pobfsx+Sq2JsASvCo6Pfo6WWoUW79HuB1BCoBXD4PLWJPqDF6fNj67pqBYTbAHkE57M1kS/+L1neOg==
 
-lodash@^4.17.20, lodash@^4.17.21:
+lodash@^4.17.20:
   version "4.17.21"
   resolved "https://mirrors.cloud.tencent.com/npm/lodash/-/lodash-4.17.21.tgz"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==

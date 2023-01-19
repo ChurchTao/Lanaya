@@ -1,15 +1,15 @@
 {
   "name": "lanaya",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.7",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "updater": "tr updater",
-    "release": "tr release --git",
-    "tr": "tr",
+    "aarch": "node scripts/aarch.mjs",
+    "updater": "node scripts/updater.mjs",
+    "publish": "node scripts/publish.mjs",
     "tauri": "tauri"
   },
   "dependencies": {
@@ -27,7 +27,6 @@
   "devDependencies": {
     "@actions/github": "^5.1.1",
     "@tauri-apps/cli": "^1.2.3",
-    "@tauri-release/cli": "^0.2.3",
     "@vitejs/plugin-vue": "^3.2.0",
     "autoprefixer": "^10.4.13",
     "node-fetch": "^3.3.0",

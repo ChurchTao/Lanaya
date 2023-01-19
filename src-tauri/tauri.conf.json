@@ -34,6 +34,7 @@
     },
     "bundle": {
       "active": true,
+      "targets": "all",
       "category": "DeveloperTool",
       "copyright": "© 2023 churchTao All Rights Reserved",
       "deb": {
@@ -58,16 +59,12 @@
       },
       "resources": [],
       "shortDescription": "Clipboard manager",
-      "targets": "all",
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
         "timestampUrl": "",
         "wix": {
-          "language": [
-            "zh-CN",
-            "en-US"
-          ]
+          "language": ["zh-CN", "en-US"]
         }
       }
     },
@@ -77,9 +74,7 @@
     "updater": {
       "active": true,
       "dialog": true,
-      "endpoints": [
-        "https://releases.myapp.com/{{target}}/{{current_version}}"
-      ],
+      "endpoints": ["https://lencx.github.io/ChatGPT/install.json"],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDFFQkYyRTBBMzk3MkM0QTcKUldTbnhISTVDaTYvSHJXbFpZYzNydW8yU0lEN2JjOFFYTHNpZFZnMmxRTWM1SUtjM0ZlcThlaVkK"
     },
     "windows": [
