@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "Lanaya",
-    "version": "../package.json"
+    "version": "0.0.3"
   },
   "tauri": {
     "macOSPrivateApi": true,
