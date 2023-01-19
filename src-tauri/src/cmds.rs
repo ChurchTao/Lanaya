@@ -34,3 +34,43 @@ pub async fn change_language(language: String) -> CmdResult {
     .await;
     Ok(())
 }
+
+#[tauri::command]
+pub async fn change_record_limit(limit: u32) -> CmdResult {
+    let _ = config::modify_common_config(CommonConfig {
+        record_limit: Some(limit),
+        ..CommonConfig::default()
+    })
+    .await;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn change_auto_launch(enable: bool) -> CmdResult {
+    let _ = config::modify_common_config(CommonConfig {
+        enable_auto_launch: Some(enable),
+        ..CommonConfig::default()
+    })
+    .await;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn change_theme_mode(theme_mode: String) -> CmdResult {
+    let _ = config::modify_common_config(CommonConfig {
+        theme_mode: Some(theme_mode),
+        ..CommonConfig::default()
+    })
+    .await;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn change_hotkeys(hotkeys: Vec<String>) -> CmdResult {
+    let _ = config::modify_common_config(CommonConfig {
+        hotkeys: Some(hotkeys),
+        ..CommonConfig::default()
+    })
+    .await;
+    Ok(())
+}

@@ -13,6 +13,7 @@
         :value="hotkeyShow"
         @blur="onBlur"
         @focus="onFocus"
+        @keydown="(e) => e.preventDefault()"
         @keypress="(e) => e.preventDefault()"
         autocomplete="off"
       />
@@ -49,7 +50,6 @@ const props = defineProps({
 });
 
 const hotkeyShow = computed(() => {
-  console.log(props.keys);
   if (props.keys.length > 0) {
     return getShortCutShow(props.keys);
   }

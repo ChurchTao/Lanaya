@@ -1394,10 +1394,11 @@ dependencies = [
 
 [[package]]
 name = "lanaya"
-version = "0.0.1"
+version = "0.0.8"
 dependencies = [
  "anyhow",
  "auto-launch",
+ "dunce",
  "once_cell",
  "parking_lot 0.12.1",
  "serde",

@@ -17,7 +17,7 @@ config:
     record_limit: "Record Limit"
     theme_mode: "Theme(unrealized)"
     hotkeys: "Hotkeys"
-    hotkeys_placeholder: "Input Keyboard Shortcut"
+    hotkeys_placeholder: "Input Shortcut"
   about:
     version: "Version"
     change-log: "Change Log"

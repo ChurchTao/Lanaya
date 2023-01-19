@@ -33,6 +33,7 @@ impl CommonConfig {
     }
 
     pub fn template() -> Self {
+        // todo windows 快捷键不一样，需要兼容
         Self {
             language: match cfg!(feature = "default-meta") {
                 false => Some("zh".into()),
@@ -41,7 +42,11 @@ impl CommonConfig {
             theme_mode: Some("light".into()),
             enable_auto_launch: Some(false),
             record_limit: Some(100),
-            ..Self::default()
+            hotkeys: Some(vec![
+                "clear-history:8+16+91".into(),
+                "global-shortcut:16+67+91".into(),
+            ]),
+            ..Default::default()
         }
     }
 

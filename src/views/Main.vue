@@ -22,45 +22,48 @@ import { ref, onMounted, onBeforeMount, onUnmounted, nextTick } from "vue";
 import { selectPage, insertRecord, removeById, clearAll } from "@/service/recordService";
 import { readText, writeText } from "@tauri-apps/api/clipboard";
 import { listen } from "@tauri-apps/api/event";
-import { message } from "@tauri-apps/api/dialog";
-import { isRegistered, register, unregister } from "@tauri-apps/api/globalShortcut";
-import { listenLanguageChange } from "@/service/globalListener";
+import { register, unregister, isRegistered } from "@tauri-apps/api/globalShortcut";
+import { getShortCutName, getShortCutShowAnyway } from "@/service/util";
+import { defaultHotkeys } from "../config/constants";
+import { listenRecordLimitChange, listenHotkeysChange } from "@/service/globalListener";
+import { getCommonConfig } from "../service/cmds";
 const mainShortCut = "CommandOrControl+Shift+C";
 const noResultFlag = ref(false);
 const selectIndex = ref(-1);
 const lastClipBoardData = ref("");
 const cmdPressDown = ref(false);
 const keyMap = ref([]);
+let clipBoardListener;
+let unlistenBlur;
+let unlistenRecordLimitChange;
+let unlistenHotkeysChange;
 /**
  * @type {Array<{id: number, contentParse: Array<{content: string, match: boolean}>, contentSource: string}>}
  */
 const clipBoardDataList = ref([]);
+const recordLimit = ref(300);
+const shortCuts = ref([
+  {
+    func: "clear-history",
+    keys: [],
+  },
+  {
+    func: "global-shortcut",
+    keys: [],
+  },
+]);
 onBeforeMount(async () => {
-  await initShortCut();
   await initListenr();
   await initClipBoardDataList();
 });
-let clipBoardListener;
-let unlistenBlur;
 
-onMounted(async () => {
-  initAppShortCut();
-  if (!clipBoardListener) {
-    clipBoardListener = setInterval(async () => {
-      let text = await readText();
-      if (text === null) {
-        return;
-      }
-      if (text.trim() === "") {
-        return;
-      }
-      if (text !== lastClipBoardData.value) {
-        lastClipBoardData.value = text;
-        await insertRecord(text);
-        await initClipBoardDataList();
-      }
-    }, 500);
-  }
+onMounted(() => {
+  initCommonConfig().then(() => {
+    initKeyMapShow();
+    initShortCut();
+    initAppShortCut();
+  });
+  initClipBoardListener();
 });
 
 onUnmounted(async () => {
@@ -70,6 +73,26 @@ onUnmounted(async () => {
   await unRegisterShortCut();
   unlistenBlur();
 });
+
+const initCommonConfig = async () => {
+  let res = await getCommonConfig();
+  if (res.record_limit) {
+    recordLimit.value = res.record_limit;
+  }
+  if (res.hotkeys) {
+    shortCuts.value.forEach((item) => {
+      let find = res.hotkeys.find((hotkey) => {
+        return hotkey.startsWith(item.func);
+      });
+      if (find) {
+        let strArr = find.split(":")[1].split("+");
+        item.keys = strArr.map((item) => {
+          return parseInt(item);
+        });
+      }
+    });
+  }
+};
 
 const initClipBoardDataList = async () => {
   let res = await selectPage("");
@@ -82,14 +105,15 @@ const initClipBoardDataList = async () => {
 };
 
 const initKeyMapShow = () => {
-  keyMap.value = [
-    { keymap: ["⏎"], tips: "hotkeys.copy" },
-    { keymap: ["⌘+Nmb"], tips: "hotkeys.quick-copy" },
-    { keymap: ["↑", "↓"], tips: "hotkeys.move-selected" },
-    { keymap: ["Esc"], tips: "hotkeys.close-window" },
-    { keymap: ["⌘⇧⌫"], tips: "hotkeys.clear-history" },
-    { keymap: ["⌘⇧C"], tips: "hotkeys.global-shortcut" },
-  ];
+  let allKeys = [...defaultHotkeys, ...JSON.parse(JSON.stringify(shortCuts.value))];
+  let keyShowArr = allKeys.map((item) => {
+    let keysShowString = getShortCutShowAnyway(item.keys);
+    return {
+      keymap: [keysShowString],
+      tips: `hotkeys.${item.func}`,
+    };
+  });
+  keyMap.value = keyShowArr;
 };
 
 const onSearchChange = async (value) => {
@@ -173,7 +197,6 @@ const initShortCut = async () => {
     // await message(`快捷键 ${mainShortCut} 被占用`, { title: "警告", type: "error" });
   } else {
     await register(mainShortCut, async () => {
-      console.log("Shortcut triggered");
       let visible = await appWindow.isVisible();
       if (visible) {
         await appWindow.hide();
@@ -188,21 +211,57 @@ const initShortCut = async () => {
 const initListenr = async () => {
   if (!unlistenBlur) {
     unlistenBlur = await listen("tauri://blur", async (event) => {
-      console.log(`tauri://blur`, event);
       let visible = await appWindow.isVisible();
       if (visible) {
-        await appWindow.hide();
+        // await appWindow.hide();
       }
+    });
+  }
+  if (!unlistenRecordLimitChange) {
+    unlistenRecordLimitChange = await listenRecordLimitChange((recordLimit) => {
+      recordLimit.value = recordLimit;
+      console.log("recordLimitChange", recordLimit);
+    });
+  }
+  if (!unlistenHotkeysChange) {
+    unlistenHotkeysChange = await listenHotkeysChange((hotkeys) => {
+      console.log("hotkeysChange", hotkeys);
+      shortCuts.value.forEach((item) => {
+        let find = hotkeys.find((hotkey) => {
+          return hotkey.startsWith(item.func);
+        });
+        if (find) {
+          let strArr = find.split(":")[1].split("+");
+          item.keys = strArr.map((item) => {
+            return parseInt(item);
+          });
+        }
+      });
     });
   }
 };
 
-const unRegisterShortCut = async () => {
-  const isRegisteredFlag = await isRegistered(mainShortCut);
-  if (isRegisteredFlag) {
-    console.log("unRegisterShortCut");
-    await unregister(mainShortCut);
+const initClipBoardListener = () => {
+  if (!clipBoardListener) {
+    clipBoardListener = setInterval(async () => {
+      let text = await readText();
+      if (text === null) {
+        return;
+      }
+      if (text.trim() === "") {
+        return;
+      }
+      if (text !== lastClipBoardData.value) {
+        lastClipBoardData.value = text;
+        await insertRecord(text);
+        await initClipBoardDataList();
+      }
+    }, 500);
   }
+};
+
+const unRegisterShortCut = async () => {
+  await unregister(mainShortCut);
 };
 const setDataItemAlwaysShow = (offset) => {
   const dataSelect = document.querySelector(".data-select")?.getBoundingClientRect();
@@ -238,7 +297,6 @@ const moveIndex = (offset) => {
 };
 
 const initAppShortCut = async () => {
-  initKeyMapShow();
   document.onkeydown = async (e) => {
     let key = e.key;
     let isShift = e.shiftKey;

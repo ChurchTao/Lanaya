@@ -14,6 +14,8 @@ pub struct Handle {
 
 pub enum MsgTypeEnum {
     ChangeLanguage,
+    ChangeRecordLimit,
+    ChangeHotKeys,
 }
 
 impl Handle {
@@ -71,6 +73,18 @@ impl Handle {
                 let window = app_handle.as_ref().unwrap().get_window("main");
                 if window.is_some() {
                     log_err!(window.unwrap().emit("lanaya://change-language", msg));
+                }
+            }
+            MsgTypeEnum::ChangeRecordLimit => {
+                let window = app_handle.as_ref().unwrap().get_window("main");
+                if window.is_some() {
+                    log_err!(window.unwrap().emit("lanaya://change-record-limit", msg));
+                }
+            }
+            MsgTypeEnum::ChangeHotKeys => {
+                let window = app_handle.as_ref().unwrap().get_window("main");
+                if window.is_some() {
+                    log_err!(window.unwrap().emit("lanaya://change-hotkeys", msg));
                 }
             }
         }

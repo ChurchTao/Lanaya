@@ -15,10 +15,7 @@ impl Tray {
         let version = app_handle.package_info().version.to_string();
         if zh {
             SystemTrayMenu::new()
-                .add_item(
-                    CustomMenuItem::new("open_window", "显示界面")
-                        .accelerator("CommandOrControl+Shift+C"),
-                )
+                .add_item(CustomMenuItem::new("open_window", "显示界面"))
                 .add_item(CustomMenuItem::new("hide_window", "隐藏界面").accelerator("Esc"))
                 .add_native_item(SystemTrayMenuItem::Separator)
                 .add_submenu(SystemTraySubmenu::new(
@@ -33,10 +30,7 @@ impl Tray {
                 .add_item(CustomMenuItem::new("quit", "退出").accelerator("CmdOrControl+Q"))
         } else {
             SystemTrayMenu::new()
-                .add_item(
-                    CustomMenuItem::new("open_window", "Show Window")
-                        .accelerator("CommandOrControl+Shift+C"),
-                )
+                .add_item(CustomMenuItem::new("open_window", "Show Window"))
                 .add_item(CustomMenuItem::new("hide_window", "Hide Window").accelerator("Esc"))
                 .add_native_item(SystemTrayMenuItem::Separator)
                 .add_submenu(SystemTraySubmenu::new(

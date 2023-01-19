@@ -4,7 +4,7 @@ const _keyMap = {
   9: { name: "tab", keyStr: "Tab" },
   12: { name: "clear", keyStr: "Clear" },
   13: { name: "enter", keyStr: "↩" },
-  27: { name: "esc", keyStr: "⎋" },
+  27: { name: "esc", keyStr: "Esc" },
   32: { name: "space", keyStr: "Space" },
   37: { name: "left", keyStr: "←" },
   38: { name: "up", keyStr: "↑" },
@@ -58,6 +58,7 @@ export function getShortCutShow(keyCodeArr) {
   let modifier = "";
   let normalKey = "";
   keyCodeArr.forEach((keyCode) => {
+    keyCode = parseInt(keyCode);
     if (_modifier[keyCode]) {
       modifier += _modifier[keyCode].keyStr;
     } else if (_keyMap[keyCode]) {
@@ -77,6 +78,24 @@ export function getShortCutShow(keyCodeArr) {
   if (modifier === "" && keyStr !== "" && normalKey !== "") {
     return "";
   }
+  return modifier + keyStr + normalKey;
+}
+
+export function getShortCutShowAnyway(keyCodeArr) {
+  keyCodeArr = keyCodeArr.sort((a, b) => a - b);
+  let keyStr = "";
+  let modifier = "";
+  let normalKey = "";
+  keyCodeArr.forEach((keyCode) => {
+    keyCode = parseInt(keyCode);
+    if (_modifier[keyCode]) {
+      modifier += _modifier[keyCode].keyStr;
+    } else if (_keyMap[keyCode]) {
+      keyStr += _keyMap[keyCode].keyStr;
+    } else {
+      normalKey = String.fromCharCode(keyCode).toUpperCase();
+    }
+  });
   return modifier + keyStr + normalKey;
 }
 

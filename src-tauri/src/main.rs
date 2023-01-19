@@ -8,6 +8,7 @@ use tauri_plugin_sql::{Migration, MigrationKind};
 use window_shadows::set_shadow;
 
 use crate::config::Config;
+use crate::core::sysopt;
 use crate::core::tray;
 mod cmds;
 mod config;
@@ -30,7 +31,11 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             cmds::get_common_config,
             cmds::set_common_config,
-            cmds::change_language
+            cmds::change_language,
+            cmds::change_record_limit,
+            cmds::change_auto_launch,
+            cmds::change_theme_mode,
+            cmds::change_hotkeys,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -44,6 +49,7 @@ fn set_up(app: &mut App) {
     core::handle::Handle::global().init(app.app_handle());
     log_err!(Config::init_config());
     log_err!(tray::Tray::update_systray(&app.app_handle()));
+    log_err!(sysopt::Sysopt::global().init_launch());
 }
 
 fn get_migrations() -> Vec<Migration> {

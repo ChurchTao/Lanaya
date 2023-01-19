@@ -1,6 +1,7 @@
 use super::{CommonConfig, Draft};
 use crate::{
     core::handle,
+    core::sysopt,
     log_err,
     utils::{dirs, json_util},
 };
@@ -53,12 +54,11 @@ pub async fn modify_common_config(patch: CommonConfig) -> Result<()> {
 
     match {
         if auto_launch.is_some() {
-            // todo change auto launch
-            // todo send msg to frontend
+            sysopt::Sysopt::global().update_launch()?;
         }
+
         if hotkeys.is_some() {
-            // send msg to frontend
-            // system tary hotkey modify
+            handle::Handle::notice_to_window(handle::MsgTypeEnum::ChangeHotKeys, hotkeys)?;
         }
 
         if language.is_some() {
@@ -71,7 +71,7 @@ pub async fn modify_common_config(patch: CommonConfig) -> Result<()> {
         }
 
         if record_limit.is_some() {
-            // todo send msg to frontend
+            handle::Handle::notice_to_window(handle::MsgTypeEnum::ChangeRecordLimit, record_limit)?;
         }
 
         <Result<()>>::Ok(())
