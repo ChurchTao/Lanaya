@@ -64,10 +64,7 @@
         "digestAlgorithm": "sha256",
         "timestampUrl": "",
         "wix": {
-          "language": [
-            "zh-CN",
-            "en-US"
-          ]
+          "language": ["zh-CN", "en-US"]
         }
       }
     },
@@ -77,9 +74,7 @@
     "updater": {
       "active": true,
       "dialog": true,
-      "endpoints": [
-        "https://lencx.github.io/ChatGPT/install.json"
-      ],
+      "endpoints": ["https://github.com/churchTao/Lanaya/releases/download/updater/update.json"],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDFFQkYyRTBBMzk3MkM0QTcKUldTbnhISTVDaTYvSHJXbFpZYzNydW8yU0lEN2JjOFFYTHNpZFZnMmxRTWM1SUtjM0ZlcThlaVkK"
     },
     "windows": [
