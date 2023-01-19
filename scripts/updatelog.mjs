@@ -34,6 +34,7 @@ export default function updatelog(tag, type = "updater") {
       _tag = null;
     }
   });
+  console.log(tagMap);
 
   if (!tagMap?.[tag]) {
     console.log(`${type === "release" ? "[CHANGE_LOG.md] " : ""}Tag ${tag} does not exist`);
