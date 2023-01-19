@@ -1,7 +1,7 @@
 {
   "name": "lanaya",
   "private": true,
-  "version": "0.0.7",
+  "version": "0.0.8",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -29,6 +29,7 @@
     "@tauri-apps/cli": "^1.2.3",
     "@vitejs/plugin-vue": "^3.2.0",
     "autoprefixer": "^10.4.13",
+    "fs-extra": "^11.1.0",
     "node-fetch": "^3.3.0",
     "postcss": "^8.4.20",
     "tailwindcss": "^3.2.4",
