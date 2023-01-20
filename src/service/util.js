@@ -81,22 +81,23 @@ export function getShortCutShow(keyCodeArr) {
   return modifier + keyStr + normalKey;
 }
 
+// 返回数组形式
 export function getShortCutShowAnyway(keyCodeArr) {
   keyCodeArr = keyCodeArr.sort((a, b) => a - b);
-  let keyStr = "";
-  let modifier = "";
-  let normalKey = "";
+  let keyStr = [];
+  let modifier = [];
+  let normalKey = [];
   keyCodeArr.forEach((keyCode) => {
     keyCode = parseInt(keyCode);
     if (_modifier[keyCode]) {
-      modifier += _modifier[keyCode].keyStr;
+      modifier.push(_modifier[keyCode].keyStr);
     } else if (_keyMap[keyCode]) {
-      keyStr += _keyMap[keyCode].keyStr;
+      keyStr.push(_keyMap[keyCode].keyStr);
     } else {
-      normalKey = String.fromCharCode(keyCode).toUpperCase();
+      normalKey.push(String.fromCharCode(keyCode).toUpperCase());
     }
   });
-  return modifier + keyStr + normalKey;
+  return [...modifier, ...keyStr, ...normalKey];
 }
 
 /**

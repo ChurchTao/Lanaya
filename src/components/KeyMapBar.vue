@@ -4,6 +4,7 @@
     data-tauri-drag-region
   >
     <HotKeyItem
+      :show="hotKeyShow(item.keymap)"
       :key="item.tips"
       v-for="item in keyMap"
       :keymap="item.keymap"
@@ -19,6 +20,7 @@
 <script setup>
 import HotKeyItem from "./HotKeyItem.vue";
 import { open } from "@tauri-apps/api/shell";
+import { computed } from "vue";
 // import { WebviewWindow } from "@tauri-apps/api/window";
 defineProps({
   keyMap: Array[Object],
@@ -28,6 +30,9 @@ const gotoGithub = async () => {
   // const webview = new WebviewWindow("config", {
   // url: "/config",
   // });
+};
+const hotKeyShow = (keymap) => {
+  return keymap.length > 0 && keymap[0] !== "";
 };
 </script>
 <style scoped>

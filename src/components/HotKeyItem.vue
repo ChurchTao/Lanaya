@@ -1,5 +1,5 @@
 <template>
-  <div class="key-item-box">
+  <div class="key-item-box" v-if="show">
     <div class="key-item" v-for="item in keymap" :key="item">{{ item }}</div>
     <div class="key-tips">{{ $t(tips) }}</div>
   </div>
@@ -8,6 +8,7 @@
 defineProps({
   tips: String,
   keymap: Array[String],
+  show: Boolean,
 });
 </script>
 <style scoped>
@@ -30,12 +31,12 @@ defineProps({
   display: flex;
   height: 18px;
   justify-content: center;
-  margin-right: 0.4em;
+  margin-right: 0.3em;
   padding: 1px 2px;
   color: #909399;
   border: 0;
   font-size: 0.75em;
-  min-width: 20px;
+  min-width: 18px;
   box-sizing: border-box;
   user-select: none;
   -moz-user-select: none;
