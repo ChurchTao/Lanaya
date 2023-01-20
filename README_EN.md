@@ -22,16 +22,20 @@ Lanaya comes from Templar Assassin in Dota2, which is a clipboard management sof
 
 - Search by keywords.
 - All shortcut to manage.
+- Setting history record range.
+- Multi-language.
+- Auto updater.
 
 ## Todos
 
-- [ ] make some args to settings.
+- [x] make some args to settings.
 - [ ] light and black theme.
 - [x] collect css by `taildwind`.
 - [x] collect code.
 - [ ] add image type history.
-- [ ] multi-language
-- [ ] updater
+- [x] multi-language
+- [x] updater
+- [ ] new feature: favorite
 
 ## Download
 
@@ -78,6 +82,7 @@ Lanaya was based on or inspired by these projects and so on:
 - [tauri-apps/tauri](https://github.com/tauri-apps/tauri): Build smaller, faster, and more secure desktop applications with a web frontend.
 - [vitejs/vite](https://github.com/vitejs/vite): Next generation frontend tooling. It's fast!
 - [vue3](https://github.com/vuejs/core): An approachable, performant and versatile framework for building web user interfaces.
+- [tailwindlabs](https://github.com/tailwindlabs) Creators of Tailwind CSS and Headless UI, and authors of Refactoring UI.
 
 ## License
 

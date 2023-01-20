@@ -22,16 +22,20 @@
 
 - 通过关键词搜索
 - 全快捷键操作
+- 设置历史条数范围
+- 多语言
+- 自动更新
 
 ## 未完成
 
-- [ ] 新增设置页面，开放一些参数为设置首选项
+- [x] 新增设置页面，开放一些参数为设置首选项
 - [ ] 增加主题
 - [x] 引入`taildwind`管理 css
 - [x] 整理代码结构
 - [ ] 新增复制图片历史的功能
-- [ ] 引入多语言
-- [ ] 引入自动更新
+- [x] 引入多语言
+- [x] 引入自动更新
+- [ ] 新增收藏夹功能
 
 ## 下载
 
@@ -77,6 +81,7 @@ cargo tauri build
 - [tauri-apps/tauri](https://github.com/tauri-apps/tauri): Build smaller, faster, and more secure desktop applications with a web frontend.
 - [vitejs/vite](https://github.com/vitejs/vite): Next generation frontend tooling. It's fast!
 - [vue3](https://github.com/vuejs/core): An approachable, performant and versatile framework for building web user interfaces.
+- [tailwindlabs](https://github.com/tailwindlabs) Creators of Tailwind CSS and Headless UI, and authors of Refactoring UI.
 
 ## License
 
