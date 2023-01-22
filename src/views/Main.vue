@@ -23,7 +23,7 @@ import { selectPage, insertRecord, removeById, clearAll } from "@/service/record
 import { readText, writeText } from "@tauri-apps/api/clipboard";
 import { listen } from "@tauri-apps/api/event";
 import { register, unregisterAll } from "@tauri-apps/api/globalShortcut";
-import { getShortCutName, getShortCutShowAnyway } from "@/service/util";
+import { getShortCutName, getShortCutShowAnyway, isDiff } from "@/service/shortCutUtil";
 import { defaultHotkeys } from "../config/constants";
 import { listenRecordLimitChange, listenHotkeysChange } from "@/service/globalListener";
 import { getCommonConfig } from "../service/cmds";
@@ -192,14 +192,14 @@ const formatData = (item, value) => {
 
 const refreshShortCut = () => {
   let allKeys = [...defaultHotkeys, ...JSON.parse(JSON.stringify(shortCuts.value))];
-  initKeyMapShow(allKeys);
   let globalShortCuts = allKeys.filter((item) => {
     return item.func.startsWith("global");
   });
-  initGlobalShortCut(globalShortCuts);
   let appShortCuts = allKeys.filter((item) => {
     return !item.func.startsWith("global");
   });
+  initKeyMapShow(allKeys);
+  initGlobalShortCut(globalShortCuts);
   initAppShortCut(appShortCuts);
 };
 
@@ -315,51 +315,64 @@ const moveIndex = (offset) => {
 };
 
 const initAppShortCut = async (appShortCuts) => {
+  console.log("initAppShortCut", appShortCuts);
+  hotkeys.filter = function (event) {
+    return true;
+  };
+  hotkeys(
+    "up,down",
+    {
+      capture: true,
+      scope: "main",
+    },
+    (event, handler) => {
+      if (event.key === "ArrowUp") {
+        moveIndex(-1);
+      } else if (event.key === "ArrowDown") {
+        moveIndex(1);
+      }
+    }
+  );
+  hotkeys(
+    "*",
+    {
+      capture: true,
+      scope: "main",
+    },
+    () => {
+      appShortCuts.forEach((shortCut) => {
+        if (!isDiff(shortCut.keys, hotkeys.getPressedKeyCodes())) {
+          switch (shortCut.func) {
+            case "clear-history":
+              onClearAll();
+              break;
+            case "copy":
+              onKeyEnter();
+              break;
+            case "close-window":
+              appWindow.hide();
+              break;
+          }
+        }
+      });
+    }
+  );
+  hotkeys.setScope("main");
+
   document.onkeydown = async (e) => {
     let key = e.key;
-    let isShift = e.shiftKey;
     let isMeta = e.metaKey;
     let isCtrl = e.ctrlKey;
-    let isAlt = e.altKey;
     let isCmd = isMeta || isCtrl;
     let numberKey = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
     if (isCmd) {
       cmdPressDown.value = true;
-    }
-    if (key == "Escape") {
-      //esc
-      await appWindow.hide();
-      return;
-    }
-    if (key == "Up" || key == "ArrowUp") {
-      //up
-      moveIndex(-1);
-      return;
-    }
-    if (key == "Down" || key == "ArrowDown") {
-      //down
-      moveIndex(1);
-      return;
-    }
-    if (key == "Enter") {
-      //enter
-      await onKeyEnter();
-      return;
     }
     if (isCmd && numberKey.includes(key)) {
       //cmd + 1
       await clickDataItem(parseInt(key) - 1);
       return;
     }
-    if (isCmd && isShift && key == "Backspace") {
-      await onClearAll();
-      return;
-    }
-    // if (isCmd && key == "Backspace") {
-    //   //cmd + backspace
-    //   await onKeyBackspace();
-    //   return;
-    // }
   };
 
   document.onkeyup = async (e) => {

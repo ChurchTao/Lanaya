@@ -30,7 +30,7 @@
 <script setup>
 import hotkeys from "hotkeys-js";
 import { computed, ref } from "vue";
-import { getShortCutShow } from "@/service/util";
+import { getShortCutShow } from "@/service/shortCutUtil";
 const id = Math.random().toString(36);
 const emit = defineEmits(["change"]);
 const focus = ref(false);

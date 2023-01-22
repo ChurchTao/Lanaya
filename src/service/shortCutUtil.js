@@ -146,3 +146,17 @@ function capitalized(name, isFirstWordUpperCase = false) {
   const rest = name.slice(1);
   return capitalizedFirst + rest;
 }
+
+export function isDiff(keyCodeArr1, keyCodeArr2) {
+  if (keyCodeArr1.length !== keyCodeArr2.length) {
+    return true;
+  }
+  keyCodeArr1 = keyCodeArr1.sort((a, b) => a - b);
+  keyCodeArr2 = keyCodeArr2.sort((a, b) => a - b);
+  for (let i = 0; i < keyCodeArr1.length; i++) {
+    if (keyCodeArr1[i] !== keyCodeArr2[i]) {
+      return true;
+    }
+  }
+  return false;
+}
