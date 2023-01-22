@@ -2,6 +2,15 @@
 
 All changes will be documented in this file.
 
+## v0.1.0
+
+### Feature
+
+- 实装 多语言
+- 实装 自动更新
+- 实装 快捷键设置
+- 实装 开机启动
+
 ## v0.0.9
 
 ### Feature
