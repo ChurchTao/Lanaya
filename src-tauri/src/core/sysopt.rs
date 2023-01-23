@@ -26,20 +26,16 @@ impl Sysopt {
         println!("enable auto launch: {}", enable);
 
         let app_exe = current_exe()?;
-        println!("app_exe: {:?}", app_exe);
         let app_exe = dunce::canonicalize(app_exe)?;
-        println!("app_exe: {:?}", app_exe);
         let app_name = app_exe
             .file_stem()
             .and_then(|f| f.to_str())
             .ok_or(anyhow!("failed to get file stem"))?;
-        println!("app_name: {}", app_name);
         let app_path = app_exe
             .as_os_str()
             .to_str()
             .ok_or(anyhow!("failed to get app_path"))?
             .to_string();
-        println!("app_path: {}", app_path);
         #[cfg(target_os = "windows")]
         let app_path = format!("\"{app_path}\"");
 

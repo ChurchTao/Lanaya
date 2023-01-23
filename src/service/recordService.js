@@ -1,7 +1,7 @@
 import { getConnect } from "./base/db";
 import md5 from "md5";
 
-async function selectPage(searchKey = "", limit = 100) {
+async function selectPage(searchKey = "", limit = 300) {
   searchKey = `%${searchKey}%`;
   let db = await getConnect();
   return await db.select(
@@ -10,7 +10,7 @@ async function selectPage(searchKey = "", limit = 100) {
   );
 }
 
-async function insertRecord(content) {
+async function insertRecord(content, limit = 300) {
   let newRecord = {
     content: content,
     md5: md5(content),
@@ -18,7 +18,6 @@ async function insertRecord(content) {
   let db = await getConnect();
   let record = await findRecordByMd5(newRecord.md5);
   if (record && record.length > 0) {
-    // update create_time
     await updateRecord(record[0]);
   } else {
     let res = await db.execute("INSERT INTO record (content, md5, create_time) VALUES ($1,$2,$3)", [
@@ -28,6 +27,24 @@ async function insertRecord(content) {
     ]);
     console.log("insert success!", res);
   }
+  removeOverLimit(limit);
+}
+
+/**
+ * 删除超过limit的记录
+ * @param {*} limit
+ * @returns
+ */
+async function removeOverLimit(limit = 300) {
+  let db = await getConnect();
+  let count = await db.execute("select count(*) from record");
+  if (count <= limit) {
+    return;
+  }
+  await db.execute(
+    "DELETE FROM record WHERE id IN (SELECT id FROM record ORDER BY id DESC LIMIT $1, 1000000000)",
+    [limit]
+  );
 }
 
 async function findRecordByMd5(md5) {

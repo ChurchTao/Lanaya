@@ -37,11 +37,11 @@ let clipBoardListener;
 let unlistenBlur;
 let unlistenRecordLimitChange;
 let unlistenHotkeysChange;
+let recordLimit = 300;
 /**
  * @type {Array<{id: number, contentParse: Array<{content: string, match: boolean}>, contentSource: string}>}
  */
 const clipBoardDataList = ref([]);
-const recordLimit = ref(300);
 const shortCuts = ref([
   {
     func: "clear-history",
@@ -74,7 +74,7 @@ onUnmounted(async () => {
 const initCommonConfig = async () => {
   let res = await getCommonConfig();
   if (res.record_limit) {
-    recordLimit.value = res.record_limit;
+    recordLimit = res.record_limit;
   }
   if (res.hotkeys) {
     shortCuts.value.forEach((item) => {
@@ -94,7 +94,7 @@ const initCommonConfig = async () => {
 };
 
 const initClipBoardDataList = async () => {
-  let res = await selectPage("");
+  let res = await selectPage("", recordLimit);
   if (res) {
     if (res.length > 0) {
       lastClipBoardData.value = res[0].content;
@@ -229,14 +229,13 @@ const initListenr = async () => {
     unlistenBlur = await listen("tauri://blur", async (event) => {
       let visible = await appWindow.isVisible();
       if (visible) {
-        // await appWindow.hide();
+        await appWindow.hide();
       }
     });
   }
   if (!unlistenRecordLimitChange) {
-    unlistenRecordLimitChange = await listenRecordLimitChange((recordLimit) => {
-      recordLimit.value = recordLimit;
-      console.log("recordLimitChange", recordLimit);
+    unlistenRecordLimitChange = await listenRecordLimitChange((newLimitNum) => {
+      recordLimit = newLimitNum;
     });
   }
   if (!unlistenHotkeysChange) {

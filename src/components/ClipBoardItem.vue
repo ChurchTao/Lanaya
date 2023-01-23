@@ -1,5 +1,10 @@
 <template>
-    <li class="data-item rounded flex pb-1 relative" :class="{'data-select': select}" role="option" :aria-selected="select">
+  <li
+    class="data-item rounded flex pb-1 relative"
+    :class="{ 'data-select': select }"
+    role="option"
+    :aria-selected="select"
+  >
     <div class="data-item-outer cursor-pointer rounded shadow-md block pl-4 py-4 w-full">
       <div
         class="data-item-container flex flex-row items-center justify-between max-h-28 pr-4 overflow-hidden"
