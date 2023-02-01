@@ -73,6 +73,7 @@ cargo tauri build
   <img src="./md/demo1.png" alt="demo1" width="100%" />
   <img src="./md/demo2.png" alt="demo2" width="100%" />
   <img src="./md/demo3.png" alt="demo3" width="100%" />
+  <img src="./md/demo4.png" alt="demo4" width="100%" />
 </div>
 
 ## 建议
