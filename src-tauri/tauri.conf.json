@@ -26,9 +26,6 @@
       },
       "globalShortcut": {
         "all": true
-      },
-      "process": {
-        "relaunch": true
       }
     },
     "systemTray": {
