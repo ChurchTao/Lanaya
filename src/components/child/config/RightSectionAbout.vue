@@ -20,6 +20,7 @@
       </div>
       <div class="check-update">
         <button
+          @click="doCheckUpdate"
           class="bg-white text-sm text-blue-700 border border-blue-400 px-2 py-1 rounded-lg font-normal hover:bg-blue-200"
         >
           {{ $t("config.about.check-update") }}
@@ -44,6 +45,7 @@
 import { getName, getVersion } from "@tauri-apps/api/app";
 import { onMounted, ref } from "vue";
 import { open } from "@tauri-apps/api/shell";
+import { checkUpdate } from "@tauri-apps/api/updater";
 const appName = ref("");
 const appVersion = ref("");
 
@@ -58,6 +60,14 @@ const gotoChangeLog = () => {
 
 const gotoGithub = () => {
   open("https://github.com/ChurchTao/Lanaya");
+};
+
+const doCheckUpdate = () => {
+  try {
+    checkUpdate();
+  } catch (error) {
+    console.log(error);
+  }
 };
 </script>
 
