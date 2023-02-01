@@ -2,6 +2,16 @@
 
 All changes will be documented in this file.
 
+## v0.1.1
+
+### Feature
+
+- 实装 限制剪切板记录条数
+
+### Bug Fixes
+
+- 主界面失去焦点时，不会自动关闭界面
+
 ## v0.1.0
 
 ### Feature
