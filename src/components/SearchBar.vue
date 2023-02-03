@@ -9,6 +9,9 @@
       class="search-input h-16 text-2xl w-full"
       :placeholder="$t('search.placeholder')"
       autocomplete="off"
+      autoCorrect="off"
+      autoCapitalize="off"
+      spellCheck="false"
     />
   </div>
 </template>
