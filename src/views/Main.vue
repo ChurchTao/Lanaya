@@ -39,7 +39,7 @@ let unlistenHotkeysChange;
 let recordLimit = 300;
 let lastClipBoardData = "";
 /**
- * @type {Array<{id: number, contentParse: Array<{content: string, match: boolean}>, contentSource: string}>}
+ * @type {Array<{id: number, content: string, content_highlight: string}>}
  */
 const clipBoardDataList = ref([]);
 const shortCuts = ref([
@@ -96,7 +96,7 @@ const initCommonConfig = async () => {
 const initClipBoardDataList = async () => {
   let res = await selectPage("", recordLimit);
   if (res) {
-    clipBoardDataList.value = res.map((item) => formatData(item, ""));
+    clipBoardDataList.value = res.map((item) => formatData(item));
   }
 };
 
@@ -119,9 +119,8 @@ const onSearchChange = async (value) => {
   }
   // [{id: 1, content: "hello world"}]
   let res = await selectPage(value, 20);
-  console.log("onSearchChange", res);
   // format to clipBoardDataList
-  clipBoardDataList.value = res.map((item) => formatData(item, value));
+  clipBoardDataList.value = res.map((item) => formatData(item));
   if (res.length === 0) {
     noResultFlag.value = true;
     selectIndex.value = -1;
@@ -136,9 +135,8 @@ const changeIndex = (index) => {
 };
 
 const clickDataItem = async (index) => {
-  console.log("clickDataItem", index);
   let item = clipBoardDataList.value[index];
-  await writeText(item.contentSource);
+  await writeText(item.content);
   appWindow.hide();
 };
 
@@ -148,7 +146,7 @@ const onKeyEnter = async () => {
     return;
   }
   let item = clipBoardDataList.value[selectIndex.value];
-  await writeText(item.contentSource);
+  await writeText(item.content);
   appWindow.hide();
 };
 
@@ -157,24 +155,11 @@ const onClearAll = async () => {
   await initClipBoardDataList();
 };
 
-const formatData = (item, value) => {
-  let contentSource = item.content;
-  let contentParse = [];
-  let matchIndex = contentSource.indexOf(value);
-  if (matchIndex === -1) {
-    contentParse.push({ content: contentSource, match: false });
-  } else {
-    let matchContent = contentSource.slice(matchIndex, matchIndex + value.length);
-    let beforeContent = contentSource.slice(0, matchIndex);
-    let afterContent = contentSource.slice(matchIndex + value.length);
-    contentParse.push({ content: beforeContent, match: false });
-    contentParse.push({ content: matchContent, match: true });
-    contentParse.push({ content: afterContent, match: false });
-  }
+const formatData = (item) => {
   return {
     id: item.id,
-    contentParse,
-    contentSource,
+    content: item.content,
+    content_highlight: item.content_highlight,
   };
 };
 
@@ -217,7 +202,7 @@ const initListenr = async () => {
     unlistenBlur = await listen("tauri://blur", async (event) => {
       let visible = await appWindow.isVisible();
       if (visible) {
-        await appWindow.hide();
+        // await appWindow.hide();
       }
     });
   }

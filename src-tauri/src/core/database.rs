@@ -2,7 +2,6 @@ use crate::utils::dirs::app_data_dir;
 use crate::utils::string_util;
 use anyhow::Result;
 use rusqlite::{Connection, OpenFlags};
-use std::collections::HashMap;
 use std::fs::File;
 use std::path::Path;
 
@@ -142,7 +141,7 @@ impl SqliteDB {
                 md5: row.get(2)?,
                 create_time: row.get(3)?,
                 is_favorite: row.get(4)?,
-                content_highlight: None,
+                content_highlight,
             };
             res.push(r);
         }

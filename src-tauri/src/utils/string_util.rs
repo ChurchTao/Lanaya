@@ -11,7 +11,7 @@ pub fn md5(s: &str) -> String {
 pub fn highlight(key: &str, content: &str) -> String {
     let mut res = String::new();
     let mut start = 0;
-    let mut end = 0;
+    let mut end;
 
     while let Some(i) = content[start..].find(key) {
         end = start + i;
@@ -25,6 +25,6 @@ pub fn highlight(key: &str, content: &str) -> String {
 
 #[test]
 fn test_highlight() {
-    let res = highlight("hello", "hello world");
+    let res = highlight("hello", "hello worldhello");
     println!("{}", res);
 }

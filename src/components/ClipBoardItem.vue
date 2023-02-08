@@ -27,13 +27,10 @@
           </svg>
         </div>
         <div class="data-item-content-wrapper font-medium relative mx-2">
-          <span class="data-item-title overflow-hidden text-sm">
-            <template :key="item.id" v-for="item in data.contentParse">
-              <mark v-if="item.match">{{ item.content }}</mark>
-              <template v-else>
-                {{ item.content }}
-              </template>
-            </template>
+          <span
+            class="data-item-title overflow-hidden text-sm"
+            v-html="data.content_highlight || data.content"
+          >
           </span>
         </div>
         <div class="data-item-action flex items-center w-5 h-5">
@@ -103,8 +100,9 @@ defineProps({
 .text-sm {
   line-height: unset;
 }
-
-mark {
+</style>
+<style>
+b {
   background: none;
   color: var(--docsearch-highlight-color);
 }
@@ -114,7 +112,7 @@ mark {
 }
 .data-item[aria-selected="true"] .data-item-action,
 .data-item[aria-selected="true"] .data-item-icon,
-.data-item[aria-selected="true"] mark {
+.data-item[aria-selected="true"] b {
   color: var(--docsearch-hit-active-color) !important;
 }
 </style>
