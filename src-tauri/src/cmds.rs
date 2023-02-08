@@ -1,7 +1,10 @@
 use crate::{
     config,
     config::{CommonConfig, Config},
-    core::handle::Handle,
+    core::{
+        database::{Record, SqliteDB},
+        handle::Handle,
+    },
     log_err,
 };
 
@@ -73,4 +76,69 @@ pub async fn change_hotkeys(hotkeys: Vec<String>) -> CmdResult {
     })
     .await;
     Ok(())
+}
+
+#[tauri::command]
+pub fn clear_data() -> bool {
+    match SqliteDB::new().clear_data() {
+        Ok(()) => true,
+        Err(e) => {
+            println!("{}", format!("清除失败:{}", e));
+            false
+        }
+    }
+}
+
+#[tauri::command]
+pub fn insert_record(r: Record) -> bool {
+    match SqliteDB::new().insert_record(r) {
+        Ok(_i) => true,
+        Err(e) => {
+            println!("err:{}", e);
+            false
+        }
+    }
+}
+
+#[tauri::command]
+pub fn insert_if_not_exist(r: Record) -> bool {
+    match SqliteDB::new().insert_if_not_exist(r) {
+        Ok(_i) => true,
+        Err(e) => {
+            println!("err:{}", e);
+            false
+        }
+    }
+}
+
+#[tauri::command]
+pub fn find_all_record() -> Vec<Record> {
+    SqliteDB::new().find_all().unwrap()
+}
+
+#[tauri::command]
+pub fn mark_favorite(id: u64) -> bool {
+    match SqliteDB::new().mark_favorite(id) {
+        Ok(_i) => true,
+        Err(e) => {
+            println!("err:{}", e);
+            false
+        }
+    }
+}
+
+#[tauri::command]
+pub fn find_by_key(key: String) -> Vec<Record> {
+    SqliteDB::new().find_by_key(key, 300).unwrap()
+}
+
+#[tauri::command]
+pub fn delete_over_limit(limit: usize) -> bool {
+    match SqliteDB::new().delete_over_limit(limit) {
+        Ok(_i) => true,
+        Err(e) => {
+            println!("err:{}", e);
+            false
+        }
+    }
 }

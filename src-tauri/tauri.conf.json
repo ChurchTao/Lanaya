@@ -18,9 +18,6 @@
       "window": {
         "all": true
       },
-      "dialog": {
-        "message": true
-      },
       "clipboard": {
         "all": true
       },

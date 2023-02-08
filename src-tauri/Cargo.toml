@@ -1,6 +1,6 @@
 [package]
 name = "lanaya"
-version = "0.0.8"
+version = "0.1.1"
 description = "a simple clipboard manager"
 authors = ["churchTao"]
 license = "Apache-2.0 license"
@@ -15,23 +15,22 @@ tauri-build = { version = "1.2.1", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.2.3", features = ["clipboard-all", "dialog-message", "global-shortcut-all", "macos-private-api", "shell-open", "system-tray", "updater", "window-all"] }
+tauri = { version = "1.2.3", features = ["clipboard-all", "global-shortcut-all", "macos-private-api", "shell-open", "system-tray", "updater", "window-all"] }
+tantivy = "0.18.1"
 window-shadows = { git = "https://github.com/tauri-apps/window-shadows" }
 auto-launch = "0.4"
 once_cell = "1.17.0"
 anyhow = "1.0"
 parking_lot = "0.12.1"
 dunce = "1.0.3"
-
-[dependencies.tauri-plugin-sql]
-git = "https://github.com/tauri-apps/plugins-workspace"
-branch = "dev"
-features = ["sqlite"] # or "postgres", or "mysql"
+rust-crypto = { version = "0.2.36" }
+rusqlite = {version= "0.28.0",features = ["bundled"] }
+chrono = "0.4.23"
 
 [features]
 # by default Tauri runs in production mode
 # when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
-default = [ "custom-protocol" ]
+default = ["custom-protocol"]
 # this feature is used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
-custom-protocol = [ "tauri/custom-protocol" ]
+custom-protocol = ["tauri/custom-protocol"]

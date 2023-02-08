@@ -4,10 +4,10 @@
 )]
 
 use tauri::{App, Manager, SystemTray};
-use tauri_plugin_sql::{Migration, MigrationKind};
 use window_shadows::set_shadow;
 
 use crate::config::Config;
+use crate::core::database::SqliteDB;
 use crate::core::sysopt;
 use crate::core::tray;
 mod cmds;
@@ -21,11 +21,6 @@ fn main() {
             set_up(app);
             Ok(())
         })
-        .plugin(
-            tauri_plugin_sql::Builder::default()
-                .add_migrations("sqlite:lanaya_data.db", get_migrations())
-                .build(),
-        )
         .system_tray(SystemTray::new())
         .on_system_tray_event(core::tray::Tray::on_system_tray_event)
         .invoke_handler(tauri::generate_handler![
@@ -36,6 +31,13 @@ fn main() {
             cmds::change_auto_launch,
             cmds::change_theme_mode,
             cmds::change_hotkeys,
+            cmds::clear_data,
+            cmds::insert_record,
+            cmds::insert_if_not_exist,
+            cmds::find_all_record,
+            cmds::mark_favorite,
+            cmds::find_by_key,
+            cmds::delete_over_limit,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -50,15 +52,5 @@ fn set_up(app: &mut App) {
     log_err!(Config::init_config());
     log_err!(tray::Tray::update_systray(&app.app_handle()));
     log_err!(sysopt::Sysopt::global().init_launch());
-}
-
-fn get_migrations() -> Vec<Migration> {
-    let mut migrations = Vec::new();
-    migrations.push(Migration {
-        version: 1,
-        description: "create record table",
-        sql: include_str!("../migrations/record.sql"),
-        kind: MigrationKind::Up,
-    });
-    migrations
+    SqliteDB::init()
 }

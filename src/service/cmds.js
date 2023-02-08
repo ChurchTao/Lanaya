@@ -27,3 +27,31 @@ export async function setThemeMode(themeMode) {
 export async function setHotkeys(hotkeys) {
   return invoke("change_hotkeys", { hotkeys });
 }
+
+export async function clearData() {
+  return invoke("clear_data");
+}
+
+export async function insertRecord(record) {
+  return invoke("insert_record", { record });
+}
+
+export async function insertIfNotExist(r) {
+  return invoke("insert_if_not_exist", { r });
+}
+
+export async function findAllRecord() {
+  return invoke("find_all_record");
+}
+
+export async function markFavorite(id) {
+  return invoke("mark_favorite", { id });
+}
+
+export async function findByKey(key) {
+  return invoke("find_by_key", { key });
+}
+
+export async function deleteOverLimit(limit) {
+  return invoke("delete_over_limit", { limit });
+}

@@ -19,7 +19,7 @@ import ClipBoardList from "@/components/ClipBoardList.vue";
 import KeyMapBar from "@/components/KeyMapBar.vue";
 import { appWindow } from "@tauri-apps/api/window";
 import { ref, onMounted, onBeforeMount, onUnmounted, nextTick } from "vue";
-import { selectPage, insertRecord, removeById, clearAll } from "@/service/recordService";
+import { selectPage, insertRecord, clearAll } from "@/service/recordService";
 import { readText, writeText } from "@tauri-apps/api/clipboard";
 import { listen } from "@tauri-apps/api/event";
 import { register, unregisterAll } from "@tauri-apps/api/globalShortcut";
@@ -30,7 +30,6 @@ import { getCommonConfig } from "../service/cmds";
 import hotkeys from "hotkeys-js";
 const noResultFlag = ref(false);
 const selectIndex = ref(-1);
-const lastClipBoardData = ref("");
 const cmdPressDown = ref(false);
 const keyMap = ref([]);
 let clipBoardListener;
@@ -38,6 +37,7 @@ let unlistenBlur;
 let unlistenRecordLimitChange;
 let unlistenHotkeysChange;
 let recordLimit = 300;
+let lastClipBoardData = "";
 /**
  * @type {Array<{id: number, contentParse: Array<{content: string, match: boolean}>, contentSource: string}>}
  */
@@ -96,9 +96,6 @@ const initCommonConfig = async () => {
 const initClipBoardDataList = async () => {
   let res = await selectPage("", recordLimit);
   if (res) {
-    if (res.length > 0) {
-      lastClipBoardData.value = res[0].content;
-    }
     clipBoardDataList.value = res.map((item) => formatData(item, ""));
   }
 };
@@ -122,6 +119,7 @@ const onSearchChange = async (value) => {
   }
   // [{id: 1, content: "hello world"}]
   let res = await selectPage(value, 20);
+  console.log("onSearchChange", res);
   // format to clipBoardDataList
   clipBoardDataList.value = res.map((item) => formatData(item, value));
   if (res.length === 0) {
@@ -152,16 +150,6 @@ const onKeyEnter = async () => {
   let item = clipBoardDataList.value[selectIndex.value];
   await writeText(item.contentSource);
   appWindow.hide();
-};
-
-const onKeyBackspace = async () => {
-  console.log("onKeyBackspace");
-  if (selectIndex.value === -1) {
-    return;
-  }
-  let item = clipBoardDataList.value[selectIndex.value];
-  await removeById(item.id);
-  await initClipBoardDataList();
 };
 
 const onClearAll = async () => {
@@ -271,8 +259,8 @@ const initClipBoardListener = () => {
       if (text.trim() === "") {
         return;
       }
-      if (text !== lastClipBoardData.value) {
-        lastClipBoardData.value = text;
+      if (text != lastClipBoardData) {
+        lastClipBoardData = text;
         await insertRecord(text);
         await initClipBoardDataList();
       }
