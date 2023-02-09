@@ -23,3 +23,11 @@ pub fn save<T: Serialize>(path: &PathBuf, data: &T) -> Result<()> {
     let path_str = path.as_os_str().to_string_lossy().to_string();
     fs::write(path, data_str.as_bytes()).context(format!("failed to save file \"{path_str}\""))
 }
+
+pub fn parse<T: DeserializeOwned>(json_str: &str) -> Result<T> {
+    serde_json::from_str::<T>(json_str).context("failed to parse json string")
+}
+
+pub fn stringfy<T: Serialize>(data: &T) -> Result<String> {
+    Ok(serde_json::to_string(data)?)
+}

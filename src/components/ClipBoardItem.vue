@@ -7,7 +7,8 @@
   >
     <div class="data-item-outer cursor-pointer rounded shadow-md block pl-4 py-4 w-full">
       <div
-        class="data-item-container flex flex-row items-center justify-between max-h-28 pr-4 overflow-hidden"
+        class="data-item-container flex flex-row items-center justify-between pr-4 overflow-hidden"
+        :class="maxHeight"
       >
         <div
           v-if="cmdPressDown && idx < 9"
@@ -27,11 +28,7 @@
           </svg>
         </div>
         <div class="data-item-content-wrapper font-medium relative mx-2">
-          <span
-            class="data-item-title overflow-hidden text-sm"
-            v-html="data.content_highlight || data.content"
-          >
-          </span>
+          <span class="data-item-title overflow-hidden text-sm" v-html="dataShow"> </span>
         </div>
         <div class="data-item-action flex items-center w-5 h-5">
           <svg
@@ -57,7 +54,9 @@
   </li>
 </template>
 <script setup>
-defineProps({
+import { computed } from "vue";
+
+const props = defineProps({
   select: {
     type: Boolean,
     default: false,
@@ -68,6 +67,24 @@ defineProps({
     default: false,
   },
   idx: Number,
+});
+
+const dataShow = computed(() => {
+  console.log("props.data", props.data);
+  if (props.data.type == "text") {
+    return props.data.content_highlight || props.data.content;
+  } else if (props.data.type == "image") {
+    let imgObj = JSON.parse(props.data.content);
+    return `<img src="data:image/png;base64,${imgObj.base64}" class="max-h-60 object-contain" />`;
+  }
+});
+
+const maxHeight = computed(() => {
+  if (props.data.type == "text") {
+    return "max-h-28";
+  } else if (props.data.type == "image") {
+    return "max-h-60";
+  }
 });
 </script>
 <style scoped>

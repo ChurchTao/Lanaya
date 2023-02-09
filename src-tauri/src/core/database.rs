@@ -9,6 +9,8 @@ use std::path::Path;
 pub struct Record {
     pub id: u64,
     pub content: String,
+    // data_type(文本=text、图片=image)
+    pub data_type: String,
     pub md5: String,
     pub create_time: u64,
     pub is_favorite: bool,
@@ -29,9 +31,7 @@ impl SqliteDB {
         let c = Connection::open_with_flags(data_dir, OpenFlags::SQLITE_OPEN_READ_WRITE).unwrap();
         SqliteDB { conn: c }
     }
-    pub fn add(&self) -> i64 {
-        self.conn.last_insert_rowid()
-    }
+
     pub fn init() {
         let data_dir = app_data_dir().unwrap().join(SQLITE_FILE);
         if !Path::new(&data_dir).exists() {
@@ -43,6 +43,7 @@ impl SqliteDB {
         (
             id          INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
             content     TEXT,
+            data_type   VARCHAR(20) DEFAULT '',
             md5         VARCHAR(200) DEFAULT '',
             create_time INTEGER,
             is_favorite INTEGER DEFAULT 0
@@ -52,12 +53,12 @@ impl SqliteDB {
     }
 
     pub fn insert_record(&self, r: Record) -> Result<i64> {
-        let sql = "insert into record (content,md5,create_time,is_favorite) values (?1,?2,?3,?4)";
+        let sql = "insert into record (content,md5,create_time,is_favorite,data_type) values (?1,?2,?3,?4,?5)";
         let md5 = string_util::md5(r.content.as_str());
         let now = chrono::Local::now().timestamp_millis() as u64;
         let res = self
             .conn
-            .execute(sql, (&r.content, md5, now, &r.is_favorite))?;
+            .execute(sql, (&r.content, md5, now, &r.is_favorite, &r.data_type))?;
         Ok(self.conn.last_insert_rowid())
     }
 
@@ -94,6 +95,12 @@ impl SqliteDB {
         Ok(())
     }
 
+    pub fn md5_is_exist(&self, md5: String) -> Result<bool> {
+        let sql = "SELECT count(*) FROM record WHERE md5 = ?1";
+        let count: u32 = self.conn.query_row(sql, [md5], |row| row.get(0))?;
+        Ok(count > 0)
+    }
+
     // 清除数据
     pub fn clear_data(&self) -> Result<()> {
         let sql = "delete from record";
@@ -109,7 +116,7 @@ impl SqliteDB {
     }
 
     pub fn find_all(&self) -> Result<Vec<Record>> {
-        let sql = "SELECT id, content, md5, create_time, is_favorite FROM record order by create_time desc";
+        let sql = "SELECT id, content, data_type, md5, create_time, is_favorite FROM record order by create_time desc";
         let mut stmt = self.conn.prepare(sql)?;
         let mut rows = stmt.query([])?;
         let mut res = vec![];
@@ -117,9 +124,10 @@ impl SqliteDB {
             let r = Record {
                 id: row.get(0)?,
                 content: row.get(1)?,
-                md5: row.get(2)?,
-                create_time: row.get(3)?,
-                is_favorite: row.get(4)?,
+                data_type: row.get(2)?,
+                md5: row.get(3)?,
+                create_time: row.get(4)?,
+                is_favorite: row.get(5)?,
                 content_highlight: None,
             };
             res.push(r);
@@ -128,7 +136,7 @@ impl SqliteDB {
     }
 
     pub fn find_by_key(&self, key: String, limit: u64) -> Result<Vec<Record>> {
-        let sql = "SELECT id, content, md5, create_time, is_favorite FROM record where content like ?1 order by create_time desc limit ?2";
+        let sql = "SELECT id, content, md5, create_time, is_favorite FROM record where data_type='text' content like ?1 order by create_time desc limit ?2";
         let mut stmt = self.conn.prepare(sql)?;
         let mut rows = stmt.query([format!("%{}%", key), limit.to_string()])?;
         let mut res = vec![];
@@ -138,37 +146,11 @@ impl SqliteDB {
             let r = Record {
                 id: row.get(0)?,
                 content,
+                data_type: "text".to_string(),
                 md5: row.get(2)?,
                 create_time: row.get(3)?,
                 is_favorite: row.get(4)?,
                 content_highlight,
-            };
-            res.push(r);
-        }
-        Ok(res)
-    }
-
-    fn find_by_id_in(&self, ids: Vec<u64>) -> Result<Vec<Record>> {
-        let ids_string = ids
-            .iter()
-            .map(|id| id.to_string())
-            .collect::<Vec<String>>()
-            .join(",");
-        let sql = format!(
-            "SELECT id, content, md5, create_time, is_favorite FROM record where id in ({})",
-            ids_string
-        );
-        let mut stmt = self.conn.prepare(sql.as_str())?;
-        let mut rows = stmt.query([])?;
-        let mut res = vec![];
-        while let Some(row) = rows.next()? {
-            let r = Record {
-                id: row.get(0)?,
-                content: row.get(1)?,
-                md5: row.get(2)?,
-                create_time: row.get(3)?,
-                is_favorite: row.get(4)?,
-                content_highlight: None,
             };
             res.push(r);
         }
@@ -186,6 +168,22 @@ impl SqliteDB {
         let sql = "DELETE FROM record WHERE id IN (SELECT id FROM record ORDER BY id DESC LIMIT ?1, 1000000000)";
         self.conn.execute(sql, [&limit])?;
         Ok(())
+    }
+
+    pub fn find_by_id(&self, id: u64) -> Result<Record> {
+        let sql = "SELECT id, content, data_type, md5, create_time, is_favorite FROM record where id = ?1";
+        let r = self.conn.query_row(sql, [&id], |row| {
+            Ok(Record {
+                id: row.get(0)?,
+                content: row.get(1)?,
+                data_type: row.get(2)?,
+                md5: row.get(3)?,
+                create_time: row.get(4)?,
+                is_favorite: row.get(5)?,
+                content_highlight: None,
+            })
+        })?;
+        Ok(r)
     }
 }
 

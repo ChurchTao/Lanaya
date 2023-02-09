@@ -20,7 +20,6 @@
 <script setup>
 import HotKeyItem from "./HotKeyItem.vue";
 import { open } from "@tauri-apps/api/shell";
-import { computed } from "vue";
 // import { WebviewWindow } from "@tauri-apps/api/window";
 defineProps({
   keyMap: Array[Object],

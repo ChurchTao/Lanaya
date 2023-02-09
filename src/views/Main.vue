@@ -19,23 +19,26 @@ import ClipBoardList from "@/components/ClipBoardList.vue";
 import KeyMapBar from "@/components/KeyMapBar.vue";
 import { appWindow } from "@tauri-apps/api/window";
 import { ref, onMounted, onBeforeMount, onUnmounted, nextTick } from "vue";
-import { selectPage, insertRecord, clearAll } from "@/service/recordService";
-import { readText, writeText } from "@tauri-apps/api/clipboard";
+import { selectPage, clearAll } from "@/service/recordService";
 import { listen } from "@tauri-apps/api/event";
 import { register, unregisterAll } from "@tauri-apps/api/globalShortcut";
 import { getShortCutName, getShortCutShowAnyway, isDiff } from "@/service/shortCutUtil";
 import { defaultHotkeys } from "../config/constants";
-import { listenRecordLimitChange, listenHotkeysChange } from "@/service/globalListener";
-import { getCommonConfig } from "../service/cmds";
+import {
+  listenRecordLimitChange,
+  listenHotkeysChange,
+  listenClipboardChange,
+} from "@/service/globalListener";
+import { getCommonConfig, writeToClip } from "../service/cmds";
 import hotkeys from "hotkeys-js";
 const noResultFlag = ref(false);
 const selectIndex = ref(-1);
 const cmdPressDown = ref(false);
 const keyMap = ref([]);
-let clipBoardListener;
 let unlistenBlur;
 let unlistenRecordLimitChange;
 let unlistenHotkeysChange;
+let unlistenClipboardChange;
 let recordLimit = 300;
 let lastClipBoardData = "";
 /**
@@ -61,13 +64,9 @@ onMounted(() => {
   initCommonConfig().then(() => {
     refreshShortCut();
   });
-  initClipBoardListener();
 });
 
 onUnmounted(async () => {
-  if (clipBoardListener) {
-    clearInterval(clipBoardListener);
-  }
   unlistenBlur();
 });
 
@@ -136,7 +135,7 @@ const changeIndex = (index) => {
 
 const clickDataItem = async (index) => {
   let item = clipBoardDataList.value[index];
-  await writeText(item.content);
+  await writeToClip(item.id);
   appWindow.hide();
 };
 
@@ -146,7 +145,7 @@ const onKeyEnter = async () => {
     return;
   }
   let item = clipBoardDataList.value[selectIndex.value];
-  await writeText(item.content);
+  await writeToClip(item.id);
   appWindow.hide();
 };
 
@@ -160,6 +159,7 @@ const formatData = (item) => {
     id: item.id,
     content: item.content,
     content_highlight: item.content_highlight,
+    type: item.data_type,
   };
 };
 
@@ -206,6 +206,12 @@ const initListenr = async () => {
       }
     });
   }
+  if (!unlistenClipboardChange) {
+    unlistenClipboardChange = await listenClipboardChange(async (event) => {
+      console.log("clipboardChange", event);
+      await initClipBoardDataList();
+    });
+  }
   if (!unlistenRecordLimitChange) {
     unlistenRecordLimitChange = await listenRecordLimitChange((newLimitNum) => {
       recordLimit = newLimitNum;
@@ -231,25 +237,6 @@ const initListenr = async () => {
       });
       refreshShortCut();
     });
-  }
-};
-
-const initClipBoardListener = () => {
-  if (!clipBoardListener) {
-    clipBoardListener = setInterval(async () => {
-      let text = await readText();
-      if (text === null) {
-        return;
-      }
-      if (text.trim() === "") {
-        return;
-      }
-      if (text != lastClipBoardData) {
-        lastClipBoardData = text;
-        await insertRecord(text);
-        await initClipBoardDataList();
-      }
-    }, 500);
   }
 };
 

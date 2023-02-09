@@ -38,6 +38,11 @@ impl Config {
                 let _ = fs::create_dir_all(&app_dir);
             }
         }));
+        log_err!(dirs::app_data_img_dir().map(|app_dir| {
+            if !app_dir.exists() {
+                let _ = fs::create_dir_all(&app_dir);
+            }
+        }));
         log_err!(dirs::config_path().map(|path| {
             if !path.exists() {
                 log_err!(json_util::save(&path, &CommonConfig::template()));

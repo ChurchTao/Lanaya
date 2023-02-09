@@ -7,6 +7,7 @@ use tauri::{App, Manager, SystemTray};
 use window_shadows::set_shadow;
 
 use crate::config::Config;
+use crate::core::clipboard;
 use crate::core::database::SqliteDB;
 use crate::core::sysopt;
 use crate::core::tray;
@@ -38,6 +39,7 @@ fn main() {
             cmds::mark_favorite,
             cmds::find_by_key,
             cmds::delete_over_limit,
+            cmds::write_to_clip,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -52,5 +54,6 @@ fn set_up(app: &mut App) {
     log_err!(Config::init_config());
     log_err!(tray::Tray::update_systray(&app.app_handle()));
     log_err!(sysopt::Sysopt::global().init_launch());
-    SqliteDB::init()
+    SqliteDB::init();
+    clipboard::ClipboardWatcher::start();
 }

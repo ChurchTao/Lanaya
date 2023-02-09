@@ -53,4 +53,8 @@ async function clearAll() {
   return await clearData();
 }
 
-export { selectPage, insertRecord, updateRecord, clearAll };
+async function markFav(id) {
+  await markFavorite(id);
+}
+
+export { selectPage, insertRecord, updateRecord, clearAll, markFav };

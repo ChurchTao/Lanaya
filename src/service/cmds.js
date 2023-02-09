@@ -55,3 +55,7 @@ export async function findByKey(key) {
 export async function deleteOverLimit(limit) {
   return invoke("delete_over_limit", { limit });
 }
+
+export async function writeToClip(id) {
+  return invoke("write_to_clip", { id });
+}

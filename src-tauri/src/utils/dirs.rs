@@ -48,6 +48,10 @@ pub fn app_data_dir() -> Result<PathBuf> {
     Ok(app_home_dir()?.join("data"))
 }
 
+pub fn app_data_img_dir() -> Result<PathBuf> {
+    Ok(app_data_dir()?.join("img"))
+}
+
 #[test]
 fn test() {
     println!("app_home_dir: {:?}", app_home_dir());
