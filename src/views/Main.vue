@@ -21,9 +21,8 @@ import { appWindow } from "@tauri-apps/api/window";
 import { ref, onMounted, onBeforeMount, onUnmounted, nextTick } from "vue";
 import { selectPage, clearAll } from "@/service/recordService";
 import { listen } from "@tauri-apps/api/event";
-import { register, unregisterAll } from "@tauri-apps/api/globalShortcut";
-import { getShortCutName, getShortCutShowAnyway, isDiff } from "@/service/shortCutUtil";
-import { defaultHotkeys } from "../config/constants";
+import { getShortCutShowAnyway, isDiff } from "@/service/shortCutUtil";
+import { defaultHotkeys, hotkeys_func_enum } from "../config/constants";
 import {
   listenRecordLimitChange,
   listenHotkeysChange,
@@ -76,6 +75,7 @@ const initCommonConfig = async () => {
     recordLimit = res.record_limit;
   }
   if (res.hotkeys) {
+    console.log("initCommonConfig", res.hotkeys);
     shortCuts.value.forEach((item) => {
       let find = res.hotkeys.find((hotkey) => {
         return hotkey.startsWith(item.func);
@@ -113,12 +113,9 @@ const initKeyMapShow = (allKeys) => {
 
 const onSearchChange = async (value) => {
   if (value === "") {
-    // reset flag
     noResultFlag.value = false;
   }
-  // [{id: 1, content: "hello world"}]
   let res = await selectPage(value, 20);
-  // format to clipBoardDataList
   clipBoardDataList.value = res.map((item) => formatData(item));
   if (res.length === 0) {
     noResultFlag.value = true;
@@ -165,36 +162,15 @@ const formatData = (item) => {
 
 const refreshShortCut = () => {
   let allKeys = [...defaultHotkeys, ...JSON.parse(JSON.stringify(shortCuts.value))];
-  let globalShortCuts = allKeys.filter((item) => {
-    return item.func.startsWith("global");
-  });
+  // let globalShortCuts = allKeys.filter((item) => {
+  //   return item.func.startsWith("global");
+  // });
   let appShortCuts = allKeys.filter((item) => {
     return !item.func.startsWith("global");
   });
   initKeyMapShow(allKeys);
-  initGlobalShortCut(globalShortCuts);
+  // initGlobalShortCut(globalShortCuts);
   initAppShortCut(appShortCuts);
-};
-
-const initGlobalShortCut = async (globalShortCuts) => {
-  await unregisterAll();
-  for (let index = 0; index < globalShortCuts.length; index++) {
-    const item = globalShortCuts[index];
-    if (item.func === "global-shortcut") {
-      if (item.keys.length > 0 && item.keys[0] != "") {
-        let mainShortCut = getShortCutName(item.keys, true);
-        await register(mainShortCut, async () => {
-          let visible = await appWindow.isVisible();
-          if (visible) {
-            await appWindow.hide();
-          } else {
-            await appWindow.show();
-            await appWindow.setFocus();
-          }
-        });
-      }
-    }
-  }
 };
 
 const initListenr = async () => {
@@ -302,13 +278,13 @@ const initAppShortCut = async (appShortCuts) => {
       appShortCuts.forEach((shortCut) => {
         if (!isDiff(shortCut.keys, hotkeys.getPressedKeyCodes())) {
           switch (shortCut.func) {
-            case "clear-history":
+            case hotkeys_func_enum.CLEAR_HISTORY:
               onClearAll();
               break;
-            case "copy":
+            case hotkeys_func_enum.COPY:
               onKeyEnter();
               break;
-            case "close-window":
+            case hotkeys_func_enum.CLOSE_WINDOW:
               appWindow.hide();
               break;
           }

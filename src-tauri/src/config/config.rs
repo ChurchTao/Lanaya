@@ -68,6 +68,7 @@ pub async fn modify_common_config(patch: CommonConfig) -> Result<()> {
         }
 
         if hotkeys.is_some() {
+            let _ = handle::Handle::refresh_global_shortcut();
             handle::Handle::notice_to_window(handle::MsgTypeEnum::ChangeHotKeys, hotkeys)?;
         }
 

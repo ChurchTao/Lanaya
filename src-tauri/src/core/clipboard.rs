@@ -45,10 +45,12 @@ impl ClipboardWatcher {
             let mut clipboard = Clipboard::new().unwrap();
             loop {
                 let text = clipboard.get_text();
-                let _ = text.map(|content| {
-                    if content != last_content {
+                let _ = text.map(|text| {
+                    let content_origin = text.clone();
+                    let content = text.trim();
+                    if !content.is_empty() && content != last_content {
                         let res = database::SqliteDB::new().insert_if_not_exist(Record {
-                            content: content.clone(),
+                            content: content_origin,
                             data_type: "text".to_string(),
                             is_favorite: false,
                             ..Default::default()
@@ -65,7 +67,7 @@ impl ClipboardWatcher {
                                 println!("insert record error: {}", e);
                             }
                         }
-                        last_content = content;
+                        last_content = content.to_string();
                     }
                 });
 

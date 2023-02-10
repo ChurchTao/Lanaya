@@ -1,4 +1,5 @@
-use super::window_manager::{self, WindowType};
+use super::handle::Handle;
+use super::window_manager::WindowType;
 use crate::config;
 use crate::config::{CommonConfig, Config};
 use anyhow::Result;
@@ -77,17 +78,17 @@ impl Tray {
         match event {
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                 "open_window" => {
-                    let window = app_handle.get_window("main").unwrap();
-                    window.show().unwrap();
-                    window.set_focus().unwrap();
+                    Handle::open_window(WindowType::Main);
                 }
                 "hide_window" => {
-                    let window = app_handle.get_window("main").unwrap();
-                    window.hide().unwrap();
+                    let window = app_handle.get_window("main");
+                    if let Some(window) = window {
+                        window.hide().unwrap();
+                    }
                 }
                 "language_zh" => change_language("zh".into()),
                 "language_en" => change_language("en".into()),
-                "more_config" => window_manager::open_window(app_handle, WindowType::Config),
+                "more_config" => Handle::open_window(WindowType::Config),
                 "quit" => {
                     app_handle.exit(0);
                     std::process::exit(0);

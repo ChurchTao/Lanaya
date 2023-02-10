@@ -27,6 +27,15 @@ export const recordLimitOptions = [
   { name: "300", value: 300 },
 ];
 
+export const hotkeys_func_enum = {
+  COPY: "copy",
+  QUICK_COPY: "quick-copy",
+  MOVE_SELECTED: "move-selected",
+  CLOSE_WINDOW: "close-window",
+  GLOBAL_SHORTCUT: "global-shortcut",
+  CLEAR_HISTORY: "clear-history",
+};
+
 /**
  *  { keymap: ["⏎"], tips: "hotkeys.copy" },
     { keymap: ["⌘"], tips: "hotkeys.quick-copy" },
@@ -35,19 +44,19 @@ export const recordLimitOptions = [
  */
 export const defaultHotkeys = [
   {
-    func: "copy",
+    func: hotkeys_func_enum.COPY,
     keys: [13],
   },
   {
-    func: "quick-copy",
+    func: hotkeys_func_enum.QUICK_COPY,
     keys: [91],
   },
   {
-    func: "move-selected",
+    func: hotkeys_func_enum.MOVE_SELECTED,
     keys: [38, 40],
   },
   {
-    func: "close-window",
+    func: hotkeys_func_enum.CLOSE_WINDOW,
     keys: [27],
   },
 ];

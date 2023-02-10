@@ -54,6 +54,7 @@ fn set_up(app: &mut App) {
     log_err!(Config::init_config());
     log_err!(tray::Tray::update_systray(&app.app_handle()));
     log_err!(sysopt::Sysopt::global().init_launch());
+    let _ = core::handle::Handle::refresh_global_shortcut();
     SqliteDB::init();
     clipboard::ClipboardWatcher::start();
 }

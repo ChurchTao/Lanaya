@@ -1,6 +1,6 @@
 <template>
   <div
-    class="data-list box-border min-h-4 overflow-y-auto px-3 pt-2"
+    class="data-list box-border min-h-4 overflow-y-auto pl-3 pr-2 pt-2"
     :data-mouseenter="mouseenter"
     @mouseenter="() => (mouseenter = true)"
     @mouseleave="() => (mouseenter = false)"

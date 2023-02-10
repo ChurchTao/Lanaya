@@ -136,7 +136,7 @@ impl SqliteDB {
     }
 
     pub fn find_by_key(&self, key: String, limit: u64) -> Result<Vec<Record>> {
-        let sql = "SELECT id, content, md5, create_time, is_favorite FROM record where data_type='text' content like ?1 order by create_time desc limit ?2";
+        let sql = "SELECT id, content, md5, create_time, is_favorite FROM record where data_type='text' and content like ?1 order by create_time desc limit ?2";
         let mut stmt = self.conn.prepare(sql)?;
         let mut rows = stmt.query([format!("%{}%", key), limit.to_string()])?;
         let mut res = vec![];

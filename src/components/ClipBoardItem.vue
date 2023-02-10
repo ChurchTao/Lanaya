@@ -70,7 +70,6 @@ const props = defineProps({
 });
 
 const dataShow = computed(() => {
-  console.log("props.data", props.data);
   if (props.data.type == "text") {
     return props.data.content_highlight || props.data.content;
   } else if (props.data.type == "image") {
