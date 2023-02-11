@@ -2,6 +2,15 @@
 
 All changes will be documented in this file.
 
+## v1.0.2
+
+### Bug Fixes
+
+- CN
+  - 修复了复制文件时，会导致循环替换复制顺序的问题
+- EN
+  - Fixed the problem that copying files will cause the loop replacement copy order
+
 ## v1.0.1
 
 ### Bug Fixes
