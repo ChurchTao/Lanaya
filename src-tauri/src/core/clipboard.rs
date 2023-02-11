@@ -47,7 +47,6 @@ impl ClipboardWatcher {
             loop {
                 let text = clipboard.get_text();
                 let _ = text.map(|text| {
-                    println!("text: {}, last_content: {}", text, last_content);
                     let content_origin = text.clone();
                     let content = text.trim();
                     if !content.is_empty() && content != last_content {
@@ -76,7 +75,6 @@ impl ClipboardWatcher {
                 let img = clipboard.get_image();
                 let _ = img.map(|img| {
                     let img_md5 = string_util::md5_by_bytes(&img.bytes);
-                    println!("img_md5: {}, last_content: {}", img_md5, last_content);
                     if img_md5 != last_img_md5 {
                         let base64 = img_util::rgba8_to_base64(&img);
                         let content_db = ImageDataDB {
