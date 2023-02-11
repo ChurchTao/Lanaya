@@ -17,7 +17,7 @@ mod core;
 mod utils;
 
 fn main() {
-    tauri::Builder::default()
+    let app = tauri::Builder::default()
         .setup(|app| {
             set_up(app);
             Ok(())
@@ -41,8 +41,18 @@ fn main() {
             cmds::delete_over_limit,
             cmds::write_to_clip,
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .build(tauri::generate_context!())
+        .expect("error while build tauri application");
+
+    app.run(|app_handle, e| match e {
+        tauri::RunEvent::ExitRequested { api, .. } => {
+            api.prevent_exit();
+        }
+        tauri::RunEvent::Exit => {
+            app_handle.exit(0);
+        }
+        _ => {}
+    });
 }
 
 fn set_up(app: &mut App) {

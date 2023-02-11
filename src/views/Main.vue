@@ -17,12 +17,12 @@ import Layout from "@/components/Layout.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import ClipBoardList from "@/components/ClipBoardList.vue";
 import KeyMapBar from "@/components/KeyMapBar.vue";
-import { appWindow } from "@tauri-apps/api/window";
 import { ref, onMounted, onBeforeMount, onUnmounted, nextTick } from "vue";
 import { selectPage, clearAll } from "@/service/recordService";
 import { listen } from "@tauri-apps/api/event";
 import { getShortCutShowAnyway, isDiff } from "@/service/shortCutUtil";
 import { defaultHotkeys, hotkeys_func_enum } from "../config/constants";
+import { closeWindowLater } from "@/service/windowUtil";
 import {
   listenRecordLimitChange,
   listenHotkeysChange,
@@ -133,7 +133,7 @@ const changeIndex = (index) => {
 const clickDataItem = async (index) => {
   let item = clipBoardDataList.value[index];
   await writeToClip(item.id);
-  appWindow.hide();
+  closeWindowLater(5000);
 };
 
 const onKeyEnter = async () => {
@@ -143,7 +143,7 @@ const onKeyEnter = async () => {
   }
   let item = clipBoardDataList.value[selectIndex.value];
   await writeToClip(item.id);
-  appWindow.hide();
+  closeWindowLater(5000);
 };
 
 const onClearAll = async () => {
@@ -162,29 +162,21 @@ const formatData = (item) => {
 
 const refreshShortCut = () => {
   let allKeys = [...defaultHotkeys, ...JSON.parse(JSON.stringify(shortCuts.value))];
-  // let globalShortCuts = allKeys.filter((item) => {
-  //   return item.func.startsWith("global");
-  // });
   let appShortCuts = allKeys.filter((item) => {
     return !item.func.startsWith("global");
   });
   initKeyMapShow(allKeys);
-  // initGlobalShortCut(globalShortCuts);
   initAppShortCut(appShortCuts);
 };
 
 const initListenr = async () => {
   if (!unlistenBlur) {
     unlistenBlur = await listen("tauri://blur", async (event) => {
-      let visible = await appWindow.isVisible();
-      if (visible) {
-        // await appWindow.hide();
-      }
+      closeWindowLater(5000);
     });
   }
   if (!unlistenClipboardChange) {
     unlistenClipboardChange = await listenClipboardChange(async (event) => {
-      console.log("clipboardChange", event);
       await initClipBoardDataList();
     });
   }
@@ -285,7 +277,7 @@ const initAppShortCut = async (appShortCuts) => {
               onKeyEnter();
               break;
             case hotkeys_func_enum.CLOSE_WINDOW:
-              appWindow.hide();
+              closeWindowLater(5000);
               break;
           }
         }

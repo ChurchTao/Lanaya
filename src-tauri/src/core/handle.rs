@@ -2,13 +2,19 @@ use super::{
     tray::Tray,
     window_manager::{WindowInfo, WindowType},
 };
-use crate::{config::Config, log_err, utils::hotkey_util};
+use crate::{
+    config::Config,
+    log_err,
+    utils::{hotkey_util, time_util},
+};
 use anyhow::{bail, Result};
+use chrono::Duration;
 use once_cell::sync::OnceCell;
 use parking_lot::Mutex;
 use serde::Serialize;
 use std::sync::Arc;
 use tauri::{AppHandle, GlobalShortcutManager, Manager, Window};
+use window_shadows::set_shadow;
 
 #[derive(Debug, Default, Clone)]
 pub struct Handle {
@@ -120,17 +126,21 @@ impl Handle {
                     break;
                 }
             }
+            // 目前只有一个 global-shortcut，此处可以改为循环
             if let Some(global_shortcut) = global_shortcut {
+                let mut shortcut_manager = Self::global().get_manager()?;
+                let _ = shortcut_manager.unregister_all();
                 let hot_key_arr: Vec<&str> = global_shortcut.split(":").collect();
+                if hot_key_arr[1] == "" {
+                    // 如果没有配置 global-shortcut，则等于清空快捷键，直接返回
+                    return Ok(());
+                }
                 let hot_key_arr: Vec<&str> = hot_key_arr[1].split("+").collect();
                 let hot_key_arr: Vec<u32> = hot_key_arr
                     .iter()
                     .map(|x| x.parse::<u32>().unwrap())
                     .collect();
-                // 目前只有一个 global-shortcut，此处可以改为循环
                 let short_cut_name = hotkey_util::get_short_cut_name(hot_key_arr, true);
-                let mut shortcut_manager = Self::global().get_manager()?;
-                let _ = shortcut_manager.unregister_all();
                 let _ = shortcut_manager.register(short_cut_name.as_str(), || {
                     Self::open_window(WindowType::Main)
                 });
@@ -155,7 +165,19 @@ impl Handle {
 
             if let Some(window) = app_handle.get_window(label) {
                 if window.is_visible().unwrap() {
-                    let _ = window.close();
+                    let _ = window.hide();
+                    // 延迟5秒如果未重新打开window则close
+                    let _ = time_util::set_time_out(
+                        || {
+                            if let Some(window) = app_handle.get_window(label) {
+                                if !window.is_visible().unwrap() {
+                                    let _ = window.close();
+                                }
+                            }
+                        },
+                        Duration::seconds(5),
+                    );
+                    println!("{} will close 5 senconds later", label);
                     return;
                 }
                 let _ = window.unminimize();
@@ -185,6 +207,12 @@ impl Handle {
                 Ok(window) => {
                     let _ = window.show();
                     let _ = window.set_focus();
+                    match window_type {
+                        WindowType::Main => {
+                            set_shadow(&window, true).expect("Unsupported platform!");
+                        }
+                        _ => {}
+                    }
                 }
                 Err(e) => {
                     println!("create_window error: {}", e);
