@@ -1,6 +1,6 @@
 [package]
 name = "lanaya"
-version = "0.1.1"
+version = "1.0.3"
 description = "a simple clipboard manager"
 authors = ["churchTao"]
 license = "Apache-2.0 license"
