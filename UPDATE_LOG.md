@@ -2,7 +2,7 @@
 
 All changes will be documented in this file.
 
-## v0.2.0
+## v1.0.0
 
 ### Feature
 
