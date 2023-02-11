@@ -17,7 +17,7 @@ A clipboard management with easy to use.
 
 <h3 align="center">
 <a href="https://github.com/ChurchTao/Lanaya/blob/master/README_EN.md">English</a> |
-<a href="https://github.com/ChurchTao/Lanaya/blob/master/README_CN.md" target="_blank">中文</a>
+<a href="https://github.com/ChurchTao/Lanaya/blob/master/README_CN.md" target="_blank">简体中文</a>
 </h3>
 
 ## Introduction
@@ -35,12 +35,12 @@ Lanaya comes from Templar Assassin in Dota2, which is a clipboard management sof
 ## Todos
 
 - [x] add `taildwind` to manage css.
-- [ ] add copy image history.
+- [x] add copy image history.
 - [ ] add theme.
 - [ ] add favorite.
 - [ ] add `Windows`,`Linux` support.
-- [ ] use `Rust` to implement clipboard listener.
-- [ ] use `Rust` to implement `Sqlite` database operation.
+- [x] use `Rust` to implement clipboard listener.
+- [x] use `Rust` to implement `Sqlite` database operation.
 
 ## Download
 

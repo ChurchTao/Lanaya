@@ -2,6 +2,28 @@
 
 All changes will be documented in this file.
 
+## v0.2.0
+
+### Feature
+
+- CN
+  - 新增复制图片历史的功能
+  - 使用`Rust`实现后台监听剪切板
+  - 使用`Rust`实现`Sqlite`的数据库操作
+- EN:
+  - add copy image history.
+  - use `Rust` to implement clipboard listener.
+  - use `Rust` to implement `Sqlite` database
+
+### Bug Fixes
+
+- CN
+  - 唤起窗口不限于主界面
+  - 优化搜索高亮显示效果
+- EN
+  - Wake up the window is not limited to the main interface
+  - Optimize the search highlight display effect
+
 ## v0.1.1
 
 ### Feature
