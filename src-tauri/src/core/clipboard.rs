@@ -42,10 +42,12 @@ impl ClipboardWatcher {
             // 500毫秒检测一次剪切板变化
             let wait_millis = 500i64;
             let mut last_content = String::new();
+            let mut last_img_md5 = String::new();
             let mut clipboard = Clipboard::new().unwrap();
             loop {
                 let text = clipboard.get_text();
                 let _ = text.map(|text| {
+                    println!("text: {}, last_content: {}", text, last_content);
                     let content_origin = text.clone();
                     let content = text.trim();
                     if !content.is_empty() && content != last_content {
@@ -74,7 +76,8 @@ impl ClipboardWatcher {
                 let img = clipboard.get_image();
                 let _ = img.map(|img| {
                     let img_md5 = string_util::md5_by_bytes(&img.bytes);
-                    if img_md5 != last_content {
+                    println!("img_md5: {}, last_content: {}", img_md5, last_content);
+                    if img_md5 != last_img_md5 {
                         let base64 = img_util::rgba8_to_base64(&img);
                         let content_db = ImageDataDB {
                             width: img.width,
@@ -100,7 +103,7 @@ impl ClipboardWatcher {
                                 println!("insert record error: {}", e);
                             }
                         }
-                        last_content = img_md5;
+                        last_img_md5 = img_md5;
                     }
                 });
 
