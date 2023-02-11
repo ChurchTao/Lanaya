@@ -2,6 +2,15 @@
 
 All changes will be documented in this file.
 
+## v1.0.1
+
+### Bug Fixes
+
+- CN
+  - 修复了复制图片时，因 SCP 协议导致的图片无法显示的问题
+- EN
+  - Fixed the problem that the image could not be displayed due to the SCP protocol when copying the image
+
 ## v1.0.0
 
 ### Feature
