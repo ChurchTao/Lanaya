@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/tauri";
+import { sendNotice } from "@/service/msg";
 
 export async function getCommonConfig() {
   return invoke("get_common_config");
@@ -57,5 +58,6 @@ export async function deleteOverLimit(limit) {
 }
 
 export async function writeToClip(id) {
-  return invoke("write_to_clip", { id });
+  invoke("write_to_clip", { id });
+  sendNotice("", "Copy!");
 }
