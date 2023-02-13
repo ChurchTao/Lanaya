@@ -2,6 +2,22 @@
 
 All changes will be documented in this file.
 
+## v1.1.0
+
+### Feature
+
+- CN
+  - 新增`收藏`功能
+- EN:
+  - add `favorite` feature.
+
+### Bug Fixes
+
+- CN
+  - 修复复制 html 时，会导致显示问题
+- EN
+  - Fixed the problem that copying html will cause display problems
+
 ## v1.0.3
 
 ### Feature
