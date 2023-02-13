@@ -15,13 +15,33 @@ struct Record {
     pub create_time: u64,
     pub is_favorite: bool,
 }
+
+pub struct QueryReq {
+    pub key: Option<String>,
+    pub limit: Option<usize>,
+    pub is_favorite: Option<bool>,
+}
  */
 
-async function selectPage(searchKey = "", limit = 300) {
+async function selectPage(searchKey = "", isFavorite = undefined, limit = 300) {
+  // 如果 searchKey 以f:开头，那么就是查询收藏的记录
   if (searchKey === "") {
     return await findAllRecord(limit);
   }
-  return await findByKey(searchKey);
+  if (searchKey.startsWith("f:")) {
+    isFavorite = true;
+    searchKey = searchKey.substring(2);
+  }
+  let query = {
+    limit,
+  };
+  if (searchKey !== "") {
+    query.key = searchKey;
+  }
+  if (isFavorite !== undefined) {
+    query.is_favorite = isFavorite;
+  }
+  return await findByKey(query);
 }
 
 async function insertRecord(content, limit = 300) {

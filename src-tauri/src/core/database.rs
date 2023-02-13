@@ -18,6 +18,13 @@ pub struct Record {
     pub content_highlight: Option<String>,
 }
 
+#[derive(serde::Serialize, serde::Deserialize, Debug, Default)]
+pub struct QueryReq {
+    pub key: Option<String>,
+    pub limit: Option<usize>,
+    pub is_favorite: Option<bool>,
+}
+
 pub struct SqliteDB {
     conn: Connection,
 }
@@ -108,10 +115,12 @@ impl SqliteDB {
         Ok(())
     }
 
-    // 标记为收藏
+    // 标记为收藏,如有已经收藏了的则取消收藏
     pub fn mark_favorite(&self, id: u64) -> Result<()> {
-        let sql = "update record set is_favorite = 1 where id = ?1";
-        self.conn.execute(sql, [&id])?;
+        let record = self.find_by_id(id)?;
+        let sql = "update record set is_favorite = ?2 where id = ?1";
+        let is_favorite = if record.is_favorite { 0 } else { 1 };
+        self.conn.execute(sql, [&id, &is_favorite])?;
         Ok(())
     }
 
@@ -135,14 +144,33 @@ impl SqliteDB {
         Ok(res)
     }
 
-    pub fn find_by_key(&self, key: String, limit: u64) -> Result<Vec<Record>> {
-        let sql = "SELECT id, content, md5, create_time, is_favorite FROM record where data_type='text' and content like ?1 order by create_time desc limit ?2";
-        let mut stmt = self.conn.prepare(sql)?;
-        let mut rows = stmt.query([format!("%{}%", key), limit.to_string()])?;
+    pub fn find_by_key(&self, req: QueryReq) -> Result<Vec<Record>> {
+        let mut sql: String = String::new();
+        sql.push_str(
+            "SELECT id, content, md5, create_time, is_favorite FROM record where data_type='text'",
+        );
+        let mut limit: usize = 300;
+        if let Some(key) = &req.key {
+            sql.push_str(format!(" and content like '%{}%'", key).as_str());
+        }
+        if let Some(is_favorite) = req.is_favorite {
+            let fav_condition = format!(" and is_favorite = {}", if is_favorite { 1 } else { 0 });
+            sql.push_str(fav_condition.as_str());
+        }
+        if let Some(l) = req.limit {
+            limit = l;
+        }
+        let sql = format!("{} order by create_time desc limit {}", sql, limit);
+        println!("sql:{}", sql);
+        let mut stmt = self.conn.prepare(&sql)?;
+        let mut rows = stmt.query([])?;
         let mut res = vec![];
         while let Some(row) = rows.next()? {
             let content: String = row.get(1)?;
-            let content_highlight = Some(string_util::highlight(key.as_str(), content.as_str()));
+            let content_highlight = match &req.key {
+                Some(key) => Some(string_util::highlight(key.as_str(), content.as_str())),
+                None => None,
+            };
             let r = Record {
                 id: row.get(0)?,
                 content,
@@ -154,6 +182,7 @@ impl SqliteDB {
             };
             res.push(r);
         }
+        println!("res:{}", res.len());
         Ok(res)
     }
 
@@ -197,15 +226,4 @@ fn test_sqlite_insert() {
         ..Default::default()
     };
     assert_eq!(SqliteDB::new().insert_record(r).unwrap(), 1_i64)
-}
-
-#[test]
-fn test_find_by_md5() {
-    // SqliteDB::init();
-    // let a = SqliteDB::new().find_all().unwrap();
-
-    // println!("{:?}", a);
-
-    let b = SqliteDB::new().find_by_key("r".to_string(), 10).unwrap();
-    println!("{:?}", b);
 }

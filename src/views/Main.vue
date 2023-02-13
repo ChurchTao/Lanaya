@@ -66,7 +66,9 @@ onMounted(() => {
 });
 
 onUnmounted(async () => {
-  unlistenBlur();
+  if (unlistenBlur) {
+    unlistenBlur();
+  }
 });
 
 const initCommonConfig = async () => {
@@ -93,7 +95,7 @@ const initCommonConfig = async () => {
 };
 
 const initClipBoardDataList = async () => {
-  let res = await selectPage("", recordLimit);
+  let res = await selectPage("", undefined, recordLimit);
   if (res) {
     clipBoardDataList.value = res.map((item) => formatData(item));
   }
@@ -115,7 +117,7 @@ const onSearchChange = async (value) => {
   if (value === "") {
     noResultFlag.value = false;
   }
-  let res = await selectPage(value, 20);
+  let res = await selectPage(value, undefined, 20);
   clipBoardDataList.value = res.map((item) => formatData(item));
   if (res.length === 0) {
     noResultFlag.value = true;
@@ -157,6 +159,7 @@ const formatData = (item) => {
     content: item.content,
     content_highlight: item.content_highlight,
     type: item.data_type,
+    is_favorite: item.is_favorite,
   };
 };
 
@@ -172,7 +175,7 @@ const refreshShortCut = () => {
 const initListenr = async () => {
   if (!unlistenBlur) {
     unlistenBlur = await listen("tauri://blur", async (event) => {
-      closeWindowLater(5000);
+      // closeWindowLater(5000);
     });
   }
   if (!unlistenClipboardChange) {

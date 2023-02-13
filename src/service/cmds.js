@@ -49,8 +49,8 @@ export async function markFavorite(id) {
   return invoke("mark_favorite", { id });
 }
 
-export async function findByKey(key) {
-  return invoke("find_by_key", { key });
+export async function findByKey(query) {
+  return invoke("find_by_key", { query });
 }
 
 export async function deleteOverLimit(limit) {

@@ -3,7 +3,7 @@ use crate::{
     config::{CommonConfig, Config},
     core::{
         clipboard::{ClipBoardOprator, ImageDataDB},
-        database::{Record, SqliteDB},
+        database::{QueryReq, Record, SqliteDB},
         handle::Handle,
     },
     log_err,
@@ -130,8 +130,8 @@ pub fn mark_favorite(id: u64) -> bool {
 }
 
 #[tauri::command]
-pub fn find_by_key(key: String) -> Vec<Record> {
-    SqliteDB::new().find_by_key(key, 300).unwrap()
+pub fn find_by_key(query: QueryReq) -> Vec<Record> {
+    SqliteDB::new().find_by_key(query).unwrap()
 }
 
 #[tauri::command]
