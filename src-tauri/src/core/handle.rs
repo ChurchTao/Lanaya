@@ -175,7 +175,7 @@ impl Handle {
                                 }
                             }
                         },
-                        Duration::seconds(5),
+                        Duration::seconds(3),
                     );
                     println!("{} will close 5 senconds later", label);
                     return;

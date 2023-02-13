@@ -31,13 +31,14 @@ Lanaya comes from Templar Assassin in Dota2, which is a clipboard management sof
 - Setting history record range.
 - Multi-language.
 - Auto updater.
+- Input `f:xxx` to search favorite records.
 
 ## Todos
 
 - [x] add `taildwind` to manage css.
 - [x] add copy image history.
 - [ ] add theme.
-- [ ] add favorite.
+- [x] add favorite.
 - [ ] add `Windows`,`Linux` support.
 - [x] use `Rust` to implement clipboard listener.
 - [x] use `Rust` to implement `Sqlite` database operation.
@@ -71,10 +72,11 @@ cargo tauri build
 ## Screenshots
 
 <div align="center">
-  <img src="./md/demo1.png" alt="demo1" width="100%" />
-  <img src="./md/demo2.png" alt="demo2" width="100%" />
-  <img src="./md/demo3.png" alt="demo3" width="100%" />
-  <img src="./md/demo4.png" alt="demo4" width="100%" />
+  <img src="./md/demo1.png" alt="demo1" width="80%" />
+  <img src="./md/demo2.png" alt="demo2" width="80%" />
+  <img src="./md/demo3.png" alt="demo3" width="80%" />
+  <img src="./md/demo4.png" alt="demo4" width="80%" />
+  <img src="./md/demo5.png" alt="demo4" width="80%" />
 </div>
 
 ## Contributions

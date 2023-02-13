@@ -31,13 +31,14 @@
 - 设置历史条数范围
 - 多语言
 - 自动更新
+- 输入 `f:xxx` 搜索收藏的记录
 
 ## 未完成
 
 - [x] 引入`taildwind`管理 css
 - [x] 新增复制图片历史的功能
 - [ ] 增加主题
-- [ ] 新增收藏夹功能
+- [x] 新增收藏夹功能
 - [ ] 增加`Windows`,`Linux`的适配
 - [x] 使用`Rust`实现后台监听剪切板
 - [x] 使用`Rust`实现`Sqlite`的数据库操作
@@ -70,10 +71,11 @@ cargo tauri build
 ## 截图
 
 <div align="center">
-  <img src="./md/demo1.png" alt="demo1" width="100%" />
-  <img src="./md/demo2.png" alt="demo2" width="100%" />
-  <img src="./md/demo3.png" alt="demo3" width="100%" />
-  <img src="./md/demo4.png" alt="demo4" width="100%" />
+  <img src="./md/demo1.png" alt="demo1" width="80%" />
+  <img src="./md/demo2.png" alt="demo2" width="80%" />
+  <img src="./md/demo3.png" alt="demo3" width="80%" />
+  <img src="./md/demo4.png" alt="demo4" width="80%" />
+  <img src="./md/demo5.png" alt="demo4" width="80%" />
 </div>
 
 ## 建议

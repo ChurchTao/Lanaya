@@ -161,7 +161,7 @@ impl SqliteDB {
             limit = l;
         }
         let sql = format!("{} order by create_time desc limit {}", sql, limit);
-        println!("sql:{}", sql);
+        // println!("sql:{}", sql);
         let mut stmt = self.conn.prepare(&sql)?;
         let mut rows = stmt.query([])?;
         let mut res = vec![];
@@ -182,7 +182,6 @@ impl SqliteDB {
             };
             res.push(r);
         }
-        println!("res:{}", res.len());
         Ok(res)
     }
 

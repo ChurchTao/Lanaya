@@ -77,7 +77,6 @@ const initCommonConfig = async () => {
     recordLimit = res.record_limit;
   }
   if (res.hotkeys) {
-    console.log("initCommonConfig", res.hotkeys);
     shortCuts.value.forEach((item) => {
       let find = res.hotkeys.find((hotkey) => {
         return hotkey.startsWith(item.func);
@@ -102,7 +101,6 @@ const initClipBoardDataList = async () => {
 };
 
 const initKeyMapShow = (allKeys) => {
-  console.log("initKeyMapShow", allKeys);
   let keyShowArr = allKeys.map((item) => {
     let keyShow = getShortCutShowAnyway(item.keys);
     return {
@@ -135,17 +133,16 @@ const changeIndex = (index) => {
 const clickDataItem = async (index) => {
   let item = clipBoardDataList.value[index];
   await writeToClip(item.id);
-  closeWindowLater(5000);
+  closeWindowLater(3000);
 };
 
 const onKeyEnter = async () => {
-  console.log("onKeyEnter");
   if (selectIndex.value === -1) {
     return;
   }
   let item = clipBoardDataList.value[selectIndex.value];
   await writeToClip(item.id);
-  closeWindowLater(5000);
+  closeWindowLater(3000);
 };
 
 const onClearAll = async () => {
@@ -175,7 +172,7 @@ const refreshShortCut = () => {
 const initListenr = async () => {
   if (!unlistenBlur) {
     unlistenBlur = await listen("tauri://blur", async (event) => {
-      // closeWindowLater(5000);
+      closeWindowLater(3000);
     });
   }
   if (!unlistenClipboardChange) {
@@ -190,7 +187,6 @@ const initListenr = async () => {
   }
   if (!unlistenHotkeysChange) {
     unlistenHotkeysChange = await listenHotkeysChange((hotkeys) => {
-      console.log("hotkeysChange", hotkeys);
       shortCuts.value.forEach((item) => {
         let find = hotkeys.find((hotkey) => {
           return hotkey.startsWith(item.func);
@@ -245,7 +241,6 @@ const moveIndex = (offset) => {
 };
 
 const initAppShortCut = async (appShortCuts) => {
-  console.log("initAppShortCut", appShortCuts);
   hotkeys.filter = function (event) {
     return true;
   };
@@ -280,7 +275,7 @@ const initAppShortCut = async (appShortCuts) => {
               onKeyEnter();
               break;
             case hotkeys_func_enum.CLOSE_WINDOW:
-              closeWindowLater(5000);
+              closeWindowLater(3000);
               break;
           }
         }
