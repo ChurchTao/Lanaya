@@ -130,10 +130,15 @@ impl SqliteDB {
         let mut rows = stmt.query([])?;
         let mut res = vec![];
         while let Some(row) = rows.next()? {
+            let data_type: String = row.get(2)?;
+            let mut content: String = row.get(1)?;
+            if content.len() > 1000 && data_type == "text" {
+                content = content[0..1000].to_string()
+            }
             let r = Record {
                 id: row.get(0)?,
-                content: row.get(1)?,
-                data_type: row.get(2)?,
+                content,
+                data_type,
                 md5: row.get(3)?,
                 create_time: row.get(4)?,
                 is_favorite: row.get(5)?,
@@ -147,7 +152,7 @@ impl SqliteDB {
     pub fn find_by_key(&self, req: QueryReq) -> Result<Vec<Record>> {
         let mut sql: String = String::new();
         sql.push_str(
-            "SELECT id, content, md5, create_time, is_favorite FROM record where data_type='text'",
+            "SELECT id, content, md5, create_time, is_favorite, data_type FROM record where 1=1",
         );
         let mut limit: usize = 300;
         let mut params: Vec<String> = vec![];
@@ -157,7 +162,9 @@ impl SqliteDB {
         params.push(limit.to_string());
         if let Some(k) = &req.key {
             params.push(format!("%{}%", k));
-            sql.push_str(format!(" and content like ?{}", params.len()).as_str());
+            sql.push_str(
+                format!(" and data_type='text' and content like ?{}", params.len()).as_str(),
+            );
         }
         if let Some(is_fav) = req.is_favorite {
             let is_fav_int = if is_fav { 1 } else { 0 };
@@ -169,7 +176,12 @@ impl SqliteDB {
         let mut rows = stmt.query(rusqlite::params_from_iter(params))?;
         let mut res = vec![];
         while let Some(row) = rows.next()? {
-            let content: String = row.get(1)?;
+            let data_type: String = row.get(5)?;
+            // 如果content > 1000 则截取前1000个字符
+            let mut content: String = row.get(1)?;
+            if content.len() > 1000 && data_type == "text" {
+                content = content[0..1000].to_string()
+            }
             let content_highlight = match &req.key {
                 Some(key) => Some(string_util::highlight(key.as_str(), content.as_str())),
                 None => None,
@@ -177,7 +189,7 @@ impl SqliteDB {
             let r = Record {
                 id: row.get(0)?,
                 content,
-                data_type: "text".to_string(),
+                data_type,
                 md5: row.get(2)?,
                 create_time: row.get(3)?,
                 is_favorite: row.get(4)?,
