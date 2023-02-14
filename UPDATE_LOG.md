@@ -2,6 +2,26 @@
 
 All changes will be documented in this file.
 
+## v1.1.2
+
+### Feature
+
+- CN
+  - 新增`删除某一条`功能
+- EN:
+  - add `delete one` feature.
+
+### Bug Fixes
+
+- CN
+  - 修复了大文本复制时，会导致 UI 渲染卡顿的问题
+  - 修复了搜索收藏记录时，无法搜索到图片的问题
+  - 修复了清空记录时，会清除收藏的记录的问题
+- EN
+  - Fixed the problem that large text copy will cause UI rendering to stall
+  - Fixed the problem that the image cannot be searched when searching for favorite records
+  - Fixed the problem that the record will be cleared when the record is cleared
+
 ## v1.1.1
 
 ### Bug Fixes

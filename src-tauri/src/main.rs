@@ -40,6 +40,7 @@ fn main() {
             cmds::find_by_key,
             cmds::delete_over_limit,
             cmds::write_to_clip,
+            cmds::delete_by_id,
         ])
         .build(tauri::generate_context!())
         .expect("error while build tauri application");

@@ -8,6 +8,7 @@
       :cmd-press-down="cmdPressDown"
       @clickItem="clickDataItem"
       @changeIndex="changeIndex"
+      @delete="deleteItem"
     />
     <KeyMapBar :key-map="keyMap" />
   </Layout>
@@ -134,6 +135,10 @@ const clickDataItem = async (index) => {
   let item = clipBoardDataList.value[index];
   await writeToClip(item.id);
   closeWindowLater(3000);
+};
+
+const deleteItem = async (index) => {
+  clipBoardDataList.value.splice(index, 1);
 };
 
 const onKeyEnter = async () => {

@@ -61,3 +61,7 @@ export async function writeToClip(id) {
   invoke("write_to_clip", { id });
   sendNotice("", "Copy!");
 }
+
+export async function deleteById(id) {
+  return invoke("delete_by_id", { id });
+}

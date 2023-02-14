@@ -110,8 +110,14 @@ impl SqliteDB {
 
     // 清除数据
     pub fn clear_data(&self) -> Result<()> {
-        let sql = "delete from record";
+        let sql = "delete from record where is_favorite = 0";
         self.conn.execute(sql, ())?;
+        Ok(())
+    }
+
+    pub fn delete_by_id(&self, id: u64) -> Result<()> {
+        let sql = "delete from record where id = ?1";
+        self.conn.execute(sql, [&id])?;
         Ok(())
     }
 

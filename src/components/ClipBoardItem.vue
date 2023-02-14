@@ -49,14 +49,35 @@
             </svg>
           </button>
         </div>
+        <!-- 删除单条记录的action -->
+        <div
+          class="data-item-action ml-1 w-5 h-5 flex items-center rounded-full transition-all text-gray-300 hover:ring-2 hover:bg-gray-200 hover:ring-gray-200 hover:bg-opacity-25 hover:ring-opacity-25"
+        >
+          <button
+            @click.stop="deleteItem"
+            class="data-item-action-button appearance-none"
+            type="submit"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20">
+              <path
+                d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z"
+                stroke="currentColor"
+                fill="none"
+                fill-rule="evenodd"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </li>
 </template>
 <script setup>
 import { computed } from "vue";
-import { markFavorite } from "../service/cmds";
-
+import { markFavorite, deleteById } from "../service/cmds";
+const emit = defineEmits(["delete"]);
 const props = defineProps({
   select: {
     type: Boolean,
@@ -102,6 +123,13 @@ const markFav = async () => {
   let res = await markFavorite(props.data.id);
   if (res) {
     props.data.is_favorite = !props.data.is_favorite;
+  }
+};
+
+const deleteItem = async () => {
+  let res = await deleteById(props.data.id);
+  if (res) {
+    emit("delete", props.idx);
   }
 };
 </script>

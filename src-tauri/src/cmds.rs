@@ -130,6 +130,17 @@ pub fn mark_favorite(id: u64) -> bool {
 }
 
 #[tauri::command]
+pub fn delete_by_id(id: u64) -> bool {
+    match SqliteDB::new().delete_by_id(id) {
+        Ok(_i) => true,
+        Err(e) => {
+            println!("err:{}", e);
+            false
+        }
+    }
+}
+
+#[tauri::command]
 pub fn find_by_key(query: QueryReq) -> Vec<Record> {
     SqliteDB::new().find_by_key(query).unwrap()
 }
