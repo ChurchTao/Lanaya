@@ -2,6 +2,15 @@
 
 All changes will be documented in this file.
 
+## v1.1.1
+
+### Bug Fixes
+
+- CN
+  - 修复了搜索时的 SQL 注入，导致崩溃的问题
+- EN
+  - Fixed the problem of SQL injection when searching, causing a crash
+
 ## v1.1.0
 
 ### Feature
