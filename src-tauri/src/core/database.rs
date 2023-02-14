@@ -150,20 +150,23 @@ impl SqliteDB {
             "SELECT id, content, md5, create_time, is_favorite FROM record where data_type='text'",
         );
         let mut limit: usize = 300;
-        if let Some(key) = &req.key {
-            sql.push_str(format!(" and content like '%{}%'", key).as_str());
-        }
-        if let Some(is_favorite) = req.is_favorite {
-            let fav_condition = format!(" and is_favorite = {}", if is_favorite { 1 } else { 0 });
-            sql.push_str(fav_condition.as_str());
-        }
+        let mut params: Vec<String> = vec![];
         if let Some(l) = req.limit {
             limit = l;
         }
-        let sql = format!("{} order by create_time desc limit {}", sql, limit);
-        // println!("sql:{}", sql);
+        params.push(limit.to_string());
+        if let Some(k) = &req.key {
+            params.push(format!("%{}%", k));
+            sql.push_str(format!(" and content like ?{}", params.len()).as_str());
+        }
+        if let Some(is_fav) = req.is_favorite {
+            let is_fav_int = if is_fav { 1 } else { 0 };
+            params.push(is_fav_int.to_string());
+            sql.push_str(format!(" and is_favorite = ?{}", params.len()).as_str());
+        }
+        let sql = format!("{} order by create_time desc limit ?1", sql);
         let mut stmt = self.conn.prepare(&sql)?;
-        let mut rows = stmt.query([])?;
+        let mut rows = stmt.query(rusqlite::params_from_iter(params))?;
         let mut res = vec![];
         while let Some(row) = rows.next()? {
             let content: String = row.get(1)?;
