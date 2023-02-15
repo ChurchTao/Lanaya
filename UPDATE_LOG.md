@@ -2,6 +2,13 @@
 
 All changes will be documented in this file.
 
+## v1.1.3
+
+- CN
+  - 修复了截取字符串时，不安全的切片导致的崩溃问题
+- EN
+  - Fixed the problem of unsafe slice caused by crash when cutting strings
+
 ## v1.1.2
 
 ### Feature

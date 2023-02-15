@@ -139,7 +139,7 @@ impl SqliteDB {
             let data_type: String = row.get(2)?;
             let mut content: String = row.get(1)?;
             if content.len() > 1000 && data_type == "text" {
-                content = content[0..1000].to_string()
+                content = content.chars().take(1000).collect();
             }
             let r = Record {
                 id: row.get(0)?,
@@ -186,7 +186,7 @@ impl SqliteDB {
             // 如果content > 1000 则截取前1000个字符
             let mut content: String = row.get(1)?;
             if content.len() > 1000 && data_type == "text" {
-                content = content[0..1000].to_string()
+                content = content.chars().take(1000).collect();
             }
             let content_highlight = match &req.key {
                 Some(key) => Some(string_util::highlight(key.as_str(), content.as_str())),
