@@ -188,10 +188,10 @@ impl SqliteDB {
             if content.len() > 1000 && data_type == "text" {
                 content = content.chars().take(1000).collect();
             }
-            let content_highlight = match &req.key {
-                Some(key) => Some(string_util::highlight(key.as_str(), content.as_str())),
-                None => None,
-            };
+            let content_highlight = req
+                .key
+                .as_ref()
+                .map(|key| string_util::highlight(key.as_str(), content.as_str()));
             let r = Record {
                 id: row.get(0)?,
                 content,

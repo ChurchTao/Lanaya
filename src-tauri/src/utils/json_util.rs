@@ -8,7 +8,7 @@ pub fn read<T: DeserializeOwned>(path: &PathBuf) -> Result<T> {
         bail!("file not found \"{}\"", path.display());
     }
 
-    let json_str = fs::read_to_string(&path)
+    let json_str = fs::read_to_string(path)
         .context(format!("failed to read the file \"{}\"", path.display()))?;
 
     serde_json::from_str::<T>(&json_str).context(format!(

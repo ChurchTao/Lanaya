@@ -46,7 +46,6 @@ impl CommonConfig {
                 "clear-history:8+16+91".into(),
                 "global-shortcut:16+67+91".into(),
             ]),
-            ..Default::default()
         }
     }
 

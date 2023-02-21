@@ -38,15 +38,16 @@ impl ClipBoardOprator {
 
 impl ClipboardWatcher {
     pub fn start() {
-        tauri::async_runtime::spawn(async move {
+        tauri::async_runtime::spawn(async {
             // 500毫秒检测一次剪切板变化
             let wait_millis = 500i64;
             let mut last_content = String::new();
             let mut last_img_md5 = String::new();
             let mut clipboard = Clipboard::new().unwrap();
+            println!("start clipboard watcher");
             loop {
                 let text = clipboard.get_text();
-                let _ = text.map(|text| {
+                let res = text.map(|text| {
                     let content_origin = text.clone();
                     let content = text.trim();
                     if !content.is_empty() && content != last_content {
@@ -71,9 +72,12 @@ impl ClipboardWatcher {
                         last_content = content.to_string();
                     }
                 });
+                if let Err(e) = res {
+                    println!("get text error: {}", e);
+                }
 
                 let img = clipboard.get_image();
-                let _ = img.map(|img| {
+                let res = img.map(|img| {
                     let img_md5 = string_util::md5_by_bytes(&img.bytes);
                     if img_md5 != last_img_md5 {
                         let base64 = img_util::rgba8_to_base64(&img);
@@ -91,6 +95,7 @@ impl ClipboardWatcher {
                         });
                         match res {
                             Ok(_) => {
+                                drop(img);
                                 handle::Handle::notice_to_window(
                                     MsgTypeEnum::ChangeClipBoard,
                                     CHANGE_DEFAULT_MSG,
@@ -104,7 +109,9 @@ impl ClipboardWatcher {
                         last_img_md5 = img_md5;
                     }
                 });
-
+                if let Err(e) = res {
+                    println!("get image error: {}", e);
+                }
                 thread::sleep(Duration::milliseconds(wait_millis).to_std().unwrap());
             }
         });

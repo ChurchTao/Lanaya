@@ -20,7 +20,7 @@ impl Sysopt {
     }
 
     pub fn init_launch(&self) -> Result<()> {
-        let enable = { Config::common().latest().enable_auto_launch.clone() };
+        let enable = { Config::common().latest().enable_auto_launch };
         let enable = enable.unwrap_or(false);
 
         println!("enable auto launch: {}", enable);
@@ -86,7 +86,7 @@ impl Sysopt {
             drop(auto_launch);
             return self.init_launch();
         }
-        let enable = { Config::common().latest().enable_auto_launch.clone() };
+        let enable = { Config::common().latest().enable_auto_launch };
         let enable = enable.unwrap_or(false);
         let auto_launch = auto_launch.as_ref().unwrap();
 

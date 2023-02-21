@@ -2,13 +2,8 @@ use super::{
     tray::Tray,
     window_manager::{WindowInfo, WindowType},
 };
-use crate::{
-    config::Config,
-    log_err,
-    utils::{hotkey_util, time_util},
-};
+use crate::{config::Config, log_err, utils::hotkey_util};
 use anyhow::{bail, Result};
-use chrono::Duration;
 use once_cell::sync::OnceCell;
 use parking_lot::Mutex;
 use serde::Serialize;
@@ -45,7 +40,7 @@ impl Handle {
         self.app_handle
             .lock()
             .as_ref()
-            .map_or(None, |a| a.get_window("main"))
+            .and_then(|a| a.get_window("main"))
     }
 
     fn get_manager(&self) -> Result<impl GlobalShortcutManager> {
@@ -90,25 +85,33 @@ impl Handle {
             MsgTypeEnum::ChangeLanguage => {
                 let window = app_handle.as_ref().unwrap().get_window("main");
                 if window.is_some() {
-                    log_err!(window.unwrap().emit("lanaya://change-language", msg));
+                    if let Some(win) = window {
+                        win.emit("lanaya://change-language", msg)?;
+                    };
                 }
             }
             MsgTypeEnum::ChangeRecordLimit => {
                 let window = app_handle.as_ref().unwrap().get_window("main");
                 if window.is_some() {
-                    log_err!(window.unwrap().emit("lanaya://change-record-limit", msg));
+                    if let Some(win) = window {
+                        win.emit("lanaya://change-record-limit", msg)?;
+                    };
                 }
             }
             MsgTypeEnum::ChangeHotKeys => {
                 let window = app_handle.as_ref().unwrap().get_window("main");
                 if window.is_some() {
-                    log_err!(window.unwrap().emit("lanaya://change-hotkeys", msg));
+                    if let Some(win) = window {
+                        win.emit("lanaya://change-hotkeys", msg)?;
+                    };
                 }
             }
             MsgTypeEnum::ChangeClipBoard => {
                 let window = app_handle.as_ref().unwrap().get_window("main");
                 if window.is_some() {
-                    log_err!(window.unwrap().emit("lanaya://change-clipboard", msg));
+                    if let Some(win) = window {
+                        win.emit("lanaya://change-clipboard", msg)?;
+                    };
                 }
             }
         }
@@ -130,12 +133,12 @@ impl Handle {
             if let Some(global_shortcut) = global_shortcut {
                 let mut shortcut_manager = Self::global().get_manager()?;
                 let _ = shortcut_manager.unregister_all();
-                let hot_key_arr: Vec<&str> = global_shortcut.split(":").collect();
-                if hot_key_arr[1] == "" {
+                let hot_key_arr: Vec<&str> = global_shortcut.split(':').collect();
+                if hot_key_arr[1].is_empty() {
                     // 如果没有配置 global-shortcut，则等于清空快捷键，直接返回
                     return Ok(());
                 }
-                let hot_key_arr: Vec<&str> = hot_key_arr[1].split("+").collect();
+                let hot_key_arr: Vec<&str> = hot_key_arr[1].split('+').collect();
                 let hot_key_arr: Vec<u32> = hot_key_arr
                     .iter()
                     .map(|x| x.parse::<u32>().unwrap())
@@ -150,74 +153,57 @@ impl Handle {
     }
 
     pub fn open_window(window_type: WindowType) {
-        tauri::async_runtime::spawn(async move {
-            let binding = Self::global().app_handle.lock();
-            let app_handle = binding.as_ref().unwrap();
+        let binding = Self::global().app_handle.lock();
+        let app_handle = binding.as_ref().unwrap();
 
-            let window_info = match window_type {
-                WindowType::Config => WindowInfo::config(),
-                WindowType::Main => WindowInfo::main(),
-            };
+        let window_info = match window_type {
+            WindowType::Config => WindowInfo::config(),
+            WindowType::Main => WindowInfo::main(),
+        };
 
-            let label = window_info.label.as_str();
-            let title = window_info.title.as_str();
-            let url = window_info.url.as_str();
+        let label = window_info.label.as_str();
+        let title = window_info.title.as_str();
+        let url = window_info.url.as_str();
 
-            if let Some(window) = app_handle.get_window(label) {
-                if window.is_visible().unwrap() {
-                    let _ = window.hide();
-                    // 延迟5秒如果未重新打开window则close
-                    let _ = time_util::set_time_out(
-                        || {
-                            if let Some(window) = app_handle.get_window(label) {
-                                if !window.is_visible().unwrap() {
-                                    let _ = window.close();
-                                }
-                            }
-                        },
-                        Duration::seconds(3),
-                    );
-                    println!("{} will close 5 senconds later", label);
-                    return;
-                }
-                let _ = window.unminimize();
-                let _ = window.show();
-                let _ = window.set_focus();
+        if let Some(window) = app_handle.get_window(label) {
+            if window.is_visible().unwrap() {
+                let _ = window.close();
                 return;
             }
+            let _ = window.unminimize();
+            let _ = window.show();
+            let _ = window.set_focus();
+            return;
+        }
 
-            let new_window = tauri::window::WindowBuilder::new(
-                app_handle,
-                label.to_string(),
-                tauri::WindowUrl::App(url.into()),
-            )
-            .title(title)
-            .center()
-            .visible(false)
-            .resizable(window_info.resizable)
-            .fullscreen(window_info.fullscreenable)
-            .always_on_top(window_info.always_on_top)
-            .inner_size(window_info.width, window_info.height)
-            .transparent(window_info.transparent)
-            .decorations(window_info.decorations)
-            .skip_taskbar(window_info.skip_taskbar)
-            .center()
-            .build();
-            match new_window {
-                Ok(window) => {
-                    let _ = window.show();
-                    let _ = window.set_focus();
-                    match window_type {
-                        WindowType::Main => {
-                            set_shadow(&window, true).expect("Unsupported platform!");
-                        }
-                        _ => {}
-                    }
-                }
-                Err(e) => {
-                    println!("create_window error: {}", e);
+        let new_window = tauri::window::WindowBuilder::new(
+            app_handle,
+            label.to_string(),
+            tauri::WindowUrl::App(url.into()),
+        )
+        .title(title)
+        .center()
+        .visible(false)
+        .resizable(window_info.resizable)
+        .fullscreen(window_info.fullscreenable)
+        .always_on_top(window_info.always_on_top)
+        .inner_size(window_info.width, window_info.height)
+        .transparent(window_info.transparent)
+        .decorations(window_info.decorations)
+        .skip_taskbar(window_info.skip_taskbar)
+        .center()
+        .build();
+        match new_window {
+            Ok(window) => {
+                let _ = window.show();
+                let _ = window.set_focus();
+                if let WindowType::Main = window_type {
+                    set_shadow(&window, true).expect("Unsupported platform!");
                 }
             }
-        });
+            Err(e) => {
+                println!("create_window error: {}", e);
+            }
+        }
     }
 }

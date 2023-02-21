@@ -68,10 +68,10 @@ pub fn get_short_cut_name(key_code_arr: Vec<u32>, is_first_word_upper_case: bool
     let mut modifier = String::new();
     let mut normal_key = String::new();
     for key_code in key_code_arr {
-        if modifier_code_to_name(key_code) != "" {
+        if !modifier_code_to_name(key_code).is_empty() {
             modifier += &capitalized(&modifier_code_to_name(key_code), is_first_word_upper_case);
             modifier += "+";
-        } else if key_code_to_name(key_code) != "" {
+        } else if !key_code_to_name(key_code).is_empty() {
             key_str = capitalized(&key_code_to_name(key_code), is_first_word_upper_case);
         } else {
             normal_key = capitalized(
@@ -80,15 +80,15 @@ pub fn get_short_cut_name(key_code_arr: Vec<u32>, is_first_word_upper_case: bool
             );
         }
     }
-    if modifier == "" && key_str == "" {
+    if modifier.is_empty() && key_str.is_empty() {
         return "".to_string();
     }
     // 若只有modifier，不显示
-    if modifier != "" && key_str == "" && normal_key == "" {
+    if !modifier.is_empty() && key_str.is_empty() && normal_key.is_empty() {
         return "".to_string();
     }
     // 若只有keyStr，不显示
-    if modifier == "" && key_str != "" && normal_key != "" {
+    if modifier.is_empty() && !key_str.is_empty() && !normal_key.is_empty() {
         return "".to_string();
     }
     modifier + &key_str + &normal_key
@@ -99,7 +99,7 @@ fn capitalized(name: &str, is_first_word_upper_case: bool) -> String {
     if !is_first_word_upper_case {
         return name;
     }
-    let capitalized_first = name.chars().nth(0).unwrap().to_uppercase().to_string();
+    let capitalized_first = name.chars().next().unwrap().to_uppercase().to_string();
     if name.len() == 1 {
         return capitalized_first;
     }
