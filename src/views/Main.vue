@@ -24,6 +24,7 @@ import { listen } from "@tauri-apps/api/event";
 import { getShortCutShowAnyway, isDiff } from "@/service/shortCutUtil";
 import { defaultHotkeys, hotkeys_func_enum } from "../config/constants";
 import { closeWindowLater } from "@/service/windowUtil";
+import { appWindow, LogicalSize } from "@tauri-apps/api/window";
 import {
   listenRecordLimitChange,
   listenHotkeysChange,
@@ -133,7 +134,7 @@ const changeIndex = (index) => {
 
 const clickDataItem = async (index) => {
   let item = clipBoardDataList.value[index];
-  await writeToClip(item.id);
+  writeToClip(item.id);
   closeWindowLater(3000);
 };
 
@@ -175,9 +176,26 @@ const refreshShortCut = () => {
 };
 
 const initListenr = async () => {
+  var recordHeight = 0;
+  var mutationObserver = new MutationObserver(function (mutations) {
+    let height = document.body.offsetHeight;
+    let width = document.body.offsetWidth;
+    if (height === recordHeight) {
+      return;
+    }
+    recordHeight = height;
+    appWindow.setSize(new LogicalSize(width, height));
+  });
+  mutationObserver.observe(document.body, {
+    attributes: true,
+    childList: true,
+    characterData: true,
+    subtree: true,
+  });
+
   if (!unlistenBlur) {
     unlistenBlur = await listen("tauri://blur", async (event) => {
-      closeWindowLater(3000);
+      // closeWindowLater(3000);
     });
   }
   if (!unlistenClipboardChange) {

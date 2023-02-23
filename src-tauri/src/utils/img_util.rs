@@ -17,6 +17,22 @@ pub fn rgba8_to_base64(img: &ImageData) -> String {
     string_util::base64_encode(bytes.as_slice())
 }
 
+pub fn rgba8_to_jpeg_base64(img: &ImageData, quality: u8) -> String {
+    let mut bytes: Vec<u8> = Vec::new();
+    image::codecs::jpeg::JpegEncoder::new_with_quality(
+        BufWriter::new(Cursor::new(&mut bytes)),
+        quality,
+    )
+    .write_image(
+        &img.bytes,
+        img.width as u32,
+        img.height as u32,
+        image::ColorType::Rgba8,
+    )
+    .unwrap();
+    string_util::base64_encode(bytes.as_slice())
+}
+
 pub fn base64_to_rgba8(base64: &str) -> Result<ImageData> {
     let bytes = string_util::base64_decode(base64);
     let reader =

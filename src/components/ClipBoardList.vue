@@ -30,7 +30,6 @@
 import ClipBoardItem from "./ClipBoardItem.vue";
 import SearchNoResult from "./child/clipboard/SearchNoResult.vue";
 import { ref, onUpdated } from "vue";
-import { appWindow, LogicalSize } from "@tauri-apps/api/window";
 const emit = defineEmits(["clickItem", "changeIndex", "delete"]);
 const mouseenter = ref(false);
 const props = defineProps({
@@ -45,13 +44,6 @@ const selectThis = (index) => {
 const clickThis = (index) => {
   emit("clickItem", index);
 };
-
-onUpdated(async () => {
-  let height = document.body.offsetHeight;
-  let width = document.body.offsetWidth;
-  await appWindow.setSize(new LogicalSize(width, height));
-});
-
 const deleteThis = (index) => {
   emit("delete", index);
 };

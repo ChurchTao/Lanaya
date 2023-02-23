@@ -99,7 +99,7 @@ const dataShow = computed(() => {
     return content;
   } else if (props.data.type == "image") {
     let imgObj = JSON.parse(props.data.content);
-    return `<img src="data:image/png;base64,${imgObj.base64}" class="max-h-60 object-contain" />`;
+    return `<img src="data:image/jpeg;base64,${imgObj.base64}" class="max-h-60 object-contain" />`;
   }
 });
 

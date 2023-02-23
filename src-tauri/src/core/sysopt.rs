@@ -58,13 +58,10 @@ impl Sysopt {
             .set_app_path(&app_path)
             .build()?;
 
-        match auto.is_enabled() {
-            Ok(true) => {
-                if enable {
-                    return Ok(());
-                }
+        if let Ok(true) = auto.is_enabled() {
+            if enable {
+                return Ok(());
             }
-            _ => {}
         }
 
         // macos每次启动都更新登录项，避免重复设置登录项

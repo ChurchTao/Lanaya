@@ -61,8 +61,7 @@ checksum = "2cb2f989d18dd141ab8ae82f64d1a8cdd37e0840f73a406896cf5e99502fab61"
 [[package]]
 name = "arboard"
 version = "3.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d6041616acea41d67c4a984709ddab1587fd0b10efe5cc563fee954d2f011854"
+source = "git+https://github.com/ChurchTao/arboard.git#69dfa58ebc9b4c8582bf4abf450df32a5b6a88f8"
 dependencies = [
  "clipboard-win",
  "core-graphics",

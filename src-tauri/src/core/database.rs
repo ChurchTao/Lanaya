@@ -9,6 +9,7 @@ use std::path::Path;
 pub struct Record {
     pub id: u64,
     pub content: String,
+    pub content_preview: Option<String>,
     // data_type(文本=text、图片=image)
     pub data_type: String,
     pub md5: String,
@@ -29,7 +30,7 @@ pub struct SqliteDB {
     conn: Connection,
 }
 
-const SQLITE_FILE: &str = "data.sqlite";
+const SQLITE_FILE: &str = "data_v1_1_4.sqlite";
 
 #[allow(unused)]
 impl SqliteDB {
@@ -50,6 +51,7 @@ impl SqliteDB {
         (
             id          INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
             content     TEXT,
+            content_preview     TEXT,
             data_type   VARCHAR(20) DEFAULT '',
             md5         VARCHAR(200) DEFAULT '',
             create_time INTEGER,
@@ -60,12 +62,21 @@ impl SqliteDB {
     }
 
     pub fn insert_record(&self, r: Record) -> Result<i64> {
-        let sql = "insert into record (content,md5,create_time,is_favorite,data_type) values (?1,?2,?3,?4,?5)";
+        let sql = "insert into record (content,md5,create_time,is_favorite,data_type,content_preview) values (?1,?2,?3,?4,?5,?6)";
         let md5 = string_util::md5(r.content.as_str());
         let now = chrono::Local::now().timestamp_millis() as u64;
-        let res = self
-            .conn
-            .execute(sql, (&r.content, md5, now, &r.is_favorite, &r.data_type))?;
+        let content_preview = r.content_preview.unwrap_or("".to_string());
+        let res = self.conn.execute(
+            sql,
+            (
+                &r.content,
+                md5,
+                now,
+                &r.is_favorite,
+                &r.data_type,
+                content_preview,
+            ),
+        )?;
         Ok(self.conn.last_insert_rowid())
     }
 
@@ -131,19 +142,17 @@ impl SqliteDB {
     }
 
     pub fn find_all(&self) -> Result<Vec<Record>> {
-        let sql = "SELECT id, content, data_type, md5, create_time, is_favorite FROM record order by create_time desc";
+        let sql = "SELECT id, content_preview, data_type, md5, create_time, is_favorite FROM record order by create_time desc";
         let mut stmt = self.conn.prepare(sql)?;
         let mut rows = stmt.query([])?;
         let mut res = vec![];
         while let Some(row) = rows.next()? {
             let data_type: String = row.get(2)?;
-            let mut content: String = row.get(1)?;
-            if content.len() > 1000 && data_type == "text" {
-                content = content.chars().take(1000).collect();
-            }
+            let content: String = row.get(1)?;
             let r = Record {
                 id: row.get(0)?,
                 content,
+                content_preview: None,
                 data_type,
                 md5: row.get(3)?,
                 create_time: row.get(4)?,
@@ -158,7 +167,7 @@ impl SqliteDB {
     pub fn find_by_key(&self, req: QueryReq) -> Result<Vec<Record>> {
         let mut sql: String = String::new();
         sql.push_str(
-            "SELECT id, content, md5, create_time, is_favorite, data_type FROM record where 1=1",
+            "SELECT id, content_preview, md5, create_time, is_favorite, data_type FROM record where 1=1",
         );
         let mut limit: usize = 300;
         let mut params: Vec<String> = vec![];
@@ -183,11 +192,7 @@ impl SqliteDB {
         let mut res = vec![];
         while let Some(row) = rows.next()? {
             let data_type: String = row.get(5)?;
-            // 如果content > 1000 则截取前1000个字符
-            let mut content: String = row.get(1)?;
-            if content.len() > 1000 && data_type == "text" {
-                content = content.chars().take(1000).collect();
-            }
+            let content: String = row.get(1)?;
             let content_highlight = req
                 .key
                 .as_ref()
@@ -195,6 +200,7 @@ impl SqliteDB {
             let r = Record {
                 id: row.get(0)?,
                 content,
+                content_preview: None,
                 data_type,
                 md5: row.get(2)?,
                 create_time: row.get(3)?,
@@ -225,6 +231,7 @@ impl SqliteDB {
             Ok(Record {
                 id: row.get(0)?,
                 content: row.get(1)?,
+                content_preview: None,
                 data_type: row.get(2)?,
                 md5: row.get(3)?,
                 create_time: row.get(4)?,

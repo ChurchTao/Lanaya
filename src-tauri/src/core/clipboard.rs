@@ -40,19 +40,27 @@ impl ClipboardWatcher {
     pub fn start() {
         tauri::async_runtime::spawn(async {
             // 500毫秒检测一次剪切板变化
-            let wait_millis = 500i64;
-            let mut last_content = String::new();
+            let wait_millis = 1000i64;
+            let mut last_content_md5 = String::new();
             let mut last_img_md5 = String::new();
             let mut clipboard = Clipboard::new().unwrap();
             println!("start clipboard watcher");
             loop {
                 let text = clipboard.get_text();
-                let res = text.map(|text| {
+                let _ = text.map(|text| {
                     let content_origin = text.clone();
                     let content = text.trim();
-                    if !content.is_empty() && content != last_content {
+                    let md5 = string_util::md5(&content_origin);
+                    if !content.is_empty() && md5 != last_content_md5 {
+                        // 说明有新内容
+                        let content_preview = if content.len() > 1000 {
+                            Some(content.chars().take(1000).collect())
+                        } else {
+                            Some(content.to_string())
+                        };
                         let res = database::SqliteDB::new().insert_if_not_exist(Record {
                             content: content_origin,
+                            content_preview,
                             data_type: "text".to_string(),
                             is_favorite: false,
                             ..Default::default()
@@ -69,26 +77,33 @@ impl ClipboardWatcher {
                                 println!("insert record error: {}", e);
                             }
                         }
-                        last_content = content.to_string();
+                        last_content_md5 = md5;
                     }
                 });
-                if let Err(e) = res {
-                    println!("get text error: {}", e);
-                }
 
                 let img = clipboard.get_image();
-                let res = img.map(|img| {
+                let _ = img.map(|img| {
                     let img_md5 = string_util::md5_by_bytes(&img.bytes);
                     if img_md5 != last_img_md5 {
+                        // 有新图片产生
                         let base64 = img_util::rgba8_to_base64(&img);
                         let content_db = ImageDataDB {
                             width: img.width,
                             height: img.height,
                             base64,
                         };
+                        // 压缩画质作为预览图，防止渲染时非常卡顿
+                        let jpeg_base64 = img_util::rgba8_to_jpeg_base64(&img, 75);
+                        let content_preview_db = ImageDataDB {
+                            width: img.width,
+                            height: img.height,
+                            base64: jpeg_base64,
+                        };
                         let content = json_util::stringfy(&content_db).unwrap();
+                        let content_preview = json_util::stringfy(&content_preview_db).unwrap();
                         let res = database::SqliteDB::new().insert_if_not_exist(Record {
                             content,
+                            content_preview: Some(content_preview),
                             data_type: "image".to_string(),
                             is_favorite: false,
                             ..Default::default()
@@ -109,9 +124,6 @@ impl ClipboardWatcher {
                         last_img_md5 = img_md5;
                     }
                 });
-                if let Err(e) = res {
-                    println!("get image error: {}", e);
-                }
                 thread::sleep(Duration::milliseconds(wait_millis).to_std().unwrap());
             }
         });

@@ -25,7 +25,7 @@ dunce = "1.0.3"
 rust-crypto = { version = "0.2.36" }
 rusqlite = {version= "0.28.0",features = ["bundled"] }
 chrono = "0.4.23"
-arboard = "3.2.0"
+arboard = { git = "https://github.com/ChurchTao/arboard.git" }
 base64 = "0.21.0"
 image = "0.24.5"
 

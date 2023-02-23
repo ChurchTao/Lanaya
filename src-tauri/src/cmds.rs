@@ -84,7 +84,7 @@ pub async fn change_hotkeys(hotkeys: Vec<String>) -> CmdResult {
 pub fn clear_data() -> bool {
     match SqliteDB::new().clear_data() {
         Ok(()) => true,
-        Err(e) => false,
+        Err(_) => false,
     }
 }
 
