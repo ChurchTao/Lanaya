@@ -2,6 +2,13 @@
 
 All changes will be documented in this file.
 
+## v1.1.5
+
+- CN
+  - 我忘了解开 `blur` 的注释..
+- EN
+  - I forgot to remove the comment of `blur`
+
 ## v1.1.4
 
 ### Bug Fixes
