@@ -2,6 +2,17 @@
 
 All changes will be documented in this file.
 
+## v1.1.4
+
+### Bug Fixes
+
+- CN
+  - 修复了因为 `objc` 导致的内存泄露
+  - 修复了显示速度
+- EN
+  - Fixed the memory leak caused by `objc`
+  - Fixed the display speed
+
 ## v1.1.3
 
 - CN
