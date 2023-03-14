@@ -2,6 +2,17 @@
 
 All changes will be documented in this file.
 
+## v1.1.6
+
+- CN
+  - 新增引入了 `daisyui`
+  - 升级了 `vite`
+  - 修复了`限制条数`功能不生效的问题
+- EN
+  - Added `daisyui`
+  - Upgraded `vite`
+  - Fixed the problem that the `limit number` function does not take effect
+
 ## v1.1.5
 
 - CN
