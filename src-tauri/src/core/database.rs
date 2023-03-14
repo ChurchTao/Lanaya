@@ -213,16 +213,20 @@ impl SqliteDB {
     }
 
     //删除超过limit的记录
-    pub fn delete_over_limit(&self, limit: usize) -> Result<()> {
+    pub fn delete_over_limit(&self, limit: usize) -> Result<bool> {
         // 先查询count，如果count - limit > 50 就删除 超出limit部分记录 主要是防止频繁重建数据库
-        let stmt = self.conn.prepare("SELECT count(*) FROM record")?;
-        let count = stmt.column_count();
-        if count < 50 + limit {
-            return Ok(());
+        let mut stmt = self
+            .conn
+            .prepare("SELECT count(*) FROM record where is_favorite = 0")?;
+        let mut rows = stmt.query([])?;
+        let count: usize = rows.next()?.unwrap().get(0).unwrap();
+        if count < 10 + limit {
+            return Ok(false);
         }
-        let sql = "DELETE FROM record WHERE id IN (SELECT id FROM record ORDER BY id DESC LIMIT ?1, 1000000000)";
-        self.conn.execute(sql, [&limit])?;
-        Ok(())
+        let remove_num = count - limit;
+        let sql = "DELETE FROM record WHERE is_favorite = 0 and id in (SELECT id FROM record where is_favorite = 0 order by create_time asc limit ?1)";
+        self.conn.execute(sql, [remove_num])?;
+        Ok(true)
     }
 
     pub fn find_by_id(&self, id: u64) -> Result<Record> {

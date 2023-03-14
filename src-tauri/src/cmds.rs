@@ -145,7 +145,7 @@ pub fn find_by_key(query: QueryReq) -> Vec<Record> {
 #[tauri::command]
 pub fn delete_over_limit(limit: usize) -> bool {
     match SqliteDB::new().delete_over_limit(limit) {
-        Ok(_i) => true,
+        Ok(res) => res,
         Err(e) => {
             println!("err:{}", e);
             false

@@ -1,5 +1,6 @@
 use super::database;
 use super::handle::{self, MsgTypeEnum};
+use crate::config::Config;
 use crate::core::database::Record;
 use crate::utils::{img_util, json_util, string_util};
 use anyhow::Result;
@@ -39,13 +40,15 @@ impl ClipBoardOprator {
 impl ClipboardWatcher {
     pub fn start() {
         tauri::async_runtime::spawn(async {
-            // 500毫秒检测一次剪切板变化
+            // 1000毫秒检测一次剪切板变化
             let wait_millis = 1000i64;
             let mut last_content_md5 = String::new();
             let mut last_img_md5 = String::new();
             let mut clipboard = Clipboard::new().unwrap();
             println!("start clipboard watcher");
             loop {
+                let mut need_notify = false;
+                let db = database::SqliteDB::new();
                 let text = clipboard.get_text();
                 let _ = text.map(|text| {
                     let content_origin = text.clone();
@@ -58,7 +61,7 @@ impl ClipboardWatcher {
                         } else {
                             Some(content.to_string())
                         };
-                        let res = database::SqliteDB::new().insert_if_not_exist(Record {
+                        let res = db.insert_if_not_exist(Record {
                             content: content_origin,
                             content_preview,
                             data_type: "text".to_string(),
@@ -67,11 +70,7 @@ impl ClipboardWatcher {
                         });
                         match res {
                             Ok(_) => {
-                                handle::Handle::notice_to_window(
-                                    MsgTypeEnum::ChangeClipBoard,
-                                    CHANGE_DEFAULT_MSG,
-                                )
-                                .unwrap();
+                                need_notify = true;
                             }
                             Err(e) => {
                                 println!("insert record error: {}", e);
@@ -101,7 +100,7 @@ impl ClipboardWatcher {
                         };
                         let content = json_util::stringfy(&content_db).unwrap();
                         let content_preview = json_util::stringfy(&content_preview_db).unwrap();
-                        let res = database::SqliteDB::new().insert_if_not_exist(Record {
+                        let res = db.insert_if_not_exist(Record {
                             content,
                             content_preview: Some(content_preview),
                             data_type: "image".to_string(),
@@ -111,11 +110,7 @@ impl ClipboardWatcher {
                         match res {
                             Ok(_) => {
                                 drop(img);
-                                handle::Handle::notice_to_window(
-                                    MsgTypeEnum::ChangeClipBoard,
-                                    CHANGE_DEFAULT_MSG,
-                                )
-                                .unwrap();
+                                need_notify = true;
                             }
                             Err(e) => {
                                 println!("insert record error: {}", e);
@@ -124,6 +119,22 @@ impl ClipboardWatcher {
                         last_img_md5 = img_md5;
                     }
                 });
+                let limit = Config::common().latest().record_limit.clone();
+                if let Some(l) = limit {
+                    let res = db.delete_over_limit(l as usize);
+                    if let Ok(success) = res {
+                        if success {
+                            need_notify = true;
+                        }
+                    }
+                }
+                if need_notify {
+                    handle::Handle::notice_to_window(
+                        MsgTypeEnum::ChangeClipBoard,
+                        CHANGE_DEFAULT_MSG,
+                    )
+                    .unwrap();
+                }
                 thread::sleep(Duration::milliseconds(wait_millis).to_std().unwrap());
             }
         });
