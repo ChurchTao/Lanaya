@@ -47,6 +47,10 @@
 
 从 [release](https://github.com/ChurchTao/Lanaya/releases) 中下载.
 
+### Mac用户
+
+如果提示`软件已损坏，请移到废纸篓`，可以使用命令 `xattr -cr /Applications/Lanaya.app` 解决
+
 ## 开发
 
 你需要安装 `Rust` 和 `Nodejs`，详细步骤查看 [这里](https://tauri.app/zh-cn/v1/guides/getting-started/prerequisites) ，然后按如下命令进行开发
