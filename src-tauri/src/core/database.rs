@@ -25,6 +25,7 @@ pub struct QueryReq {
     pub key: Option<String>,
     pub limit: Option<usize>,
     pub is_favorite: Option<bool>,
+    pub tags: Option<Vec<String>>,
 }
 
 pub struct SqliteDB {
@@ -189,6 +190,12 @@ impl SqliteDB {
             let is_fav_int = if is_fav { 1 } else { 0 };
             params.push(is_fav_int.to_string());
             sql.push_str(format!(" and is_favorite = ?{}", params.len()).as_str());
+        }
+        if let Some(tags) = req.tags {
+            for tag in tags.iter() {
+                params.push(format!("%{}%", tag));
+                sql.push_str(format!(" and tags like ?{}", params.len()).as_str());
+            }
         }
         let sql = format!("{} order by create_time desc limit ?1", sql);
         let mut stmt = self.conn.prepare(&sql)?;

@@ -35,7 +35,10 @@ async function selectPage(searchKey = "", isFavorite = undefined, limit = 300) {
   let query = {
     limit,
   };
-  if (searchKey !== "") {
+  if (searchKey.startsWith("t:")) {
+    query.tags = searchKey.substring(2).split(",");
+  }
+  else if (searchKey !== "") {
     query.key = searchKey;
   }
   if (isFavorite !== undefined) {
