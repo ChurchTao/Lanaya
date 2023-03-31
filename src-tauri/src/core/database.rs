@@ -15,6 +15,7 @@ pub struct Record {
     pub md5: String,
     pub create_time: u64,
     pub is_favorite: bool,
+    pub tags: String,
     // 仅在搜索返回时使用
     pub content_highlight: Option<String>,
 }
@@ -55,7 +56,8 @@ impl SqliteDB {
             data_type   VARCHAR(20) DEFAULT '',
             md5         VARCHAR(200) DEFAULT '',
             create_time INTEGER,
-            is_favorite INTEGER DEFAULT 0
+            is_favorite INTEGER DEFAULT 0,
+            tags        VARCHAR(256) DEFAULT ''
         );
         "#;
         c.execute(sql, ()).unwrap();
@@ -142,13 +144,14 @@ impl SqliteDB {
     }
 
     pub fn find_all(&self) -> Result<Vec<Record>> {
-        let sql = "SELECT id, content_preview, data_type, md5, create_time, is_favorite FROM record order by create_time desc";
+        let sql = "SELECT id, content_preview, data_type, md5, create_time, is_favorite, tags FROM record order by create_time desc";
         let mut stmt = self.conn.prepare(sql)?;
         let mut rows = stmt.query([])?;
         let mut res = vec![];
         while let Some(row) = rows.next()? {
             let data_type: String = row.get(2)?;
             let content: String = row.get(1)?;
+            let tags: String = row.get(6)?;
             let r = Record {
                 id: row.get(0)?,
                 content,
@@ -158,6 +161,7 @@ impl SqliteDB {
                 create_time: row.get(4)?,
                 is_favorite: row.get(5)?,
                 content_highlight: None,
+                tags
             };
             res.push(r);
         }
@@ -167,7 +171,7 @@ impl SqliteDB {
     pub fn find_by_key(&self, req: QueryReq) -> Result<Vec<Record>> {
         let mut sql: String = String::new();
         sql.push_str(
-            "SELECT id, content_preview, md5, create_time, is_favorite, data_type FROM record where 1=1",
+            "SELECT id, content_preview, md5, create_time, is_favorite, data_type, tags FROM record where 1=1",
         );
         let mut limit: usize = 300;
         let mut params: Vec<String> = vec![];
@@ -193,6 +197,7 @@ impl SqliteDB {
         while let Some(row) = rows.next()? {
             let data_type: String = row.get(5)?;
             let content: String = row.get(1)?;
+            let tags: String = row.get(6)?;
             let content_highlight = req
                 .key
                 .as_ref()
@@ -206,6 +211,7 @@ impl SqliteDB {
                 create_time: row.get(3)?,
                 is_favorite: row.get(4)?,
                 content_highlight,
+                tags,
             };
             res.push(r);
         }
@@ -230,7 +236,7 @@ impl SqliteDB {
     }
 
     pub fn find_by_id(&self, id: u64) -> Result<Record> {
-        let sql = "SELECT id, content, data_type, md5, create_time, is_favorite FROM record where id = ?1";
+        let sql = "SELECT id, content, data_type, md5, create_time, is_favorite, tags FROM record where id = ?1";
         let r = self.conn.query_row(sql, [&id], |row| {
             Ok(Record {
                 id: row.get(0)?,
@@ -241,6 +247,7 @@ impl SqliteDB {
                 create_time: row.get(4)?,
                 is_favorite: row.get(5)?,
                 content_highlight: None,
+                tags: row.get(6)?,
             })
         })?;
         Ok(r)

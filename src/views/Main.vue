@@ -163,6 +163,7 @@ const formatData = (item) => {
     content_highlight: item.content_highlight,
     type: item.data_type,
     is_favorite: item.is_favorite,
+    tags: item.tags.split(",").filter(Boolean),
   };
 };
 
