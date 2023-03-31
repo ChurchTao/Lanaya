@@ -8,6 +8,7 @@
       type="text"
       class="search-input h-16 text-2xl w-full"
       :placeholder="$t('search.placeholder')"
+      autofocus
       autocomplete="off"
       autoCorrect="off"
       autoCapitalize="off"
