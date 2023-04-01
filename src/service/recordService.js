@@ -3,6 +3,7 @@ import {
   insertIfNotExist,
   findAllRecord,
   markFavorite,
+  saveTags as saveTagsCmd,
   findByKey,
   deleteOverLimit,
 } from "./cmds";
@@ -80,4 +81,8 @@ async function markFav(id) {
   await markFavorite(id);
 }
 
-export { selectPage, insertRecord, updateRecord, clearAll, markFav };
+async function saveTags(id, tags) {
+  return await saveTagsCmd(id, tags);
+}
+
+export { selectPage, insertRecord, updateRecord, clearAll, markFav, saveTags };

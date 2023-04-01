@@ -127,6 +127,17 @@ pub fn mark_favorite(id: u64) -> bool {
 }
 
 #[tauri::command]
+pub fn save_tags(id: u64, tags: String) -> bool {
+    match SqliteDB::new().save_tags(id, tags) {
+        Ok(_i) => true,
+        Err(e) => {
+            println!("err:{}", e);
+            false
+        }
+    }
+}
+
+#[tauri::command]
 pub fn delete_by_id(id: u64) -> bool {
     match SqliteDB::new().delete_by_id(id) {
         Ok(_i) => true,

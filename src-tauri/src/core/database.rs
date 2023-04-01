@@ -144,6 +144,12 @@ impl SqliteDB {
         Ok(())
     }
 
+    pub fn save_tags(&self, id: u64, tags: String) -> Result<()> {
+        let sql = "update record set tags = ?2 where id = ?1";
+        self.conn.execute(sql, (&id, &tags))?;
+        Ok(())
+    }
+
     pub fn find_all(&self) -> Result<Vec<Record>> {
         let sql = "SELECT id, content_preview, data_type, md5, create_time, is_favorite, tags FROM record order by create_time desc";
         let mut stmt = self.conn.prepare(sql)?;

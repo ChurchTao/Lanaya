@@ -39,27 +39,40 @@
 <script setup>
 
 import { ref } from "vue";
+import { saveTags } from "../service/cmds";
 
 const emits = defineEmits(['onEscape'])
 const props = defineProps({
+    recordId: Number,
     tags: Array,
     editable: Boolean
 })
 
 const inputText = ref("")
 
-const removeTag = (tag) => {
-    props.tags.splice(tag, 1)
+const removeTag = async (tag) => {
+    const removedTags = props.tags.splice(tag, 1)
+    let res = await saveTags(props.recordId, props.tags);
+    if (!res) {
+        props.tags.splice(tag, 0, ...removedTags)
+    }
 }
 
-const addTags = () => {
+const addTags = async () => {
+    const oldLength = props.tags.length
     const newTags = inputText.value.split(",").map(tag => tag.toLowerCase().trim())
     newTags.forEach(tag => {
         if (!!tag && !props.tags.includes(tag)) {
             props.tags.push(tag)
         }
     })
-    inputText.value = ""
+    let res = await saveTags(props.recordId, props.tags);
+    if (res) {
+        inputText.value = ""
+    }
+    else {
+        props.tags.splice(oldLength)
+    }
 }
 
 </script>
