@@ -1,5 +1,7 @@
 search:
   placeholder: "Search"
+tags:
+  placeholder: "Add tag"
 hotkeys:
   copy: "Copy"
   quick-copy: "Quick Copy"
