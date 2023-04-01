@@ -33,11 +33,22 @@ pub fn highlight(key: &str, content: &str) -> String {
     while let Some(i) = content[start..].find(key) {
         end = start + i;
         res.push_str(&content[start..end]);
-        res.push_str(&format!("<b>{}</b>", &content[end..end + key.len()]));
+        res.push_str(&format!(
+            "[highlight]{}[/highlight]",
+            &content[end..end + key.len()]
+        ));
         start = end + key.len();
     }
     res.push_str(&content[start..]);
+    res = escape_html(&res);
+    res = res
+        .replace("[highlight]", "<b>")
+        .replace("[/highlight]", "</b>");
     res
+}
+
+fn escape_html(html: &str) -> String {
+    html.replace("<", "&lt;").replace(">", "&gt;")
 }
 
 #[test]

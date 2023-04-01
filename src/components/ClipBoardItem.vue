@@ -94,8 +94,10 @@ const props = defineProps({
 const dataShow = computed(() => {
   if (props.data.type == "text") {
     let content = props.data.content_highlight || props.data.content;
-    // content 中过转义掉html的标签 只保留 <b>和</b>不转义
-    content = content.replace(/<[^b\/][^>]*>/g, "");
+    if (!props.data.content_highlight) {
+      // escape html tag
+      content = content.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
     return content;
   } else if (props.data.type == "image") {
     let imgObj = JSON.parse(props.data.content);
