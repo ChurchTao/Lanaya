@@ -2,7 +2,17 @@ import { appWindow } from "@tauri-apps/api/window";
 
 let closeWindowTimer = null;
 
+let skipNextClose = false;
+
+export function keepWindowOpen() {
+  skipNextClose = true;
+}
+
 export async function closeWindowLater(delay) {
+  if (skipNextClose) {
+    skipNextClose = false;
+    return;
+  }
   if (closeWindowTimer) {
     clearTimeout(closeWindowTimer);
     closeWindowTimer = null;
