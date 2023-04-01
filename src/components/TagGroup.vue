@@ -1,13 +1,12 @@
 <template>
     <span class="text-sm absolute right-0.5 top-0.5">
         <div class="flex justify-end items-center">
-            <div v-if="editable" v-for="tag, i in tags" class="badge badge-primary ml-1 gap-1" @click.stop="removeTag(i)">
-                {{ tag }}
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-4 h-4 stroke-current">
+            <div v-for="tag, i in tags" class="badge badge-primary ml-1 gap-1" @click.stop="removeTag(i)" :key="tag">
+                {{  tag }}
+                <svg v-if="editable" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-4 h-4 stroke-current">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </div>
-            <div v-else v-for="tag in tags" class="badge badge-primary ml-1">{{ tag }}</div>
 
             <div class="form-control ml-1" v-if="editable">
                 <div class="input-group input-group-xs" @click.prevent.stop>
@@ -51,6 +50,9 @@ const props = defineProps({
 const inputText = ref("")
 
 const removeTag = async (tag) => {
+    if (!props.editable) {
+        return
+    }
     const removedTags = props.tags.splice(tag, 1)
     let res = await saveTags(props.recordId, props.tags);
     if (!res) {
