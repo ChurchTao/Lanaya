@@ -28,7 +28,8 @@
           </svg>
         </div>
         <div class="data-item-content-wrapper font-medium relative mx-2">
-          <span class="data-item-title overflow-hidden text-sm" v-html="dataShow"> </span>
+          <span v-if="data.type === 'text'" class="data-item-title overflow-hidden text-sm" v-text="dataShow"></span>
+          <span v-else class="data-item-title overflow-hidden text-sm" v-html="dataShow"> </span>
         </div>
         <div
           class="data-item-action w-5 h-5 flex items-center rounded-full transition-all"
