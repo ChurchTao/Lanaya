@@ -140,10 +140,12 @@ const deleteItem = async () => {
   if  (props.data.is_favorite) {
     keepWindowOpen();
     const proceed = await ask(
-      t("dialogs.delete_favorite.message"), { 
+      t("dialogs.delete_favorite.message"),
+      { 
         title: t("dialogs.delete_favorite.title"), 
         type: "warning"
-      })
+      }
+    );
     if (!proceed) {
       return;
     }
