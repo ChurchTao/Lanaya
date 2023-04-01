@@ -32,6 +32,7 @@ Lanaya comes from Templar Assassin in Dota2, which is a clipboard management sof
 - Multi-language.
 - Auto updater.
 - Input `f:xxx` to search favorite records.
+- Tag records and search by tags with `t:xxx,yyy`.
 
 ## Todos
 
@@ -76,7 +77,9 @@ cargo tauri build
   <img src="./md/demo2.png" alt="demo2" width="80%" />
   <img src="./md/demo3.png" alt="demo3" width="80%" />
   <img src="./md/demo4.png" alt="demo4" width="80%" />
-  <img src="./md/demo5.png" alt="demo4" width="80%" />
+  <img src="./md/demo5.png" alt="demo5" width="80%" />
+  <img src="./md/demo6.png" alt="demo6" width="80%" />
+  <img src="./md/demo7.png" alt="demo7" width="80%" />
 </div>
 
 ## Contributions
