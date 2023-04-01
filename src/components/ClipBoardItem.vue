@@ -29,7 +29,7 @@
         </div>
         <div class="data-item-content-wrapper font-medium relative mx-2">
           <span class="data-item-title overflow-hidden text-sm" v-html="dataShow"> </span>
-          <TagGroup :tags="data.tags" :editable="editTags"/>
+          <TagGroup :tags="data.tags" :editable="editTags" @onEscape="toggleEditTags"/>
         </div>
         <div
           class="data-item-action w-5 h-5 flex items-center rounded-full transition-all text-gray-300 hover:ring-2 hover:bg-gray-200 hover:ring-gray-200 hover:bg-opacity-25 hover:ring-opacity-25"
