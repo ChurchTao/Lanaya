@@ -95,7 +95,7 @@ const dataShow = computed(() => {
   if (props.data.type == "text") {
     let content = props.data.content_highlight || props.data.content;
     // content 中过转义掉html的标签 只保留 <b>和</b>不转义
-    content = content.replace(/<[^b\/][^>]*>/g, "");
+    content = content.replace(/<\/?([^<>]+)>/g, (m, p1) => p1 === "b" ? m : `&lt;${p1}&gt;`);
     return content;
   } else if (props.data.type == "image") {
     let imgObj = JSON.parse(props.data.content);
