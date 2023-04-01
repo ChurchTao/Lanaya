@@ -37,7 +37,7 @@ async function selectPage(searchKey = "", isFavorite = undefined, limit = 300) {
     limit,
   };
   if (searchKey.startsWith("t:")) {
-    query.tags = searchKey.substring(2).split(",");
+    query.tags = searchKey.substring(2).split(",").filter(Boolean);
   }
   else if (searchKey !== "") {
     query.key = searchKey;
