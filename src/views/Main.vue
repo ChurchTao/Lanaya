@@ -266,6 +266,10 @@ const moveIndex = (offset) => {
 
 const initAppShortCut = async (appShortCuts) => {
   hotkeys.filter = function (event) {
+    const target = event.target || event.srcElement;
+    if (target.dataset.disableHotkeys) {
+      return false
+    }
     return true;
   };
   hotkeys(

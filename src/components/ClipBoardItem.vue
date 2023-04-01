@@ -29,16 +29,14 @@
         </div>
         <div class="data-item-content-wrapper font-medium relative mx-2">
           <span class="data-item-title overflow-hidden text-sm" v-html="dataShow"> </span>
-          <span class="text-sm absolute right-0 top-0.5">
-            <div v-for="tag in data.tags" class="badge badge-primary ml-1">{{ tag }}</div>
-          </span>
+          <TagGroup :tags="data.tags" :editable="editTags"/>
         </div>
         <div
           class="data-item-action w-5 h-5 flex items-center rounded-full transition-all text-gray-300 hover:ring-2 hover:bg-gray-200 hover:ring-gray-200 hover:bg-opacity-25 hover:ring-opacity-25"
-          :class="favClass"
+          :class="editTagsClass"
         >
           <button
-            @click.stop="markFav"
+            @click.stop="toggleEditTags"
             class="data-item-action-button appearance-none"
             type="submit"
           >
@@ -90,8 +88,9 @@
   </li>
 </template>
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { markFavorite, deleteById } from "../service/cmds";
+import TagGroup from "./TagGroup.vue";
 const emit = defineEmits(["delete"]);
 const props = defineProps({
   select: {
@@ -105,6 +104,8 @@ const props = defineProps({
   },
   idx: Number,
 });
+
+const editTags = ref(false)
 
 const dataShow = computed(() => {
   if (props.data.type == "text") {
@@ -134,6 +135,14 @@ const favClass = computed(() => {
   }
 });
 
+const editTagsClass = computed(() => {
+  if (editTags.value) {
+    return "fill-current text-primary";
+  } else {
+    return "fill-none text-gray-300 hover:fill-current hover:ring-2 hover:bg-gray-200 hover:ring-gray-200 hover:bg-opacity-25 hover:ring-opacity-25";
+  }
+});
+
 const markFav = async () => {
   let res = await markFavorite(props.data.id);
   if (res) {
@@ -147,6 +156,10 @@ const deleteItem = async () => {
     emit("delete", props.idx);
   }
 };
+
+const toggleEditTags = () => {
+  editTags.value = !editTags.value
+}
 </script>
 <style scoped>
 .data-item-outer {
