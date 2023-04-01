@@ -2,6 +2,17 @@
 
 All changes will be documented in this file.
 
+## v1.1.7
+
+- CN
+
+  - 窗口出现时，会自动聚焦到搜索框 [#4](https://github.com/ChurchTao/Lanaya/pull/4)
+  - 修复了当复制 html 标签时，列表框结果展示异常的问题 [#5](https://github.com/ChurchTao/Lanaya/pull/5)
+
+- EN
+  - When the window appears, it will automatically focus on the search box [#4](https://github.com/ChurchTao/Lanaya/pull/4)
+  - Fixed the problem that the list box result display is abnormal when copying html tags [#5](https://github.com/ChurchTao/Lanaya/pull/5)
+
 ## v1.1.6
 
 - CN
