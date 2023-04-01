@@ -17,7 +17,7 @@
                         @keyup.enter.stop="addTags"
                         @keyup.esc.stop="$emit('onEscape')"
                         data-disable-hotkeys="true"
-                        class="input input-xs input-primary input-bordered"
+                        class="input input-xs input-primary input-bordered w-20"
                         autofocus
                         autocomplete="off"
                         autoCorrect="off"
