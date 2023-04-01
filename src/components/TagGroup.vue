@@ -19,6 +19,11 @@
                         @keyup.esc.stop="$emit('onEscape')"
                         data-disable-hotkeys="true"
                         class="input input-xs input-primary input-bordered"
+                        autofocus
+                        autocomplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck="false"
                     />
                     <button class="btn btn-primary btn-xs btn-square" @click="addTags">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  class="h-4 w-4" viewBox="0 0 20 20">
