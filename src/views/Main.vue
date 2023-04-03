@@ -44,6 +44,7 @@ let unlistenClipboardChange;
 let unlistenAutoPasteChange;
 let recordLimit = 300;
 let autoPaste = false;
+let shiftPressDown = false;
 let lastClipBoardData = "";
 /**
  * @type {Array<{id: number, content: string, content_highlight: string}>}
@@ -142,7 +143,7 @@ const clickDataItem = async (index) => {
   let item = clipBoardDataList.value[index];
   writeToClip(item.id);
   closeWindowLater(3000);
-  if (autoPaste) {
+  if (autoPaste && !shiftPressDown) {
     pasteInPreviousWindow();
   }
 };
@@ -158,7 +159,7 @@ const onKeyEnter = async () => {
   let item = clipBoardDataList.value[selectIndex.value];
   await writeToClip(item.id);
   closeWindowLater(3000);
-  if (autoPaste) {
+  if (autoPaste && !shiftPressDown) {
     pasteInPreviousWindow();
   }
 };
@@ -328,6 +329,7 @@ const initAppShortCut = async (appShortCuts) => {
     let key = e.key;
     let isMeta = e.metaKey;
     let isCtrl = e.ctrlKey;
+    shiftPressDown = e.shiftKey;
     let isCmd = isMeta || isCtrl;
     let numberKey = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
     if (isCmd) {
@@ -343,6 +345,7 @@ const initAppShortCut = async (appShortCuts) => {
   document.onkeyup = async (e) => {
     let key = e.key;
     let isCmd = key == "Meta" || key == "Control";
+    shiftPressDown = e.shiftKey;
     if (isCmd) {
       cmdPressDown.value = false;
     }
