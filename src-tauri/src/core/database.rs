@@ -32,7 +32,7 @@ pub struct SqliteDB {
     conn: Connection,
 }
 
-const SQLITE_FILE: &str = "data_v1_1_4.sqlite";
+const SQLITE_FILE: &str = "data_v1_1_8.sqlite";
 
 #[allow(unused)]
 impl SqliteDB {
@@ -168,7 +168,7 @@ impl SqliteDB {
                 create_time: row.get(4)?,
                 is_favorite: row.get(5)?,
                 content_highlight: None,
-                tags
+                tags,
             };
             res.push(r);
         }

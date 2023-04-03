@@ -1,5 +1,7 @@
 search:
   placeholder: "关键词搜索"
+tags:
+  placeholder: "输入标签"
 hotkeys:
   copy: "复制"
   quick-copy: "快捷复制"

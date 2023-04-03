@@ -196,7 +196,7 @@ const initListenr = async () => {
 
   if (!unlistenBlur) {
     unlistenBlur = await listen("tauri://blur", async (event) => {
-      closeWindowLater(3000);
+      // closeWindowLater(3000);
     });
   }
   if (!unlistenClipboardChange) {
@@ -268,7 +268,7 @@ const initAppShortCut = async (appShortCuts) => {
   hotkeys.filter = function (event) {
     const target = event.target || event.srcElement;
     if (target.dataset.disableHotkeys) {
-      return false
+      return false;
     }
     return true;
   };

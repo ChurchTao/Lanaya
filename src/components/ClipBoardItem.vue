@@ -28,8 +28,19 @@
           </svg>
         </div>
         <div class="data-item-content-wrapper font-medium relative mx-2">
-          <span class="data-item-title overflow-hidden text-sm" v-html="dataShow"> </span>
-          <TagGroup :record-id="data.id" :tags="data.tags" :editable="editTags" @onEscape="toggleEditTags"/>
+          <div class="flex flex-col">
+            <span
+              class="data-item-title overflow-hidden text-sm"
+              :class="maxHeightInner"
+              v-html="dataShow"
+            ></span>
+            <TagGroup
+              :record-id="data.id"
+              :tags="data.tags"
+              :editable="editTags"
+              @onEscape="toggleEditTags"
+            />
+          </div>
         </div>
         <div
           class="data-item-action w-5 h-5 flex items-center rounded-full transition-all text-gray-300 hover:ring-2 hover:bg-gray-200 hover:ring-gray-200 hover:bg-opacity-25 hover:ring-opacity-25"
@@ -40,7 +51,18 @@
             class="data-item-action-button appearance-none"
             type="submit"
           >
-            <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512"><path d="M403.29 32H280.36a14.46 14.46 0 0 0-10.2 4.2L24.4 281.9a28.85 28.85 0 0 0 0 40.7l117 117a28.86 28.86 0 0 0 40.71 0L427.8 194a14.46 14.46 0 0 0 4.2-10.2v-123A28.66 28.66 0 0 0 403.29 32z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></path><path d="M352 144a32 32 0 1 1 32-32a32 32 0 0 1-32 32z" fill="currentColor"></path><path d="M230 480l262-262a13.81 13.81 0 0 0 4-10V80" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></path></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M9.493 2.853a.75.75 0 00-1.486-.205L7.545 6H4.198a.75.75 0 000 1.5h3.14l-.69 5H3.302a.75.75 0 000 1.5h3.14l-.435 3.148a.75.75 0 001.486.205L7.955 14h2.986l-.434 3.148a.75.75 0 001.486.205L12.456 14h3.346a.75.75 0 000-1.5h-3.14l.69-5h3.346a.75.75 0 000-1.5h-3.14l.435-3.147a.75.75 0 00-1.486-.205L12.045 6H9.059l.434-3.147zM8.852 7.5l-.69 5h2.986l.69-5H8.852z"
+                clip-rule="evenodd"
+              />
+            </svg>
           </button>
         </div>
         <div
@@ -105,7 +127,7 @@ const props = defineProps({
   idx: Number,
 });
 
-const editTags = ref(false)
+const editTags = ref(false);
 
 const dataShow = computed(() => {
   if (props.data.type == "text") {
@@ -117,15 +139,23 @@ const dataShow = computed(() => {
     return content;
   } else if (props.data.type == "image") {
     let imgObj = JSON.parse(props.data.content);
-    return `<img src="data:image/jpeg;base64,${imgObj.base64}" class="max-h-60 object-contain" />`;
+    return `<img src="data:image/jpeg;base64,${imgObj.base64}" class="max-h-52 object-contain" />`;
   }
 });
 
 const maxHeight = computed(() => {
   if (props.data.type == "text") {
-    return "max-h-28";
+    return "max-h-48";
   } else if (props.data.type == "image") {
-    return "max-h-60";
+    return "max-h-64";
+  }
+});
+
+const maxHeightInner = computed(() => {
+  if (props.data.type == "text") {
+    return "max-h-36";
+  } else if (props.data.type == "image") {
+    return "max-h-52";
   }
 });
 
@@ -160,8 +190,8 @@ const deleteItem = async () => {
 };
 
 const toggleEditTags = () => {
-  editTags.value = !editTags.value
-}
+  editTags.value = !editTags.value;
+};
 </script>
 <style scoped>
 .data-item-outer {
