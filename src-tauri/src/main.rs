@@ -37,6 +37,7 @@ fn main() {
             cmds::insert_if_not_exist,
             cmds::find_all_record,
             cmds::mark_favorite,
+            cmds::save_tags,
             cmds::find_by_key,
             cmds::delete_over_limit,
             cmds::write_to_clip,

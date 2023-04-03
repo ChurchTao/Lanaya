@@ -3,6 +3,7 @@ import {
   insertIfNotExist,
   findAllRecord,
   markFavorite,
+  saveTags as saveTagsCmd,
   findByKey,
   deleteOverLimit,
 } from "./cmds";
@@ -35,7 +36,10 @@ async function selectPage(searchKey = "", isFavorite = undefined, limit = 300) {
   let query = {
     limit,
   };
-  if (searchKey !== "") {
+  if (searchKey.startsWith("t:")) {
+    query.tags = searchKey.substring(2).split(",").filter(Boolean);
+  }
+  else if (searchKey !== "") {
     query.key = searchKey;
   }
   if (isFavorite !== undefined) {
@@ -77,4 +81,8 @@ async function markFav(id) {
   await markFavorite(id);
 }
 
-export { selectPage, insertRecord, updateRecord, clearAll, markFav };
+async function saveTags(id, tags) {
+  return await saveTagsCmd(id, tags);
+}
+
+export { selectPage, insertRecord, updateRecord, clearAll, markFav, saveTags };

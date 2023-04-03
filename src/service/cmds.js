@@ -49,6 +49,10 @@ export async function markFavorite(id) {
   return invoke("mark_favorite", { id });
 }
 
+export async function saveTags(id, tags) {
+  return invoke("save_tags", { id, tags: tags.join(",") });
+}
+
 export async function findByKey(query) {
   return invoke("find_by_key", { query });
 }

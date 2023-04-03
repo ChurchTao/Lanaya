@@ -163,6 +163,7 @@ const formatData = (item) => {
     content_highlight: item.content_highlight,
     type: item.data_type,
     is_favorite: item.is_favorite,
+    tags: item.tags.split(",").filter(Boolean),
   };
 };
 
@@ -265,6 +266,10 @@ const moveIndex = (offset) => {
 
 const initAppShortCut = async (appShortCuts) => {
   hotkeys.filter = function (event) {
+    const target = event.target || event.srcElement;
+    if (target.dataset.disableHotkeys) {
+      return false
+    }
     return true;
   };
   hotkeys(
