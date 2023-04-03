@@ -30,6 +30,7 @@ fn main() {
             cmds::change_language,
             cmds::change_record_limit,
             cmds::change_auto_launch,
+            cmds::change_auto_paste,
             cmds::change_theme_mode,
             cmds::change_hotkeys,
             cmds::clear_data,
@@ -41,6 +42,7 @@ fn main() {
             cmds::delete_over_limit,
             cmds::write_to_clip,
             cmds::delete_by_id,
+            cmds::paste_in_previous_window,
         ])
         .build(tauri::generate_context!())
         .expect("error while build tauri application");

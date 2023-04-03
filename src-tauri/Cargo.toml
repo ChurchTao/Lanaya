@@ -28,6 +28,7 @@ chrono = "0.4.23"
 arboard = { git = "https://github.com/ChurchTao/arboard.git" }
 base64 = "0.21.0"
 image = "0.24.5"
+rdev = "0.5.2"
 
 [features]
 # by default Tauri runs in production mode

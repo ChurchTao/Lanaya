@@ -21,6 +21,7 @@ pub enum MsgTypeEnum {
     ChangeRecordLimit,
     ChangeHotKeys,
     ChangeClipBoard,
+    ChangeAutoPaste,
 }
 
 impl Handle {
@@ -111,6 +112,14 @@ impl Handle {
                 if window.is_some() {
                     if let Some(win) = window {
                         win.emit("lanaya://change-clipboard", msg)?;
+                    };
+                }
+            }
+            MsgTypeEnum::ChangeAutoPaste => {
+                let window = app_handle.as_ref().unwrap().get_window("main");
+                if window.is_some() {
+                    if let Some(win) = window {
+                        win.emit("lanaya://change-auto-paste", msg)?;
                     };
                 }
             }

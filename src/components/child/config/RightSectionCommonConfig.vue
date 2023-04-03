@@ -40,6 +40,14 @@
         />
       </div>
     </div>
+    <div class="check-config-item h-10 mb-2 flex items-center justify-between">
+      <div class="check-config-item-name text-sm">
+        {{ $t("config.common.enable_auto_paste") }}
+      </div>
+      <div class="check-config-item-value flex items-center">
+        <BaseSwitch v-model="commonConfig.enable_auto_paste" @change="changeAutoPaste" />
+      </div>
+    </div>
     <div class="select-config-item mt-4">
       <div class="select-config-item-name font-medium text-base mb-1">
         {{ $t("config.common.hotkeys") }}
@@ -72,6 +80,7 @@ import {
   setAutoLaunch,
   setThemeMode,
   setHotkeys,
+  setAutoPaste,
 } from "@/service/cmds";
 import { ref, onMounted } from "vue";
 import HotKeyInput from "@/components/child/config/HotKeyInput.vue";
@@ -160,6 +169,11 @@ const changeRecordLimit = async (e) => {
 const changeAutoLaunch = async (e) => {
   commonConfig.value.enable_auto_launch = e;
   setAutoLaunch(e);
+};
+
+const changeAutoPaste = async (e) => {
+  commonConfig.value.enable_auto_paste = e;
+  setAutoPaste(e);
 };
 
 const shortCutChange = async (e) => {

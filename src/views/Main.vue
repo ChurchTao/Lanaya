@@ -29,8 +29,9 @@ import {
   listenRecordLimitChange,
   listenHotkeysChange,
   listenClipboardChange,
+  listenAutoPasteChange,
 } from "@/service/globalListener";
-import { getCommonConfig, writeToClip } from "../service/cmds";
+import { getCommonConfig, pasteInPreviousWindow, writeToClip } from "../service/cmds";
 import hotkeys from "hotkeys-js";
 const noResultFlag = ref(false);
 const selectIndex = ref(-1);
@@ -40,7 +41,9 @@ let unlistenBlur;
 let unlistenRecordLimitChange;
 let unlistenHotkeysChange;
 let unlistenClipboardChange;
+let unlistenAutoPasteChange;
 let recordLimit = 300;
+let autoPaste = false;
 let lastClipBoardData = "";
 /**
  * @type {Array<{id: number, content: string, content_highlight: string}>}
@@ -77,6 +80,9 @@ const initCommonConfig = async () => {
   let res = await getCommonConfig();
   if (res.record_limit) {
     recordLimit = res.record_limit;
+  }
+  if (res.enable_auto_paste) {
+    autoPaste = res.enable_auto_paste;
   }
   if (res.hotkeys) {
     shortCuts.value.forEach((item) => {
@@ -136,6 +142,9 @@ const clickDataItem = async (index) => {
   let item = clipBoardDataList.value[index];
   writeToClip(item.id);
   closeWindowLater(3000);
+  if (autoPaste) {
+    pasteInPreviousWindow();
+  }
 };
 
 const deleteItem = async (index) => {
@@ -149,6 +158,9 @@ const onKeyEnter = async () => {
   let item = clipBoardDataList.value[selectIndex.value];
   await writeToClip(item.id);
   closeWindowLater(3000);
+  if (autoPaste) {
+    pasteInPreviousWindow();
+  }
 };
 
 const onClearAll = async () => {
@@ -206,6 +218,11 @@ const initListenr = async () => {
   if (!unlistenRecordLimitChange) {
     unlistenRecordLimitChange = await listenRecordLimitChange((newLimitNum) => {
       recordLimit = newLimitNum;
+    });
+  }
+  if (!unlistenAutoPasteChange) {
+    unlistenAutoPasteChange = await listenAutoPasteChange((value) => {
+      autoPaste = value;
     });
   }
   if (!unlistenHotkeysChange) {
