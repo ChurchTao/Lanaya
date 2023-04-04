@@ -48,6 +48,10 @@ Lanaya comes from Templar Assassin in Dota2, which is a clipboard management sof
 
 Download from [release](https://github.com/ChurchTao/Lanaya/releases).
 
+### Mac OS
+
+If you got error: 'Lanaya' is damaged and can’t be opened. You should move it to the Trash. You can use `xattr -cr /Applications/Lanaya.app` to solve it.
+
 ## Development
 
 You should install Rust and Nodejs, see [here](https://tauri.app/v1/guides/getting-started/prerequisites) for more details. Then install Nodejs packages.

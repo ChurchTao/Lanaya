@@ -32,6 +32,7 @@
 - 多语言
 - 自动更新
 - 输入 `f:xxx` 搜索收藏的记录
+- 输入 `t:xxx` 搜索标签分类
 
 ## 未完成
 
@@ -47,7 +48,7 @@
 
 从 [release](https://github.com/ChurchTao/Lanaya/releases) 中下载.
 
-### Mac用户
+### Mac 用户
 
 如果提示`软件已损坏，请移到废纸篓`，可以使用命令 `xattr -cr /Applications/Lanaya.app` 解决
 
@@ -80,6 +81,8 @@ cargo tauri build
   <img src="./md/demo3.png" alt="demo3" width="80%" />
   <img src="./md/demo4.png" alt="demo4" width="80%" />
   <img src="./md/demo5.png" alt="demo4" width="80%" />
+  <img src="./md/demo6.png" alt="demo6" width="80%" />
+  <img src="./md/demo7.png" alt="demo7" width="80%" />
 </div>
 
 ## 建议

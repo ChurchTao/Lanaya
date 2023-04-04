@@ -196,7 +196,7 @@ const initListenr = async () => {
 
   if (!unlistenBlur) {
     unlistenBlur = await listen("tauri://blur", async (event) => {
-      // closeWindowLater(3000);
+      closeWindowLater(3000);
     });
   }
   if (!unlistenClipboardChange) {
