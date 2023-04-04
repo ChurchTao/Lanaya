@@ -7,9 +7,11 @@ use crate::{
         handle::Handle,
     },
     log_err,
-    utils::json_util,
-    utils::dispatch_util,
+    utils::{json_util, dispatch_util},
+    utils::window_util::{focus_window},
+    PreviousProcessId,
 };
+use tauri::State;
 
 type CmdResult<T = ()> = Result<T, String>;
 
@@ -188,7 +190,8 @@ pub fn write_to_clip(id: u64) -> bool {
 }
 
 #[tauri::command]
-pub fn paste_in_previous_window() -> CmdResult {
-    dispatch_util::paste_in_previous_window();
+pub fn paste_in_previous_window(previous_process_id: State<PreviousProcessId>) -> CmdResult {
+    focus_window(*previous_process_id.0.lock().unwrap());
+    dispatch_util::paste();
     Ok(())
 }

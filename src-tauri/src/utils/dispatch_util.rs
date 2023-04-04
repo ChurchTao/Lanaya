@@ -1,29 +1,6 @@
 use rdev::{simulate, EventType, Key, SimulateError};
 use std::{thread, time};
 
-pub fn paste_in_previous_window() {
-    focus_previous_window();
-    sleep(100);
-    paste();
-}
-
-pub fn focus_previous_window() {
-    // Ideally there's some native function to return focus to previous window,
-    // haven't found it yet though.
-
-    // First run command + tab
-    dispatch(&EventType::KeyPress(Key::MetaLeft));
-    dispatch(&EventType::KeyPress(Key::Tab));
-    dispatch(&EventType::KeyRelease(Key::Tab));
-    sleep(100);
-    // While pressing command key, also run shift + command + tab
-    dispatch(&EventType::KeyPress(Key::ShiftLeft));
-    dispatch(&EventType::KeyPress(Key::Tab));
-    dispatch(&EventType::KeyRelease(Key::Tab));
-    dispatch(&EventType::KeyRelease(Key::ShiftLeft));
-    dispatch(&EventType::KeyRelease(Key::MetaLeft));
-}
-
 pub fn paste() {
     // Run command + v to paste
     // Same approach as both Maccy and Clipy, reference: https://github.com/p0deje/Maccy/blob/master/Maccy/Clipboard.swift#L101
@@ -47,7 +24,7 @@ fn dispatch(event_type: &EventType) {
         }
     }
     // Let the OS catchup (at least MacOS)
-    sleep(40)
+    sleep(20)
 }
 
 fn sleep(ms: u64) {

@@ -15,6 +15,9 @@ mod cmds;
 mod config;
 mod core;
 mod utils;
+use std::sync::Mutex;
+
+pub struct PreviousProcessId(Mutex<i32>);
 
 fn main() {
     let app = tauri::Builder::default()
@@ -24,6 +27,7 @@ fn main() {
         })
         .system_tray(SystemTray::new())
         .on_system_tray_event(core::tray::Tray::on_system_tray_event)
+        .manage(PreviousProcessId(Default::default()))
         .invoke_handler(tauri::generate_handler![
             cmds::get_common_config,
             cmds::set_common_config,
