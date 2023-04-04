@@ -30,7 +30,7 @@ pub fn highlight(key: &str, content: &str) -> String {
     let mut start = 0;
     let mut end;
 
-    while let Some(i) = content[start..].find(key) {
+    while let Some(i) = content[start..].to_lowercase().find(&key.to_lowercase()) {
         end = start + i;
         res.push_str(&content[start..end]);
         res.push_str(&format!(
