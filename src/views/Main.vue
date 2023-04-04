@@ -31,7 +31,7 @@ import {
   listenClipboardChange,
   listenAutoPasteChange,
 } from "@/service/globalListener";
-import { getCommonConfig, pasteInPreviousWindow, writeToClip } from "../service/cmds";
+import { getCommonConfig, pasteInPreviousWindow, focusPreviousWindow, writeToClip } from "../service/cmds";
 import hotkeys from "hotkeys-js";
 const noResultFlag = ref(false);
 const selectIndex = ref(-1);
@@ -146,6 +146,9 @@ const clickDataItem = async (index) => {
   if (autoPaste && !shiftPressDown) {
     pasteInPreviousWindow();
   }
+  else {
+    focusPreviousWindow();
+  }
 };
 
 const deleteItem = async (index) => {
@@ -161,6 +164,9 @@ const onKeyEnter = async () => {
   closeWindowLater(3000);
   if (autoPaste && !shiftPressDown) {
     pasteInPreviousWindow();
+  }
+  else {
+    focusPreviousWindow();
   }
 };
 
@@ -317,6 +323,7 @@ const initAppShortCut = async (appShortCuts) => {
               break;
             case hotkeys_func_enum.CLOSE_WINDOW:
               closeWindowLater(3000);
+              focusPreviousWindow();
               break;
           }
         }

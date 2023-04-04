@@ -190,6 +190,12 @@ pub fn write_to_clip(id: u64) -> bool {
 }
 
 #[tauri::command]
+pub fn focus_previous_window(previous_process_id: State<PreviousProcessId>) -> CmdResult {
+    focus_window(*previous_process_id.0.lock().unwrap());
+    Ok(())
+}
+
+#[tauri::command]
 pub fn paste_in_previous_window(previous_process_id: State<PreviousProcessId>) -> CmdResult {
     focus_window(*previous_process_id.0.lock().unwrap());
     dispatch_util::paste();

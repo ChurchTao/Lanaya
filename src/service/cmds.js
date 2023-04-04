@@ -70,6 +70,10 @@ export async function deleteById(id) {
   return invoke("delete_by_id", { id });
 }
 
+export async function focusPreviousWindow() {
+  return invoke("focus_previous_window");
+}
+
 export async function pasteInPreviousWindow() {
   return invoke("paste_in_previous_window");
 }

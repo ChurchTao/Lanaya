@@ -46,6 +46,7 @@ fn main() {
             cmds::delete_over_limit,
             cmds::write_to_clip,
             cmds::delete_by_id,
+            cmds::focus_previous_window,
             cmds::paste_in_previous_window,
         ])
         .build(tauri::generate_context!())
