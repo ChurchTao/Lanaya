@@ -2,6 +2,15 @@
 
 All changes will be documented in this file.
 
+## v1.1.8
+
+### Feature
+
+- CN
+  - 新增功能，添加标签、搜索标签
+- EN
+  - Add function, add tag, search tag
+
 ## v1.1.7
 
 - CN
