@@ -19,6 +19,7 @@ pub fn focus_window(process_id: i32) {
     if process_id == 0 {
         return;
     }
+    #[cfg(target_os = "macos")]
     unsafe {
         let current_app = NSRunningApplication::runningApplicationWithProcessIdentifier(nil, process_id);
         current_app.activateWithOptions_(NSApplicationActivateIgnoringOtherApps);
