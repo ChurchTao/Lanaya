@@ -47,6 +47,14 @@
         />
       </div>
     </div>
+    <div v-if="isMacOS" class="check-config-item h-10 mb-2 flex items-center justify-between">
+      <div class="check-config-item-name text-sm">
+        {{ $t("config.common.enable_auto_paste") }}
+      </div>
+      <div class="check-config-item-value flex items-center">
+        <BaseSwitch v-model="commonConfig.enable_auto_paste" @change="changeAutoPaste" />
+      </div>
+    </div>
     <div class="select-config-item mt-4">
       <div class="select-config-item-name font-medium text-base mb-1">
         {{ $t("config.common.hotkeys") }}
@@ -79,6 +87,7 @@ import {
   setAutoLaunch,
   setThemeMode,
   setHotkeys,
+  setAutoPaste,
 } from "@/service/cmds";
 import { ref, onMounted } from "vue";
 import HotKeyInput from "@/components/child/config/HotKeyInput.vue";
@@ -87,6 +96,7 @@ import {
   themeOptions,
   recordLimitOptions,
 } from "@/config/constants";
+import { platform } from '@tauri-apps/api/os';
 
 // enable_auto_launch: false
 // language: "zh"
@@ -116,6 +126,7 @@ const recordLimitSelectOption = ref({
   name: "300",
   value: 300,
 });
+const isMacOS = ref(false);
 
 const getCommonConfigFromService = async () => {
   const res = await getCommonConfig();
@@ -149,11 +160,14 @@ const getCommonConfigFromService = async () => {
 
 const init = async () => {
   await getCommonConfigFromService();
+  const platformName = await platform();
+  isMacOS.value = platformName === "darwin";
 };
 
 onMounted(async () => {
   await init();
 });
+
 
 const changeLanguage = async (e) => {
   commonConfig.value.language = e.value;
@@ -171,6 +185,11 @@ const changeRecordLimit = async (e) => {
 const changeAutoLaunch = async (e) => {
   commonConfig.value.enable_auto_launch = e;
   setAutoLaunch(e);
+};
+
+const changeAutoPaste = async (e) => {
+  commonConfig.value.enable_auto_paste = e;
+  setAutoPaste(e);
 };
 
 const shortCutChange = async (e) => {

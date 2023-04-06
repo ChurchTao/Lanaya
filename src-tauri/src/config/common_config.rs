@@ -10,6 +10,8 @@ pub struct CommonConfig {
     pub theme_mode: Option<String>,
     /// can the app auto startup
     pub enable_auto_launch: Option<bool>,
+    /// can the app paste automatically in previous window
+    pub enable_auto_paste: Option<bool>,
     /// hotkey map
     /// format: {func},{key}
     pub hotkeys: Option<Vec<String>>,
@@ -41,6 +43,7 @@ impl CommonConfig {
             },
             theme_mode: Some("light".into()),
             enable_auto_launch: Some(false),
+            enable_auto_paste: Some(false),
             record_limit: Some(100),
             hotkeys: Some(vec![
                 "clear-history:8+16+91".into(),
@@ -63,6 +66,9 @@ impl CommonConfig {
         if let Some(enable_auto_launch) = other.enable_auto_launch {
             self.enable_auto_launch = Some(enable_auto_launch);
         }
+        if let Some(enable_auto_paste) = other.enable_auto_paste {
+            self.enable_auto_paste = Some(enable_auto_paste);
+        }
         if let Some(record_limit) = other.record_limit {
             self.record_limit = Some(record_limit);
         }
@@ -82,6 +88,7 @@ impl CommonConfig {
         patch!(language);
         patch!(theme_mode);
         patch!(enable_auto_launch);
+        patch!(enable_auto_paste);
         patch!(hotkeys);
         patch!(record_limit);
     }

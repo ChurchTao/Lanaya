@@ -32,6 +32,13 @@ export const listenClipboardChange = async (consumer) => {
   return unListen;
 };
 
+export const listenAutoPasteChange = async (consumer) => {
+  const unListen = await listen("lanaya://change-auto-paste", async (event) => {
+    consumer(event.payload);
+  });
+  return unListen;
+};
+
 export const listenWindowBlur = async (consumer) => {
   const unlistenBlur = await listen("tauri://blur", async (event) => {
     consumer(event);

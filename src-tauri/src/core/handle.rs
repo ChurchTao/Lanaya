@@ -2,13 +2,14 @@ use super::{
     tray::Tray,
     window_manager::{WindowInfo, WindowType},
 };
-use crate::{config::Config, log_err, utils::hotkey_util};
+use crate::{config::Config, log_err, utils::{hotkey_util, window_util}, PreviousProcessId};
 use anyhow::{bail, Result};
 use once_cell::sync::OnceCell;
 use parking_lot::Mutex;
 use serde::Serialize;
 use std::sync::Arc;
 use tauri::{AppHandle, GlobalShortcutManager, Manager, Window};
+use tauri::State;
 use window_shadows::set_shadow;
 
 #[derive(Debug, Default, Clone)]
@@ -21,6 +22,7 @@ pub enum MsgTypeEnum {
     ChangeRecordLimit,
     ChangeHotKeys,
     ChangeClipBoard,
+    ChangeAutoPaste,
 }
 
 impl Handle {
@@ -114,6 +116,14 @@ impl Handle {
                     };
                 }
             }
+            MsgTypeEnum::ChangeAutoPaste => {
+                let window = app_handle.as_ref().unwrap().get_window("main");
+                if window.is_some() {
+                    if let Some(win) = window {
+                        win.emit("lanaya://change-auto-paste", msg)?;
+                    };
+                }
+            }
         }
         Ok(())
     }
@@ -154,6 +164,12 @@ impl Handle {
 
     pub fn open_window(window_type: WindowType) {
         let binding = Self::global().app_handle.lock();
+        let previous_process_id: State<PreviousProcessId> = binding
+            .as_ref()
+            .expect("Couldn't get app_handle")
+            .state();
+        let mut p_id = previous_process_id.0.lock().unwrap();
+        *p_id = window_util::get_active_process_id();
         let app_handle = binding.as_ref().unwrap();
 
         let window_info = match window_type {
@@ -206,4 +222,5 @@ impl Handle {
             }
         }
     }
+
 }

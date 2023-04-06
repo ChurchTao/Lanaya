@@ -57,6 +57,7 @@ pub async fn modify_common_config(patch: CommonConfig) -> Result<()> {
     Config::common().draft().patch_config(patch.clone());
 
     let auto_launch = patch.enable_auto_launch;
+    let auto_paste = patch.enable_auto_paste;
     let language = patch.language;
     let theme_mode = patch.theme_mode;
     let record_limit = patch.record_limit;
@@ -83,6 +84,10 @@ pub async fn modify_common_config(patch: CommonConfig) -> Result<()> {
 
         if record_limit.is_some() {
             handle::Handle::notice_to_window(handle::MsgTypeEnum::ChangeRecordLimit, record_limit)?;
+        }
+
+        if auto_paste.is_some() {
+            handle::Handle::notice_to_window(handle::MsgTypeEnum::ChangeAutoPaste, auto_paste)?;
         }
 
         <Result<()>>::Ok(())

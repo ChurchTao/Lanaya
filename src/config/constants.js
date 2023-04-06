@@ -48,6 +48,10 @@ export const defaultHotkeys = [
     keys: [13],
   },
   {
+    func: hotkeys_func_enum.COPY,
+    keys: [13, 16],
+  },
+  {
     func: hotkeys_func_enum.QUICK_COPY,
     keys: [91],
   },

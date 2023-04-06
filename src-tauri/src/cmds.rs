@@ -7,8 +7,11 @@ use crate::{
         handle::Handle,
     },
     log_err,
-    utils::json_util,
+    utils::{json_util, dispatch_util},
+    utils::window_util::{focus_window},
+    PreviousProcessId,
 };
+use tauri::State;
 
 type CmdResult<T = ()> = Result<T, String>;
 
@@ -54,6 +57,19 @@ pub async fn change_record_limit(limit: u32) -> CmdResult {
 pub async fn change_auto_launch(enable: bool) -> CmdResult {
     let _ = config::modify_common_config(CommonConfig {
         enable_auto_launch: Some(enable),
+        ..CommonConfig::default()
+    })
+    .await;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn change_auto_paste(enable: bool) -> CmdResult {
+    if enable == true {
+        dispatch_util::request_permissions();
+    }
+    let _ = config::modify_common_config(CommonConfig {
+        enable_auto_paste: Some(enable),
         ..CommonConfig::default()
     })
     .await;
@@ -182,4 +198,17 @@ pub fn write_to_clip(id: u64) -> bool {
             false
         }
     }
+}
+
+#[tauri::command]
+pub fn focus_previous_window(previous_process_id: State<PreviousProcessId>) -> CmdResult {
+    focus_window(*previous_process_id.0.lock().unwrap());
+    Ok(())
+}
+
+#[tauri::command]
+pub fn paste_in_previous_window(previous_process_id: State<PreviousProcessId>) -> CmdResult {
+    focus_window(*previous_process_id.0.lock().unwrap());
+    dispatch_util::paste();
+    Ok(())
 }

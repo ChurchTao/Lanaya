@@ -21,6 +21,10 @@ export async function setAutoLaunch(enable) {
   return invoke("change_auto_launch", { enable });
 }
 
+export async function setAutoPaste(enable) {
+  return invoke("change_auto_paste", { enable });
+}
+
 export async function setThemeMode(themeMode) {
   return invoke("change_theme_mode", { themeMode });
 }
@@ -68,4 +72,12 @@ export async function writeToClip(id) {
 
 export async function deleteById(id) {
   return invoke("delete_by_id", { id });
+}
+
+export async function focusPreviousWindow() {
+  return invoke("focus_previous_window");
+}
+
+export async function pasteInPreviousWindow() {
+  return invoke("paste_in_previous_window");
 }

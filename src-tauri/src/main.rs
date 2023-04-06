@@ -15,6 +15,9 @@ mod cmds;
 mod config;
 mod core;
 mod utils;
+use std::sync::Mutex;
+
+pub struct PreviousProcessId(Mutex<i32>);
 
 fn main() {
     let app = tauri::Builder::default()
@@ -24,12 +27,14 @@ fn main() {
         })
         .system_tray(SystemTray::new())
         .on_system_tray_event(core::tray::Tray::on_system_tray_event)
+        .manage(PreviousProcessId(Default::default()))
         .invoke_handler(tauri::generate_handler![
             cmds::get_common_config,
             cmds::set_common_config,
             cmds::change_language,
             cmds::change_record_limit,
             cmds::change_auto_launch,
+            cmds::change_auto_paste,
             cmds::change_theme_mode,
             cmds::change_hotkeys,
             cmds::clear_data,
@@ -42,6 +47,8 @@ fn main() {
             cmds::delete_over_limit,
             cmds::write_to_clip,
             cmds::delete_by_id,
+            cmds::focus_previous_window,
+            cmds::paste_in_previous_window,
         ])
         .build(tauri::generate_context!())
         .expect("error while build tauri application");
