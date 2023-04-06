@@ -16,7 +16,7 @@
 <script setup>
 import { Switch } from "@headlessui/vue";
 
-const props = defineProps({
+defineProps({
   modelValue: Boolean,
 });
 

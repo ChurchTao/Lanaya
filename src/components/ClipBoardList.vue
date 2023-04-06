@@ -5,8 +5,8 @@
     @mouseenter="() => (mouseenter = true)"
     @mouseleave="() => (mouseenter = false)"
   >
-    <SearchNoResult v-if="noResult || data.length == 0" />
-    <div v-if="!noResult" class="data-list-container">
+    <SearchNoResult v-if="props.noResult || data.length == 0" />
+    <div v-if="!props.noResult" class="data-list-container">
       <section class="item-hits">
         <ul
           id="docsearch-list"
@@ -14,12 +14,12 @@
           aria-labelledby="docsearch-label"
         >
           <ClipBoardItem
-            v-for="(item, index) in data"
+            v-for="(item, index) in props.data"
             :key="index"
             :idx="index"
             :data="item"
-            :select="selectIndex == index"
-            :cmd-press-down="cmdPressDown"
+            :select="props.selectIndex == index"
+            :cmd-press-down="props.cmdPressDown"
             @click="clickThis(index)"
             @mouseenter="selectThis(index)"
             @delete="deleteThis"
@@ -35,7 +35,7 @@
 <script setup>
 import ClipBoardItem from "./ClipBoardItem.vue";
 import SearchNoResult from "./child/clipboard/SearchNoResult.vue";
-import { ref, onUpdated } from "vue";
+import { ref } from "vue";
 const emit = defineEmits(["clickItem", "changeIndex", "delete"]);
 const mouseenter = ref(false);
 const props = defineProps({

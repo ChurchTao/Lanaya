@@ -43,6 +43,7 @@ const onBlur = () => {
 const props = defineProps({
   keys: {
     type: Array,
+    // eslint-disable-next-line vue/require-valid-default-prop
     default: [],
   },
   func: {

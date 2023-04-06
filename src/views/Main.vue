@@ -1,5 +1,6 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <Layout>
+  <Mainlayout>
     <SearchBar @change="onSearchChange" />
     <ClipBoardList
       :select-index="selectIndex"
@@ -11,10 +12,10 @@
       @delete="deleteItem"
     />
     <KeyMapBar :key-map="keyMap" />
-  </Layout>
+  </Mainlayout>
 </template>
 <script setup>
-import Layout from "@/components/Layout.vue";
+import Mainlayout from "@/components/Mainlayout.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import ClipBoardList from "@/components/ClipBoardList.vue";
 import KeyMapBar from "@/components/KeyMapBar.vue";
@@ -41,7 +42,6 @@ let unlistenRecordLimitChange;
 let unlistenHotkeysChange;
 let unlistenClipboardChange;
 let recordLimit = 300;
-let lastClipBoardData = "";
 /**
  * @type {Array<{id: number, content: string, content_highlight: string}>}
  */
@@ -181,7 +181,7 @@ const refreshShortCut = () => {
 
 const initListenr = async () => {
   var recordHeight = 0;
-  var mutationObserver = new MutationObserver(function (mutations) {
+  var mutationObserver = new MutationObserver(function () {
     let height = document.body.offsetHeight;
     let width = document.body.offsetWidth;
     if (height === recordHeight) {
@@ -198,12 +198,12 @@ const initListenr = async () => {
   });
 
   if (!unlistenBlur) {
-    unlistenBlur = await listen("tauri://blur", async (event) => {
+    unlistenBlur = await listen("tauri://blur", async () => {
       closeWindowLater(3000);
     });
   }
   if (!unlistenClipboardChange) {
-    unlistenClipboardChange = await listenClipboardChange(async (event) => {
+    unlistenClipboardChange = await listenClipboardChange(async () => {
       await initClipBoardDataList();
     });
   }
@@ -285,7 +285,7 @@ const initAppShortCut = async (appShortCuts) => {
       capture: true,
       scope: "main",
     },
-    (event, handler) => {
+    (event) => {
       if (event.key === "ArrowUp") {
         moveIndex(-1);
       } else if (event.key === "ArrowDown") {

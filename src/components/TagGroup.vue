@@ -72,12 +72,12 @@
     </div>
   </div>
 </template>
-
+<!-- eslint-disable vue/no-mutating-props -->
 <script setup>
 import { ref } from "vue";
 import { saveTags } from "../service/cmds";
 
-const emits = defineEmits(["onEscape"]);
+defineEmits(["onEscape"]);
 const props = defineProps({
   recordId: Number,
   tags: Array,

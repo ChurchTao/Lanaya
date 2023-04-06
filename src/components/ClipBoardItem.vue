@@ -40,7 +40,7 @@
               :record-id="data.id"
               :tags="data.tags"
               :editable="editTags"
-              @onEscape="toggleEditTags"
+              @on-escape="toggleEditTags"
             />
           </div>
         </div>
@@ -150,6 +150,8 @@ const dataShow = computed(() => {
   } else if (props.data.type == "image") {
     let imgObj = JSON.parse(props.data.content);
     return `<img src="data:image/jpeg;base64,${imgObj.base64}" class="max-h-52 object-contain" />`;
+  } else {
+    return "";
   }
 });
 
@@ -158,6 +160,8 @@ const maxHeight = computed(() => {
     return "max-h-48";
   } else if (props.data.type == "image") {
     return "max-h-64";
+  } else {
+    return "";
   }
 });
 
@@ -166,6 +170,8 @@ const maxHeightInner = computed(() => {
     return "max-h-36";
   } else if (props.data.type == "image") {
     return "max-h-52";
+  } else {
+    return "";
   }
 });
 
@@ -188,6 +194,7 @@ const editTagsClass = computed(() => {
 const markFav = async () => {
   let res = await markFavorite(props.data.id);
   if (res) {
+    // eslint-disable-next-line vue/no-mutating-props
     props.data.is_favorite = !props.data.is_favorite;
   }
 };

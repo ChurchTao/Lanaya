@@ -12,7 +12,8 @@
     "publish": "node scripts/publish.mjs",
     "tauri": "tauri",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
-    "format": "prettier . --write"
+    "format": "prettier --write .",
+    "check": "prettier --check ."
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.7",

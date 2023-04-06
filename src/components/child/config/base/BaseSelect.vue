@@ -61,7 +61,6 @@
 <script setup>
 import {
   Listbox,
-  ListboxLabel,
   ListboxButton,
   ListboxOptions,
   ListboxOption,
