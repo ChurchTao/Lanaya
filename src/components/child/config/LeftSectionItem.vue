@@ -1,6 +1,13 @@
 <template>
-  <div class="left-section-item px-3 py-2 h-8" :aria-active="active" @click="itemClick">
-    <div v-if="icon === 'common'" class="left-section-icon mr-3 h-8 w-8 icon-blue-bg">
+  <div
+    class="left-section-item px-3 py-2 h-8"
+    :aria-active="active"
+    @click="itemClick"
+  >
+    <div
+      v-if="icon === 'common'"
+      class="left-section-icon mr-3 h-8 w-8 icon-blue-bg"
+    >
       <img src="@/assets/shezhi.svg" class="block h-5 w-5" />
     </div>
     <div v-if="icon === 'about'" class="left-section-icon mr-3 h-8 w-8">

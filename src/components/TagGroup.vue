@@ -3,9 +3,9 @@
     <div class="flex">
       <div
         v-for="(tag, i) in tags"
+        :key="tag"
         class="badge text-xs mr-1"
         @click.stop="removeTag(i)"
-        :key="tag"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -36,14 +36,12 @@
         </svg>
       </div>
 
-      <div class="form-control ml-1" v-if="editable">
+      <div v-if="editable" class="form-control ml-1">
         <div class="input-group input-group-xs" @click.prevent.stop>
           <input
-            type="text"
             v-model="inputText"
+            type="text"
             :placeholder="$t('tags.placeholder')"
-            @keyup.enter.stop="addTags"
-            @keyup.esc.stop="$emit('onEscape')"
             data-disable-hotkeys="true"
             class="input input-xs input-primary input-bordered w-20"
             autofocus
@@ -51,6 +49,8 @@
             autoCorrect="off"
             autoCapitalize="off"
             spellCheck="false"
+            @keyup.enter.stop="addTags"
+            @keyup.esc.stop="$emit('onEscape')"
           />
           <button class="btn btn-xs btn-square" @click="addTags">
             <svg
@@ -99,7 +99,9 @@ const removeTag = async (tag) => {
 
 const addTags = async () => {
   const oldLength = props.tags.length;
-  const newTags = inputText.value.split(",").map((tag) => tag.toLowerCase().trim());
+  const newTags = inputText.value
+    .split(",")
+    .map((tag) => tag.toLowerCase().trim());
   newTags.forEach((tag) => {
     if (!!tag && !props.tags.includes(tag)) {
       props.tags.push(tag);

@@ -168,7 +168,10 @@ const formatData = (item) => {
 };
 
 const refreshShortCut = () => {
-  let allKeys = [...defaultHotkeys, ...JSON.parse(JSON.stringify(shortCuts.value))];
+  let allKeys = [
+    ...defaultHotkeys,
+    ...JSON.parse(JSON.stringify(shortCuts.value)),
+  ];
   let appShortCuts = allKeys.filter((item) => {
     return !item.func.startsWith("global");
   });
@@ -232,8 +235,12 @@ const initListenr = async () => {
 };
 
 const setDataItemAlwaysShow = (offset) => {
-  const dataSelect = document.querySelector(".data-select")?.getBoundingClientRect();
-  const dataList = document.querySelector(".data-list")?.getBoundingClientRect();
+  const dataSelect = document
+    .querySelector(".data-select")
+    ?.getBoundingClientRect();
+  const dataList = document
+    .querySelector(".data-list")
+    ?.getBoundingClientRect();
   if (dataSelect && dataList) {
     const dataSelectTop = dataSelect.top - dataList.top;
     const dataSelectBottom = dataSelectTop + dataSelect.height;

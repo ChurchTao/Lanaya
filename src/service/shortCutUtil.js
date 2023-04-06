@@ -113,11 +113,15 @@ export function getShortCutName(keyCodeArr, isFirstWordUpperCase = false) {
   let normalKey = "";
   keyCodeArr.forEach((keyCode) => {
     if (_modifier[keyCode]) {
-      modifier += capitalized(_modifier[keyCode].name, isFirstWordUpperCase) + "+";
+      modifier +=
+        capitalized(_modifier[keyCode].name, isFirstWordUpperCase) + "+";
     } else if (_keyMap[keyCode]) {
       keyStr = capitalized(_keyMap[keyCode].name, isFirstWordUpperCase);
     } else {
-      normalKey = capitalized(String.fromCharCode(keyCode), isFirstWordUpperCase);
+      normalKey = capitalized(
+        String.fromCharCode(keyCode),
+        isFirstWordUpperCase
+      );
     }
   });
   if (modifier === "" && keyStr === "") {

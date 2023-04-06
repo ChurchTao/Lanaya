@@ -1,5 +1,8 @@
 <template>
-  <div class="box-boder f-lg text-center my-0 mx-auto py-12 px-0 w-4/5" data-tauri-drag-region>
+  <div
+    class="box-boder f-lg text-center my-0 mx-auto py-12 px-0 w-4/5"
+    data-tauri-drag-region
+  >
     <div data-tauri-drag-region>
       <svg
         class="my-0 mx-auto text-gray-400"

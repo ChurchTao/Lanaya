@@ -4,9 +4,9 @@
     data-tauri-drag-region
   >
     <HotKeyItem
-      :show="hotKeyShow(item.keymap)"
-      :key="item.tips"
       v-for="item in keyMap"
+      :key="item.tips"
+      :show="hotKeyShow(item.keymap)"
       :keymap="item.keymap"
       :tips="item.tips"
     ></HotKeyItem>

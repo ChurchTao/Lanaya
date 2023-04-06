@@ -1,6 +1,8 @@
 <template>
-  <div class="key-item-box" v-if="show">
-    <kbd class="kbd kbd-sm mr-px" v-for="item in keymap" :key="item">{{ item }}</kbd>
+  <div v-if="show" class="key-item-box">
+    <kbd v-for="item in keymap" :key="item" class="kbd kbd-sm mr-px">{{
+      item
+    }}</kbd>
     <div class="key-tips ml-1 text-gray-500">{{ $t(tips) }}</div>
   </div>
 </template>

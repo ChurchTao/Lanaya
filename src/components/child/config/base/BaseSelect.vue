@@ -1,11 +1,17 @@
 <template>
-  <Listbox :modelValue="modelValue" @update:modelValue="change" :by="compareDepartments">
+  <Listbox
+    :model-value="modelValue"
+    :by="compareDepartments"
+    @update:modelValue="change"
+  >
     <div class="relative mt-1 w-auto">
       <ListboxButton
         class="relative w-full cursor-default rounded-lg bg-gray-100 border border-gray-200 py-1 pl-2 pr-6 text-left sm:text-sm"
       >
         <span class="block truncate">{{ modelValue.name }}</span>
-        <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
+        <span
+          class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1"
+        >
           <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
         </span>
       </ListboxButton>
@@ -19,8 +25,8 @@
           class="absolute z-10 mt-1 max-h-60 w-auto overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
         >
           <ListboxOption
-            v-slot="{ active, selected }"
             v-for="department in props.options"
+            v-slot="{ active, selected }"
             :key="department.name"
             :value="department"
             as="template"
@@ -31,9 +37,13 @@
                 'relative cursor-default select-none py-1 pl-6 pr-2',
               ]"
             >
-              <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">{{
-                department.name
-              }}</span>
+              <span
+                :class="[
+                  selected ? 'font-medium' : 'font-normal',
+                  'block truncate',
+                ]"
+                >{{ department.name }}</span
+              >
               <span
                 v-if="selected"
                 class="absolute inset-y-0 left-0 flex items-center pl-1 text-blue-600"
