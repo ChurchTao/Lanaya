@@ -10,7 +10,9 @@
     "aarch": "node scripts/aarch.mjs",
     "updater": "node scripts/updater.mjs",
     "publish": "node scripts/publish.mjs",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+    "format": "prettier . --write"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.7",
@@ -28,11 +30,15 @@
     "@tauri-apps/cli": "^1.2.3",
     "@vitejs/plugin-vue": "^4.0.0",
     "autoprefixer": "^10.4.13",
+    "daisyui": "^2.51.2",
+    "eslint": "^8.37.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-vue": "^9.10.0",
     "fs-extra": "^11.1.0",
     "node-fetch": "^3.3.0",
     "postcss": "^8.4.21",
+    "prettier": "2.8.7",
     "tailwindcss": "^3.2.6",
-    "vite": "^4.1.0",
-    "daisyui": "^2.51.2"
+    "vite": "^4.1.0"
   }
 }
