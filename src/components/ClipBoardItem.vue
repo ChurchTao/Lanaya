@@ -111,7 +111,10 @@
 </template>
 <script setup>
 import { computed, ref } from "vue";
+import { ask } from '@tauri-apps/api/dialog';
 import { markFavorite, deleteById } from "../service/cmds";
+import { keepWindowOpen } from "../service/windowUtil";
+import { useI18n } from "vue-i18n";
 import TagGroup from "./TagGroup.vue";
 const emit = defineEmits(["delete"]);
 const props = defineProps({
@@ -128,6 +131,11 @@ const props = defineProps({
 });
 
 const editTags = ref(false);
+
+const { t } = useI18n({
+  inheritLocale: true,
+  useScope: "global",
+});
 
 const dataShow = computed(() => {
   if (props.data.type == "text") {
@@ -183,6 +191,19 @@ const markFav = async () => {
 };
 
 const deleteItem = async () => {
+  if  (props.data.is_favorite) {
+    keepWindowOpen();
+    const proceed = await ask(
+      t("dialogs.delete_favorite.message"),
+      {
+        title: t("dialogs.delete_favorite.title"),
+        type: "warning"
+      }
+    );
+    if (!proceed) {
+      return;
+    }
+  }
   let res = await deleteById(props.data.id);
   if (res) {
     emit("delete", props.idx);

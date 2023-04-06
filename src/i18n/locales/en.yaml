@@ -9,6 +9,10 @@ hotkeys:
   close-window: "Close"
   clear-history: "Clear History"
   global-shortcut: "Pop Up"
+dialogs:
+  delete_favorite:
+    title: "Delete favorite?"
+    message: "Are you sure you want to delete this favorite?"
 config:
   section:
     common: "Common"
