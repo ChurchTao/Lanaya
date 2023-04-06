@@ -36,7 +36,7 @@ import { getShortCutShow } from "@/service/shortCutUtil";
 const id = Math.random().toString(36);
 const emit = defineEmits(["change"]);
 const focus = ref(false);
-const onBlur = (e) => {
+const onBlur = () => {
   focus.value = false;
   hotkeys.unbind("*", "input");
 };
@@ -58,7 +58,7 @@ const hotkeyShow = computed(() => {
   return "";
 });
 
-const onFocus = (e) => {
+const onFocus = () => {
   focus.value = true;
   hotkeys.filter = function (event) {
     var tagName = (event.target || event.srcElement).tagName;
@@ -74,7 +74,7 @@ const onFocus = (e) => {
       scope: "input",
       element: document.getElementById(id),
     },
-    function (event, handler) {
+    function () {
       let keyCodes = hotkeys.getPressedKeyCodes();
       let keyShowValue = getShortCutShow(keyCodes);
       if (keyShowValue.length > 0) {
