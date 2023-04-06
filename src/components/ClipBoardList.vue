@@ -6,9 +6,13 @@
     @mouseleave="() => (mouseenter = false)"
   >
     <SearchNoResult v-if="noResult || data.length == 0" />
-    <div class="data-list-container" v-if="!noResult">
+    <div v-if="!noResult" class="data-list-container">
       <section class="item-hits">
-        <ul role="listbox" aria-labelledby="docsearch-label" id="docsearch-list">
+        <ul
+          id="docsearch-list"
+          role="listbox"
+          aria-labelledby="docsearch-label"
+        >
           <ClipBoardItem
             v-for="(item, index) in data"
             :key="index"
@@ -22,7 +26,9 @@
           />
         </ul>
       </section>
-      <section class="item-hits-footer p-4 mb-4 flex justify-center text-base"></section>
+      <section
+        class="item-hits-footer p-4 mb-4 flex justify-center text-base"
+      ></section>
     </div>
   </div>
 </template>

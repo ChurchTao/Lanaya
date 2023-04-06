@@ -32,8 +32,14 @@ async function resolvePublish() {
   const nextTag = `v${nextVersion}`;
   await resolveUpdateLog(nextTag);
 
-  await fs.writeFile("./package.json", JSON.stringify(packageJson, undefined, 2));
-  await fs.writeFile("./src-tauri/tauri.conf.json", JSON.stringify(tauriJson, undefined, 2));
+  await fs.writeFile(
+    "./package.json",
+    JSON.stringify(packageJson, undefined, 2)
+  );
+  await fs.writeFile(
+    "./src-tauri/tauri.conf.json",
+    JSON.stringify(tauriJson, undefined, 2)
+  );
 
   execSync("git add ./package.json");
   execSync("git add ./src-tauri/tauri.conf.json");

@@ -5,7 +5,10 @@
         {{ $t("config.common.enable_auto_launch") }}
       </div>
       <div class="check-config-item-value flex items-center">
-        <BaseSwitch v-model="commonConfig.enable_auto_launch" @change="changeAutoLaunch" />
+        <BaseSwitch
+          v-model="commonConfig.enable_auto_launch"
+          @change="changeAutoLaunch"
+        />
       </div>
     </div>
     <div class="select-config-item h-10 mb-2 flex items-center justify-between">
@@ -25,7 +28,11 @@
         {{ $t("config.common.theme_mode") }}
       </div>
       <div class="select-config-item-value flex items-center">
-        <BaseSelect v-model="themeSelectOption" :options="themeOptions" @change="changeTheme" />
+        <BaseSelect
+          v-model="themeSelectOption"
+          :options="themeOptions"
+          @change="changeTheme"
+        />
       </div>
     </div>
     <div class="select-config-item h-10 mb-2 flex items-center justify-between">
@@ -75,7 +82,11 @@ import {
 } from "@/service/cmds";
 import { ref, onMounted } from "vue";
 import HotKeyInput from "@/components/child/config/HotKeyInput.vue";
-import { languageOptions, themeOptions, recordLimitOptions } from "@/config/constants";
+import {
+  languageOptions,
+  themeOptions,
+  recordLimitOptions,
+} from "@/config/constants";
 
 // enable_auto_launch: false
 // language: "zh"

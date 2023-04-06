@@ -13,15 +13,15 @@
       class="about-check-update border border-gray-200 shadow-sm h-16 mt-6 rounded-lg px-4 w-full flex items-center justify-between"
     >
       <div
-        @click="gotoChangeLog"
         class="change-log text-sm text-blue-700 underline cursor-pointer font-normal"
+        @click="gotoChangeLog"
       >
         {{ $t("config.about.change-log") }}
       </div>
       <div class="check-update">
         <button
-          @click="doCheckUpdate"
           class="bg-white text-sm text-blue-700 border border-blue-400 px-2 py-1 rounded-lg font-normal hover:bg-blue-200"
+          @click="doCheckUpdate"
         >
           {{ $t("config.about.check-update") }}
         </button>
@@ -29,8 +29,8 @@
     </div>
     <div class="about-footer mt-6">
       <p
-        @click="gotoGithub"
         class="text-sm text-blue-600 underline cursor-pointer font-normal text-center"
+        @click="gotoGithub"
       >
         Github
       </p>

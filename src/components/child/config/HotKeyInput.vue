@@ -1,5 +1,7 @@
 <template>
-  <div class="hotkey-input-container w-full flex items-center justify-between py-1">
+  <div
+    class="hotkey-input-container w-full flex items-center justify-between py-1"
+  >
     <div class="hotkey-func text-sm">{{ $t("hotkeys." + func) }}：</div>
     <div
       class="relative input-container flex items-center border rounded-lg border-gray-200 py-1 pl-2 pr-6 text-left sm:text-sm"
@@ -11,11 +13,11 @@
         class="hotkey-input"
         :placeholder="$t('config.common.hotkeys_placeholder')"
         :value="hotkeyShow"
+        autocomplete="off"
         @blur="onBlur"
         @focus="onFocus"
         @keydown="(e) => e.preventDefault()"
         @keypress="(e) => e.preventDefault()"
-        autocomplete="off"
       />
       <div
         class="hotkey-input-clear cursor-pointer absolute inset-y-0 right-0 pl-2 pr-2 flex items-center hover:bg-gray-100"
@@ -60,7 +62,9 @@ const onFocus = (e) => {
   focus.value = true;
   hotkeys.filter = function (event) {
     var tagName = (event.target || event.srcElement).tagName;
-    hotkeys.setScope(/^(INPUT|TEXTAREA|SELECT)$/.test(tagName) ? "input" : "other");
+    hotkeys.setScope(
+      /^(INPUT|TEXTAREA|SELECT)$/.test(tagName) ? "input" : "other"
+    );
     return true;
   };
   hotkeys(

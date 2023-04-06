@@ -52,7 +52,10 @@ async function resolve() {
 
   if (!release.id) throw new Error("failed to find the release");
 
-  await uploadAssets(release.id, [join(`dmg/Lanaya_${version}_aarch64.dmg`), ...appPathList]);
+  await uploadAssets(release.id, [
+    join(`dmg/Lanaya_${version}_aarch64.dmg`),
+    ...appPathList,
+  ]);
 }
 
 // From tauri-apps/tauri-action

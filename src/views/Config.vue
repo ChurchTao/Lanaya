@@ -21,7 +21,9 @@
     </div>
     <div class="right-section">
       <KeepAlive>
-        <component :is="sectionIdAndComponentNameMap[activeSection]"></component>
+        <component
+          :is="sectionIdAndComponentNameMap[activeSection]"
+        ></component>
       </KeepAlive>
     </div>
   </div>

@@ -5,7 +5,9 @@
     role="option"
     :aria-selected="select"
   >
-    <div class="data-item-outer cursor-pointer rounded shadow-md block pl-4 py-4 w-full">
+    <div
+      class="data-item-outer cursor-pointer rounded shadow-md block pl-4 py-4 w-full"
+    >
       <div
         class="data-item-container flex flex-row items-center justify-between pr-4 overflow-hidden"
         :class="maxHeight"
@@ -47,9 +49,9 @@
           :class="editTagsClass"
         >
           <button
-            @click.stop="toggleEditTags"
             class="data-item-action-button appearance-none"
             type="submit"
+            @click.stop="toggleEditTags"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -70,9 +72,9 @@
           :class="favClass"
         >
           <button
-            @click.stop="markFav"
             class="data-item-action-button appearance-none"
             type="submit"
+            @click.stop="markFav"
           >
             <svg width="20" height="20" viewBox="0 0 20 20">
               <path
@@ -89,9 +91,9 @@
           class="data-item-action ml-1 w-5 h-5 flex items-center rounded-full transition-all text-gray-300 hover:ring-2 hover:bg-gray-200 hover:ring-gray-200 hover:bg-opacity-25 hover:ring-opacity-25"
         >
           <button
-            @click.stop="deleteItem"
             class="data-item-action-button appearance-none"
             type="submit"
+            @click.stop="deleteItem"
           >
             <svg width="20" height="20" viewBox="0 0 20 20">
               <path
@@ -111,7 +113,7 @@
 </template>
 <script setup>
 import { computed, ref } from "vue";
-import { ask } from '@tauri-apps/api/dialog';
+import { ask } from "@tauri-apps/api/dialog";
 import { markFavorite, deleteById } from "../service/cmds";
 import { keepWindowOpen } from "../service/windowUtil";
 import { useI18n } from "vue-i18n";
@@ -191,15 +193,12 @@ const markFav = async () => {
 };
 
 const deleteItem = async () => {
-  if  (props.data.is_favorite) {
+  if (props.data.is_favorite) {
     keepWindowOpen();
-    const proceed = await ask(
-      t("dialogs.delete_favorite.message"),
-      {
-        title: t("dialogs.delete_favorite.title"),
-        type: "warning"
-      }
-    );
+    const proceed = await ask(t("dialogs.delete_favorite.message"), {
+      title: t("dialogs.delete_favorite.title"),
+      type: "warning",
+    });
     if (!proceed) {
       return;
     }

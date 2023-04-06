@@ -9,9 +9,12 @@ export const listenLanguageChange = async (consumer) => {
 };
 
 export const listenRecordLimitChange = async (consumer) => {
-  const unListen = await listen("lanaya://change-record-limit", async (event) => {
-    consumer(event.payload);
-  });
+  const unListen = await listen(
+    "lanaya://change-record-limit",
+    async (event) => {
+      consumer(event.payload);
+    }
+  );
   return unListen;
 };
 
