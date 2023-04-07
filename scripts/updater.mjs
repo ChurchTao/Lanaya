@@ -36,28 +36,25 @@ async function resolveUpdater() {
     notes: await resolveUpdateLog(tag.name), // use updatelog.md
     pub_date: new Date().toISOString(),
     platforms: {
-      // win64: { signature: "", url: "" }, // compatible with older formats
-      // linux: { signature: "", url: "" }, // compatible with older formats
-      // darwin: { signature: "", url: "" }, // compatible with older formats
       "darwin-aarch64": { signature: "", url: "" },
       "darwin-intel": { signature: "", url: "" },
-      "linux-x86_64": { signature: "", url: "" },
-      "windows-x86_64": { signature: "", url: "" },
+      // "linux-x86_64": { signature: "", url: "" },
+      // "windows-x86_64": { signature: "", url: "" },
     },
   };
 
   const promises = latestRelease.assets.map(async (asset) => {
     const { name, browser_download_url } = asset;
 
-    // win64 url
-    if (name.endsWith(".msi.zip") && name.includes("en-US")) {
-      updateData.platforms["windows-x86_64"].url = browser_download_url;
-    }
-    // win64 signature
-    if (name.endsWith(".msi.zip.sig") && name.includes("en-US")) {
-      const sig = await getSignature(browser_download_url);
-      updateData.platforms["windows-x86_64"].signature = sig;
-    }
+    // // win64 url
+    // if (name.endsWith(".msi.zip") && name.includes("en-US")) {
+    //   updateData.platforms["windows-x86_64"].url = browser_download_url;
+    // }
+    // // win64 signature
+    // if (name.endsWith(".msi.zip.sig") && name.includes("en-US")) {
+    //   const sig = await getSignature(browser_download_url);
+    //   updateData.platforms["windows-x86_64"].signature = sig;
+    // }
 
     // darwin url (intel)
     if (name.endsWith(".app.tar.gz") && !name.includes("aarch")) {
@@ -79,15 +76,15 @@ async function resolveUpdater() {
       updateData.platforms["darwin-aarch64"].signature = sig;
     }
 
-    // linux url
-    if (name.endsWith(".AppImage.tar.gz")) {
-      updateData.platforms["linux-x86_64"].url = browser_download_url;
-    }
-    // linux signature
-    if (name.endsWith(".AppImage.tar.gz.sig")) {
-      const sig = await getSignature(browser_download_url);
-      updateData.platforms["linux-x86_64"].signature = sig;
-    }
+    // // linux url
+    // if (name.endsWith(".AppImage.tar.gz")) {
+    //   updateData.platforms["linux-x86_64"].url = browser_download_url;
+    // }
+    // // linux signature
+    // if (name.endsWith(".AppImage.tar.gz.sig")) {
+    //   const sig = await getSignature(browser_download_url);
+    //   updateData.platforms["linux-x86_64"].signature = sig;
+    // }
   });
 
   await Promise.allSettled(promises);
