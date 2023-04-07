@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <Mainlayout>
+  <MainLayout>
     <SearchBar @change="onSearchChange" />
     <ClipBoardList
       :select-index="selectIndex"
@@ -12,10 +12,10 @@
       @delete="deleteItem"
     />
     <KeyMapBar :key-map="keyMap" />
-  </Mainlayout>
+  </MainLayout>
 </template>
 <script setup>
-import Mainlayout from "@/components/Mainlayout.vue";
+import MainLayout from "@/components/MainLayout.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import ClipBoardList from "@/components/ClipBoardList.vue";
 import KeyMapBar from "@/components/KeyMapBar.vue";
@@ -23,50 +23,40 @@ import { ref, onMounted, onBeforeMount, onUnmounted, nextTick } from "vue";
 import { selectPage, clearAll } from "@/service/recordService";
 import { listen } from "@tauri-apps/api/event";
 import { getShortCutShowAnyway, isDiff } from "@/service/shortCutUtil";
-import { defaultHotkeys, hotkeys_func_enum } from "../config/constants";
+import { hotkeys_func_enum } from "../config/constants";
 import { closeWindowLater } from "@/service/windowUtil";
 import { appWindow, LogicalSize } from "@tauri-apps/api/window";
 import {
-  listenRecordLimitChange,
   listenHotkeysChange,
   listenClipboardChange,
-  listenAutoPasteChange,
 } from "@/service/globalListener";
-import { getCommonConfig, pasteInPreviousWindow, focusPreviousWindow, writeToClip } from "../service/cmds";
+import {
+  pasteInPreviousWindow,
+  focusPreviousWindow,
+  writeToClip,
+} from "../service/cmds";
 import hotkeys from "hotkeys-js";
+import { globalData } from "@/service/store";
+const store = globalData();
 const noResultFlag = ref(false);
 const selectIndex = ref(-1);
 const cmdPressDown = ref(false);
 const keyMap = ref([]);
 let unlistenBlur;
-let unlistenRecordLimitChange;
 let unlistenHotkeysChange;
 let unlistenClipboardChange;
-let unlistenAutoPasteChange;
-let recordLimit = 300;
-let autoPaste = false;
 let shiftPressDown = false;
 /**
  * @type {Array<{id: number, content: string, content_highlight: string}>}
  */
 const clipBoardDataList = ref([]);
-const shortCuts = ref([
-  {
-    func: "clear-history",
-    keys: [],
-  },
-  {
-    func: "global-shortcut",
-    keys: [],
-  },
-]);
 onBeforeMount(async () => {
   await initListenr();
   await initClipBoardDataList();
 });
 
 onMounted(() => {
-  initCommonConfig().then(() => {
+  store.initCommonConfig().then(() => {
     refreshShortCut();
   });
 });
@@ -77,33 +67,9 @@ onUnmounted(async () => {
   }
 });
 
-const initCommonConfig = async () => {
-  let res = await getCommonConfig();
-  if (res.record_limit) {
-    recordLimit = res.record_limit;
-  }
-  if (res.enable_auto_paste) {
-    autoPaste = res.enable_auto_paste;
-  }
-  if (res.hotkeys) {
-    shortCuts.value.forEach((item) => {
-      let find = res.hotkeys.find((hotkey) => {
-        return hotkey.startsWith(item.func);
-      });
-      if (find) {
-        let strArr = find.split(":")[1].split("+");
-        if (strArr.length > 0 && strArr[0] !== "") {
-          item.keys = strArr.map((item) => {
-            return parseInt(item);
-          });
-        }
-      }
-    });
-  }
-};
-
 const initClipBoardDataList = async () => {
-  let res = await selectPage("", undefined, recordLimit);
+  let common_config = store.config;
+  let res = await selectPage("", undefined, common_config.record_limit);
   if (res) {
     clipBoardDataList.value = res.map((item) => formatData(item));
   }
@@ -141,12 +107,12 @@ const changeIndex = (index) => {
 
 const clickDataItem = async (index) => {
   let item = clipBoardDataList.value[index];
+  let common_config = store.config;
   writeToClip(item.id);
   closeWindowLater(3000);
-  if (autoPaste && !shiftPressDown) {
+  if (common_config.enable_auto_paste && !shiftPressDown) {
     pasteInPreviousWindow();
-  }
-  else {
+  } else {
     focusPreviousWindow();
   }
 };
@@ -159,13 +125,13 @@ const onKeyEnter = async () => {
   if (selectIndex.value === -1) {
     return;
   }
+  let common_config = store.config;
   let item = clipBoardDataList.value[selectIndex.value];
   await writeToClip(item.id);
   closeWindowLater(3000);
-  if (autoPaste && !shiftPressDown) {
+  if (common_config.enable_auto_paste && !shiftPressDown) {
     pasteInPreviousWindow();
-  }
-  else {
+  } else {
     focusPreviousWindow();
   }
 };
@@ -187,10 +153,7 @@ const formatData = (item) => {
 };
 
 const refreshShortCut = () => {
-  let allKeys = [
-    ...defaultHotkeys,
-    ...JSON.parse(JSON.stringify(shortCuts.value)),
-  ];
+  let allKeys = store.short_cuts;
   let appShortCuts = allKeys.filter((item) => {
     return !item.func.startsWith("global");
   });
@@ -226,33 +189,10 @@ const initListenr = async () => {
       await initClipBoardDataList();
     });
   }
-  if (!unlistenRecordLimitChange) {
-    unlistenRecordLimitChange = await listenRecordLimitChange((newLimitNum) => {
-      recordLimit = newLimitNum;
-    });
-  }
-  if (!unlistenAutoPasteChange) {
-    unlistenAutoPasteChange = await listenAutoPasteChange((value) => {
-      autoPaste = value;
-    });
-  }
+
   if (!unlistenHotkeysChange) {
     unlistenHotkeysChange = await listenHotkeysChange((hotkeys) => {
-      shortCuts.value.forEach((item) => {
-        let find = hotkeys.find((hotkey) => {
-          return hotkey.startsWith(item.func);
-        });
-        if (find) {
-          let strArr = find.split(":")[1].split("+");
-          if (strArr.length === 1 && strArr[0] == "") {
-            item.keys = [];
-          } else {
-            item.keys = strArr.map((item) => {
-              return parseInt(item);
-            });
-          }
-        }
-      });
+      store.patchShotCuts(hotkeys);
       refreshShortCut();
     });
   }

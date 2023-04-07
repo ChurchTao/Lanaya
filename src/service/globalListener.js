@@ -1,5 +1,4 @@
 import { listen } from "@tauri-apps/api/event";
-// import { getCommonConfig } from "./cmds";
 
 export const listenLanguageChange = async (consumer) => {
   const unListen = await listen("lanaya://change-language", async (event) => {
@@ -36,6 +35,16 @@ export const listenAutoPasteChange = async (consumer) => {
   const unListen = await listen("lanaya://change-auto-paste", async (event) => {
     consumer(event.payload);
   });
+  return unListen;
+};
+
+export const listenDeleteConfirmChange = async (consumer) => {
+  const unListen = await listen(
+    "lanaya://change-delete-confirm",
+    async (event) => {
+      consumer(event.payload);
+    }
+  );
   return unListen;
 };
 

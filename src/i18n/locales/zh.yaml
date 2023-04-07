@@ -22,8 +22,10 @@ config:
     language: "语言"
     record_limit: "历史记录条数"
     theme_mode: "主题(敬请期待)"
+    enable_auto_paste: "自动粘贴 (需要获取权限)"
     hotkeys: "快捷键"
     hotkeys_placeholder: "输入键盘快捷键"
+    enable_delete_confirm: "删除需要确认"
   about:
     version: "版本号"
     change-log: "更新日志"

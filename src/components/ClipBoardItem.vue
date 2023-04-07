@@ -118,6 +118,8 @@ import { markFavorite, deleteById } from "../service/cmds";
 import { keepWindowOpen } from "../service/windowUtil";
 import { useI18n } from "vue-i18n";
 import TagGroup from "./TagGroup.vue";
+import { globalData } from "@/service/store";
+const store = globalData();
 const emit = defineEmits(["delete"]);
 const props = defineProps({
   select: {
@@ -200,7 +202,7 @@ const markFav = async () => {
 };
 
 const deleteItem = async () => {
-  if (props.data.is_favorite) {
+  if (props.data.is_favorite && store.config.enable_delete_confirm) {
     keepWindowOpen();
     const proceed = await ask(t("dialogs.delete_favorite.message"), {
       title: t("dialogs.delete_favorite.title"),

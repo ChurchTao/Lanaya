@@ -48,10 +48,6 @@ export const defaultHotkeys = [
     keys: [13],
   },
   {
-    func: hotkeys_func_enum.COPY,
-    keys: [13, 16],
-  },
-  {
     func: hotkeys_func_enum.QUICK_COPY,
     keys: [91],
   },
@@ -62,5 +58,13 @@ export const defaultHotkeys = [
   {
     func: hotkeys_func_enum.CLOSE_WINDOW,
     keys: [27],
+  },
+  {
+    func: hotkeys_func_enum.CLEAR_HISTORY,
+    keys: [],
+  },
+  {
+    func: hotkeys_func_enum.GLOBAL_SHORTCUT,
+    keys: [],
   },
 ];

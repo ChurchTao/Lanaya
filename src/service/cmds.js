@@ -81,3 +81,7 @@ export async function focusPreviousWindow() {
 export async function pasteInPreviousWindow() {
   return invoke("paste_in_previous_window");
 }
+
+export async function setDeleteConfirm(enable) {
+  return invoke("change_delete_confirm", { enable });
+}

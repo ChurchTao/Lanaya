@@ -49,6 +49,7 @@ fn main() {
             cmds::delete_by_id,
             cmds::focus_previous_window,
             cmds::paste_in_previous_window,
+            cmds::change_delete_confirm,
         ])
         .build(tauri::generate_context!())
         .expect("error while build tauri application");

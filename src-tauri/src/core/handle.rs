@@ -23,6 +23,7 @@ pub enum MsgTypeEnum {
     ChangeHotKeys,
     ChangeClipBoard,
     ChangeAutoPaste,
+    ChangeDeleteConfirm,
 }
 
 impl Handle {
@@ -121,6 +122,14 @@ impl Handle {
                 if window.is_some() {
                     if let Some(win) = window {
                         win.emit("lanaya://change-auto-paste", msg)?;
+                    };
+                }
+            }
+            MsgTypeEnum::ChangeDeleteConfirm => {
+                let window = app_handle.as_ref().unwrap().get_window("main");
+                if window.is_some() {
+                    if let Some(win) = window {
+                        win.emit("lanaya://change-delete-confirm", msg)?;
                     };
                 }
             }

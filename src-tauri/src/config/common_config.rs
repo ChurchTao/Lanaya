@@ -12,6 +12,8 @@ pub struct CommonConfig {
     pub enable_auto_launch: Option<bool>,
     /// can the app paste automatically in previous window
     pub enable_auto_paste: Option<bool>,
+    /// delete confirm
+    pub enable_delete_confirm: Option<bool>,
     /// hotkey map
     /// format: {func},{key}
     pub hotkeys: Option<Vec<String>>,
@@ -44,6 +46,7 @@ impl CommonConfig {
             theme_mode: Some("light".into()),
             enable_auto_launch: Some(false),
             enable_auto_paste: Some(false),
+            enable_delete_confirm: Some(true),
             record_limit: Some(100),
             hotkeys: Some(vec![
                 "clear-history:8+16+91".into(),
@@ -69,6 +72,9 @@ impl CommonConfig {
         if let Some(enable_auto_paste) = other.enable_auto_paste {
             self.enable_auto_paste = Some(enable_auto_paste);
         }
+        if let Some(delete_confirm) = other.enable_delete_confirm {
+            self.enable_delete_confirm = Some(delete_confirm);
+        }
         if let Some(record_limit) = other.record_limit {
             self.record_limit = Some(record_limit);
         }
@@ -89,6 +95,7 @@ impl CommonConfig {
         patch!(theme_mode);
         patch!(enable_auto_launch);
         patch!(enable_auto_paste);
+        patch!(enable_delete_confirm);
         patch!(hotkeys);
         patch!(record_limit);
     }

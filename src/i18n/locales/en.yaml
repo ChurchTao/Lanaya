@@ -25,6 +25,7 @@ config:
     enable_auto_paste: "Auto paste (requires accessibility permissions)"
     hotkeys: "Hotkeys"
     hotkeys_placeholder: "Input Shortcut"
+    enable_delete_confirm: "Delete need confirm"
   about:
     version: "Version"
     change-log: "Change Log"

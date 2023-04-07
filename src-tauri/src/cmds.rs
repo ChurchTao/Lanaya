@@ -77,6 +77,15 @@ pub async fn change_auto_paste(enable: bool) -> CmdResult {
 }
 
 #[tauri::command]
+pub async fn change_delete_confirm(enable: bool) -> CmdResult {
+    let _ = config::modify_common_config(CommonConfig {
+        enable_delete_confirm: Some(enable),
+        ..CommonConfig::default()
+    }).await;
+    Ok(())
+}
+
+#[tauri::command]
 pub async fn change_theme_mode(theme_mode: String) -> CmdResult {
     let _ = config::modify_common_config(CommonConfig {
         theme_mode: Some(theme_mode),
