@@ -5,7 +5,7 @@ import fs from "fs-extra";
 import path from "path";
 import { exit } from "process";
 import { createRequire } from "module";
-import { getOctokit, context } from "@actions/github";
+import { getOctokit } from "@actions/github";
 
 const require = createRequire(import.meta.url);
 

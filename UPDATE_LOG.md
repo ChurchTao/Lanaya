@@ -2,6 +2,18 @@
 
 All changes will be documented in this file.
 
+## v1.1.9
+
+### Feature
+
+- CN
+  - 新增功能`自动粘贴`，可以自动粘贴前一个窗口的焦点输入框 [#8](https://github.com/ChurchTao/Lanaya/pull/8)
+  - 新增配置`删除前确认` [#7](https://github.com/ChurchTao/Lanaya/pull/7)
+- EN
+  - Add function `auto paste`, can automatically paste the focus input box of the previous window [#8](https://github.com/ChurchTao/Lanaya/pull/8)
+  - Add configuration `delete before confirm` [#7](https://github.com/ChurchTao/Lanaya/pull/7)
+
+
 ## v1.1.8
 
 ### Feature
