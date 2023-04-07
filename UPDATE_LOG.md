@@ -13,7 +13,6 @@ All changes will be documented in this file.
   - Add function `auto paste`, can automatically paste the focus input box of the previous window [#8](https://github.com/ChurchTao/Lanaya/pull/8)
   - Add configuration `delete before confirm` [#7](https://github.com/ChurchTao/Lanaya/pull/7)
 
-
 ## v1.1.8
 
 ### Feature

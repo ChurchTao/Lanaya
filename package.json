@@ -13,7 +13,7 @@
     "tauri": "tauri",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
     "format": "prettier --write .",
-    "check": "prettier --check ."
+    "check": "prettier --check **/*.{js,md,vue,css,html}"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.7",
