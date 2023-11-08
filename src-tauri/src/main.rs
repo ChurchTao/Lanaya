@@ -67,6 +67,7 @@ fn main() {
 
 fn set_up(app: &mut App) {
     // Make the docker NOT to have an active app when started
+    #[cfg(target_os = "macos")]
     app.set_activation_policy(tauri::ActivationPolicy::Accessory);
     let window = app.get_window("main").unwrap();
     set_shadow(&window, true).expect("Unsupported platform!");
