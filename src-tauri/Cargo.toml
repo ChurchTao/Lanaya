@@ -30,6 +30,7 @@ base64 = "0.21.0"
 image = "0.24.5"
 rdev = "0.5.2"
 active-win-pos-rs = "0.7"
+winapi = { version = "0.3", features = ["winuser"] }
 
 [target.'cfg(target_os = "macos")'.dependencies]
 cocoa = "0.24.1"
