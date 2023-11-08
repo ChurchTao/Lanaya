@@ -10,6 +10,12 @@ use cocoa::appkit::{NSRunningApplication, NSApplicationActivateIgnoringOtherApps
 #[cfg(target_os = "windows")]
 use winapi::um::winuser::{GetForegroundWindow, SetForegroundWindow};
 
+#[cfg(target_os = "windows")]
+use winapi::um::winuser::GetWindowThreadProcessId;
+
+#[cfg(target_os = "windows")]
+use winapi::shared::minwindef::LPDWORD;
+
 pub fn get_active_process_id() -> i32 {
     #[cfg(target_os = "macos")]
     {
@@ -50,6 +56,7 @@ pub fn focus_window(process_id: i32) {
     if process_id == 0 {
         return;
     }
+
     #[cfg(target_os = "macos")]
     unsafe {
         let current_app = NSRunningApplication::runningApplicationWithProcessIdentifier(nil, process_id);

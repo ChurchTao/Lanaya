@@ -11,19 +11,12 @@ pub fn app_home_dir() -> Result<PathBuf> {
     unsafe {
         use tauri::utils::platform::current_exe;
 
-        if !PORTABLE_FLAG {
-            Ok(home_dir()
-                .ok_or(anyhow::anyhow!("failed to get app home dir"))?
-                .join(".config")
-                .join(APP_DIR))
-        } else {
-            let app_exe = current_exe()?;
-            let app_exe = dunce::canonicalize(app_exe)?;
-            let app_dir = app_exe
-                .parent()
-                .ok_or(anyhow::anyhow!("failed to get the portable app dir"))?;
-            Ok(PathBuf::from(app_dir).join(".config").join(APP_DIR))
-        }
+        let app_exe = current_exe()?;
+        let app_exe = dunce::canonicalize(app_exe)?;
+        let app_dir = app_exe
+            .parent()
+            .ok_or(anyhow::anyhow!("failed to get the portable app dir"))?;
+        Ok(PathBuf::from(app_dir).join(".config").join(APP_DIR))
     }
 
     #[cfg(not(target_os = "windows"))]
