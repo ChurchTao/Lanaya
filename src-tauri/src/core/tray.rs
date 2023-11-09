@@ -97,9 +97,14 @@ impl Tray {
             },
             #[cfg(target_os = "windows")]
             SystemTrayEvent::LeftClick { .. } => {
-                let window = app_handle.get_window("main").unwrap();
-                window.show().unwrap();
-                window.set_focus().unwrap();
+                if let Some(window) = app_handle.get_window("main") {
+                    if let Err(err) = window.show() {
+                        println!("Failed to show window: {}", err);
+                    }
+                    if let Err(err) = window.set_focus() {
+                        println!("Failed to set focus on window: {}", err);
+                    }
+                }
             }
             _ => {}
         }

@@ -1,6 +1,5 @@
 use anyhow::Result;
 use std::path::PathBuf;
-use tauri::api::path::home_dir;
 
 static APP_DIR: &str = "lanaya";
 static CONFIG_FILE: &str = "config.json";
@@ -8,7 +7,7 @@ static CONFIG_FILE: &str = "config.json";
 /// get the app home dir
 pub fn app_home_dir() -> Result<PathBuf> {
     #[cfg(target_os = "windows")]
-    unsafe {
+    {
         use tauri::utils::platform::current_exe;
 
         let app_exe = current_exe()?;
@@ -17,6 +16,7 @@ pub fn app_home_dir() -> Result<PathBuf> {
             .parent()
             .ok_or(anyhow::anyhow!("failed to get the portable app dir"))?;
         Ok(PathBuf::from(app_dir).join(".config").join(APP_DIR))
+
     }
 
     #[cfg(not(target_os = "windows"))]

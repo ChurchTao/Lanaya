@@ -30,7 +30,7 @@ macro_rules! draft_define {
 
             // 获取草稿数据
             pub fn draft(&self) -> MappedMutexGuard<$id> {
-                MutexGuard::map(self.inner.lock(), |mut inner| {
+                MutexGuard::map(self.inner.lock(), |inner| {
                     if inner.1.is_none() {
                         inner.1 = Some(inner.0.clone());
                     }
