@@ -2,7 +2,7 @@ import { createI18n } from "vue-i18n";
 import en from "./locales/en.yaml";
 import zh from "./locales/zh.yaml";
 
-let language = window.localStorage.getItem("language") || "zh";
+let language = window.localStorage.getItem("language") || "en";
 
 export const i18n = createI18n({
   locale: language,
