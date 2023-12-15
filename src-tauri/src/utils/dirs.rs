@@ -1,5 +1,6 @@
 use anyhow::Result;
 use std::path::PathBuf;
+use tauri::api::path::home_dir;
 
 static APP_DIR: &str = "lanaya";
 static CONFIG_FILE: &str = "config.json";
