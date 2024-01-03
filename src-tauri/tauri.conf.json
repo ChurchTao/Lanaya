@@ -75,7 +75,7 @@
       "csp": "default-src 'self';img-src 'self' data: *;"
     },
     "updater": {
-      "active": true,
+      "active": false,
       "dialog": true,
       "endpoints": [
         "https://github.com/churchTao/Lanaya/releases/download/updater/update.json"

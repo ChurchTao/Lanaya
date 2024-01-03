@@ -2,12 +2,14 @@
 
 All changes will be documented in this file.
 
-## v1.2.0
+## v1.2.1
 
 - CN
   - 新增`windows`系统支持 [#12](https://github.com/ChurchTao/Lanaya/pull/12)
+  - 暂时关闭了`自动更新`功能，因为官方的打包程序有问题
 - EN
   - Add windows support [#12](https://github.com/ChurchTao/Lanaya/pull/12)
+  - Temporarily turned off the `auto update` function, because the official packaging program has problems
 
 ## v1.1.9
 
