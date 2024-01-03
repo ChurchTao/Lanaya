@@ -12,7 +12,7 @@ export const listenRecordLimitChange = async (consumer) => {
     "lanaya://change-record-limit",
     async (event) => {
       consumer(event.payload);
-    }
+    },
   );
   return unListen;
 };
@@ -43,7 +43,7 @@ export const listenDeleteConfirmChange = async (consumer) => {
     "lanaya://change-delete-confirm",
     async (event) => {
       consumer(event.payload);
-    }
+    },
   );
   return unListen;
 };

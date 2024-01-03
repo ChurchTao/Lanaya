@@ -34,11 +34,11 @@ async function resolvePublish() {
 
   await fs.writeFile(
     "./package.json",
-    JSON.stringify(packageJson, undefined, 2)
+    JSON.stringify(packageJson, undefined, 2),
   );
   await fs.writeFile(
     "./src-tauri/tauri.conf.json",
-    JSON.stringify(tauriJson, undefined, 2)
+    JSON.stringify(tauriJson, undefined, 2),
   );
 
   execSync("git add ./package.json");

@@ -36,6 +36,8 @@ const hotKeyShow = (keymap) => {
 </script>
 <style scoped>
 .key-map-bar {
-  box-shadow: 0 -1px 0 0 #e0e3e8, 0 -3px 6px 0 rgba(69, 98, 155, 0.12);
+  box-shadow:
+    0 -1px 0 0 #e0e3e8,
+    0 -3px 6px 0 rgba(69, 98, 155, 0.12);
 }
 </style>

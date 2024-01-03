@@ -120,7 +120,7 @@ export function getShortCutName(keyCodeArr, isFirstWordUpperCase = false) {
     } else {
       normalKey = capitalized(
         String.fromCharCode(keyCode),
-        isFirstWordUpperCase
+        isFirstWordUpperCase,
       );
     }
   });

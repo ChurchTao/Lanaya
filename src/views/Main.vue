@@ -255,7 +255,7 @@ const initAppShortCut = async (appShortCuts) => {
       } else if (event.key === "ArrowDown") {
         moveIndex(1);
       }
-    }
+    },
   );
   hotkeys(
     "*",
@@ -280,7 +280,7 @@ const initAppShortCut = async (appShortCuts) => {
           }
         }
       });
-    }
+    },
   );
   hotkeys.setScope("main");
 

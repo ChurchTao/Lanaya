@@ -64,7 +64,7 @@ const onFocus = () => {
   hotkeys.filter = function (event) {
     var tagName = (event.target || event.srcElement).tagName;
     hotkeys.setScope(
-      /^(INPUT|TEXTAREA|SELECT)$/.test(tagName) ? "input" : "other"
+      /^(INPUT|TEXTAREA|SELECT)$/.test(tagName) ? "input" : "other",
     );
     return true;
   };
@@ -84,7 +84,7 @@ const onFocus = () => {
           func: props.func,
         });
       }
-    }
+    },
   );
 };
 
