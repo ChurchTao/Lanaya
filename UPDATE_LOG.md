@@ -2,6 +2,13 @@
 
 All changes will be documented in this file.
 
+## v1.2.0
+
+- CN
+  - 新增`windows`系统支持 [#12](https://github.com/ChurchTao/Lanaya/pull/12)
+- EN
+  - Add windows support [#12](https://github.com/ChurchTao/Lanaya/pull/12)
+
 ## v1.1.9
 
 ### Feature
