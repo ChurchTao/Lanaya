@@ -24,6 +24,8 @@ A clipboard management with easy to use.
 
 Lanaya comes from Templar Assassin in Dota2, which is a clipboard management software with convenient and simple interaction.
 
+### When I first wrote this project, it was in the learning stage and the writing was rudimentary. I am currently preparing to rewrite version 2.0, so stay tuned...
+
 ## Features
 
 - Search by keywords.
